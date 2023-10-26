@@ -1,0 +1,7 @@
+body {
+    width: 360px;
+}
+
+input::placeholder {
+    text-align: center;
+}

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Aviation Tools</title>
+    <link rel="icon" href="../images/logo16.png" sizes="any">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/popup.css">
+    <script type="text/javascript" src="../js/theme.js"></script>
+</head>
+<body>
+
+<div class="container-fluid p-3">
+    <form id="search-form">
+
+        <div class="row mb-3">
+            <div class="col text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
+                    <label class="form-check-label small" for="searchRegistration">Registration</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchFlight" value="flight">
+                    <label class="form-check-label small" for="searchFlight">Flight #</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchAirport" value="airport">
+                    <label class="form-check-label small" for="searchAirport">Airport</label>
+                </div>
+            </div>
+        </div>
+
+<!--        <div class="row mb-3">-->
+<!--            <div class="col text-center">-->
+<!--                <div class="form-check form-switch form-check-inline">-->
+<!--                    <input class="form-check-input" type="checkbox" id="flightaware" value="flightaware">-->
+<!--                    <label class="form-check-label small" for="flightaware">FA</label>-->
+<!--                </div>-->
+<!--                <div class="form-check form-switch form-check-inline">-->
+<!--                    <input class="form-check-input" type="checkbox" id="airfleets" value="airfleets">-->
+<!--                    <label class="form-check-label small" for="airfleets">AirFleet</label>-->
+<!--                </div>-->
+<!--                <div class="form-check form-switch form-check-inline">-->
+<!--                    <input class="form-check-input" type="checkbox" id="jetphotos" value="jetphotos">-->
+<!--                    <label class="form-check-label small" for="jetphotos">JetPhoto</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="row mb-3">
+            <div class="col">
+                <label for="search-term" class="visually-hidden"></label>
+                <input id="search-term" class="form-control" type="text" placeholder="Registration, Flight # or Airport">
+            </div>
+        </div>
+        <button type="submit" form="search-form" class="visually-hidden"></button>
+
+    </form>
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example">
+                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Registration</button>
+                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="flight">Flight #</button>
+                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="airport">Airport</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="btn-group btn-group-sm w-100" role="group" aria-label="ADSB Links">
+                    <button type="button" class="btn btn-outline-success" data-href="https://globe.adsbexchange.com/">
+                        ADSBx</button>
+                    <button type="button" class="btn btn-outline-success" data-href="https://www.flightaware.com/live/">
+                        FlightAware</button>
+                    <button type="button" class="btn btn-outline-success" data-href="https://www.flightradar24.com/">
+                        FlightRadar24</button>
+                </div>
+            </div>
+        </div>
+
+<!--        <div class="row mb-3">-->
+<!--            <div class="col">-->
+<!--                <div class="btn-group btn-group-sm w-100" role="group" aria-label="Search Dropdown">-->
+<!--                    <button class="btn btn-success popup-click" type="submit">Search Favorite</button>-->
+<!--                    <button class="btn btn-outline-success popup-click" type="button">All</button>-->
+<!--                    <div class="btn-group btn-group-sm" role="group">-->
+<!--                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item popup-click" href="#">FlightAware</a></li>-->
+<!--                            <li><a class="dropdown-item popup-click" href="#">AirFleet</a></li>-->
+<!--                            <li><a class="dropdown-item popup-click" href="#">JetPhoto</a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </form>-->
+
+    <hr class="my-1">
+
+    <p class="small text-center">Additional Links</p>
+
+    <div class="d-grid g-2 gap-3 mb-3">
+
+        <div class="btn-group btn-group-sm" role="group" aria-label="Search Dropdown">
+            <button id="all-bookmarks" class="btn btn-success popup-click" type="button">Open All Bookmarks</button>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul id="bookmarks" class="dropdown-menu">
+                    <li id="no-bookmarks"><a class="dropdown-item popup-click" href="#" data-href="html/options.html">No Saved Bookmarks</a></li>
+                </ul>
+            </div>
+        </div>
+
+<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
+<!--            <button type="button" class="btn btn-outline-success" data-href="https://globe.adsbexchange.com/">-->
+<!--                ADSBx</button>-->
+<!--            <button type="button" class="btn btn-outline-success" data-href="https://www.flightaware.com/live/">-->
+<!--                FlightAware</button>-->
+<!--            <button type="button" class="btn btn-outline-success" data-href="https://www.flightradar24.com/">-->
+<!--                FlightRadar24</button>-->
+<!--        </div>-->
+
+        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Country=N">
+                ASN USA</button>
+            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">
+                All 2023</button>
+            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2022&sorteer=datekey_desc">
+                2022</button>
+        </div>
+
+<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
+<!--            <button type="button" class="btn btn-outline-info" data-href="https://avherald.com/">-->
+<!--                AV Herald</button>-->
+<!--            <button type="button" class="btn btn-outline-info" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">-->
+<!--                All 2023</button>-->
+<!--            <button type="button" class="btn btn-outline-info" data-href="https://simpleflying.com/latest-news/">-->
+<!--                Simple Flying</button>-->
+<!--        </div>-->
+
+        <button class="btn btn-primary btn-sm popup-click" type="button"
+                data-href="html/options.html">Open Options</button>
+    </div>
+
+    <div class="text-center">
+        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"
+           data-href="https://github.com/cssnr">Aviation Tools</a> v<span class="version"></span>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
+<script type="text/javascript" src="../js/popup.js"></script>
+
+</body>
+</html>
