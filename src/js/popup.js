@@ -1,6 +1,6 @@
 // JS for popup.html
 
-jQuery('html').hide().fadeIn('slow')
+import { openOptionsFor } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
@@ -25,6 +25,7 @@ document.getElementById('search-term').focus()
 async function initPopup() {
     console.log('initPopup')
     // await chrome.storage.sync.clear()
+    jQuery('html').hide().fadeIn('slow')
     const { popup, bookmarks } = await chrome.storage.sync.get([
         'popup',
         'bookmarks',
@@ -121,41 +122,16 @@ async function searchForm(event) {
         searchTerm.focus()
         return
     }
-    for (const [key, value] of Object.entries(options[search])) {
-        console.log(`${key}: ${value}`)
-        if (value) {
-            const url = getLinkUrl(search, key, searchTerm.value)
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
-        }
-    }
+    await openOptionsFor(search, searchTerm.value)
+    // for (const [key, value] of Object.entries(options[search])) {
+    //     console.log(`${key}: ${value}`)
+    //     if (value) {
+    //         const url = getLinkUrl(search, key, searchTerm.value)
+    //         console.log(`url: ${url}`)
+    //         await chrome.tabs.create({ active: true, url })
+    //     }
+    // }
     window.close()
-}
-
-function getLinkUrl(subkey, key, value) {
-    console.log(`${subkey}: ${key}: ${value}`)
-    const links = {
-        registration: {
-            flightaware: 'https://flightaware.com/resources/registration/',
-            flightradar: 'https://www.flightradar24.com/data/aircraft/',
-            airfleets: 'https://www.airfleets.net/recherche/?key=',
-            avherald:
-                'https://avherald.com/h?opt=0&dosearch=1&search.x=0&search.y=0&search_term=',
-            asn: 'https://aviation-safety.net/wikibase/dblist2.php?re=',
-            jetphotos: 'https://www.jetphotos.com/registration/',
-        },
-        flight: {
-            flightaware: 'https://flightaware.com/live/flight/',
-            flightradar: 'https://www.flightradar24.com/data/flights/',
-        },
-        airport: {
-            airnav: 'https://www.airnav.com/airport/',
-            liveatc: 'https://www.liveatc.net/search/?icao=',
-        },
-    }
-    const link = links[subkey][key] + value.trim()
-    console.log(`link: ${link}`)
-    return link
 }
 
 /**

@@ -1,5 +1,7 @@
 // Background Service Worker JS
 
+import { openOptionsFor } from './exports.js'
+
 chrome.runtime.onInstalled.addListener(function () {
     const contexts = [
         // ['link', 'Link Menu'],
@@ -20,9 +22,10 @@ chrome.runtime.onInstalled.addListener(function () {
     }
 })
 
-chrome.contextMenus.onClicked.addListener(function (ctx) {
+chrome.contextMenus.onClicked.addListener(async function (ctx) {
+    console.log('ctx:', ctx)
     console.log('ctx.menuItemId: ' + ctx.menuItemId)
-    console.log(ctx)
+    await openOptionsFor(ctx.menuItemId, ctx.selectionText)
 })
 
 // chrome.notifications.onClicked.addListener((notificationId) => {

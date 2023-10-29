@@ -1,5 +1,7 @@
 // JS for options.html
 
+import { showToast } from './exports.js'
+
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('options-form').addEventListener('submit', saveOptions)
 document.getElementById('add-bookmark').addEventListener('click', addBookmark)

@@ -12,8 +12,8 @@ including Aircraft Registration, Flight #'s, and Airports, custom bookmarks with
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
-    -   [Chrome](#chrome)
-    -   [Firefox](#firefox)
+    -   [Chrome](#chrome-setup)
+    -   [Firefox](#firefox-setup)
 
 # Download
 
@@ -39,28 +39,36 @@ To open the options, click on the icon (from above) then click `Open Options`.
 
 # Development
 
-To build locally, clone the repository then run `npm install`.
+To build locally or run from source, clone the repository then run `npm install`.
 You can then run the addon from the [src](src) directory as normal.
 
-The extension is automatically built on every release which uploads the artifacts to that release.
+NPM is only used to manage dependency versions and copy files to `src/dist`.
+Files are copied automatically after `npm install`. See [gulpfile.js](gulpfile.js) for more information.
+
+The extension is automatically built on new releases then automatically uploaded to that release.
 See [build.yaml](.github/workflows/build.yaml) for more information.
 
-## Chrome
+## Chrome Setup
 
-1.  Download (or clone) the repo.
+1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Open Chrome, click the `3 dots` in the top right, click `Extensions`, click `Manage Extensions`.
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-## Firefox
+## Firefox Setup
+
+For development, you can and should load unpacked in Firefox as a temporary addon.
+This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
+
+1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
+1.  Load temporary from: `about:debugging#/runtime/this-firefox`
+1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 > **Note**
 >
-> This **does not** work on Release Firefox!
+> This method **does not** work on Release Firefox and is NOT recommended for development.
 > You must use [ESR](https://www.mozilla.org/en-CA/firefox/all/#product-desktop-esr), Development, or Nightly.
 
-1.  Download (or clone) the repo.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
-1.  You may also load temporary from: `about:debugging#/runtime/this-firefox`

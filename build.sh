@@ -6,7 +6,7 @@ shopt -so pipefail
 
 _src_dir="src"
 _build_dir="web-ext-artifacts"
-_chrome_pem="chrome.pem"
+_chrome_pem="${HOME}/chrome.pem"
 #_chrome="google-chrome"
 _web_ext="web-ext"
 _zip="zip"
@@ -32,7 +32,7 @@ echo "_version: ${_version}"
 _full_name="${_package_name}_${_version}"
 echo "_full_name: ${_full_name}"
 
-if [ -d "${_build_dir}" ];then
+if [ -d "${_build_dir}}" ];then
     echo "Removing and Creating Build Directory: ${_build_dir}"
     rm -rf "${_build_dir}"
     mkdir -p "${_build_dir}"
