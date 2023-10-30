@@ -75,6 +75,9 @@ export async function openOptionsFor(category, searchTerm) {
  * @return {string}
  */
 export function getLinkUrl(subkey, key, value) {
+    if (subkey === 'flight') {
+        value = value.toLowerCase().replace(/[\s-]+/g, '')
+    }
     console.log(`${subkey}: ${key}: ${value}`)
     const link = links[subkey][key] + value.trim()
     console.log(`link: ${link}`)

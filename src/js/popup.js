@@ -133,7 +133,7 @@ async function saveSearchRadio(event) {
  */
 async function searchForm(event) {
     event.preventDefault()
-    console.log(event)
+    console.log('searchForm:', event)
     console.log('event.submitter:', event.submitter)
     const searchTerm = document.getElementById('search-term')
     console.log(`searchTerm.value: ${searchTerm.value}`)
@@ -163,14 +163,6 @@ async function searchForm(event) {
         return
     }
     await openOptionsFor(search, searchTerm.value)
-    // for (const [key, value] of Object.entries(options[search])) {
-    //     console.log(`${key}: ${value}`)
-    //     if (value) {
-    //         const url = getLinkUrl(search, key, searchTerm.value)
-    //         console.log(`url: ${url}`)
-    //         await chrome.tabs.create({ active: true, url })
-    //     }
-    // }
     window.close()
 }
 
