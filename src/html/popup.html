@@ -11,8 +11,7 @@
 
 <div class="container-fluid p-3">
     <form id="search-form">
-
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col text-center">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
@@ -24,79 +23,48 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchAirport" value="airport">
-                    <label class="form-check-label small" for="searchAirport">Airport</label>
+                    <label class="form-check-label small" for="searchAirport">Airport Code</label>
                 </div>
             </div>
         </div>
-
-<!--        <div class="row mb-3">-->
-<!--            <div class="col text-center">-->
-<!--                <div class="form-check form-switch form-check-inline">-->
-<!--                    <input class="form-check-input" type="checkbox" id="flightaware" value="flightaware">-->
-<!--                    <label class="form-check-label small" for="flightaware">FA</label>-->
-<!--                </div>-->
-<!--                <div class="form-check form-switch form-check-inline">-->
-<!--                    <input class="form-check-input" type="checkbox" id="airfleets" value="airfleets">-->
-<!--                    <label class="form-check-label small" for="airfleets">AirFleet</label>-->
-<!--                </div>-->
-<!--                <div class="form-check form-switch form-check-inline">-->
-<!--                    <input class="form-check-input" type="checkbox" id="jetphotos" value="jetphotos">-->
-<!--                    <label class="form-check-label small" for="jetphotos">JetPhoto</label>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col">
                 <label for="search-term" class="visually-hidden"></label>
-                <input id="search-term" class="form-control" type="text" placeholder="Registration, Flight # or Airport">
+                <input id="search-term" class="form-control" type="text" placeholder="Registration, Flight # or Airport Code">
             </div>
         </div>
         <button type="submit" form="search-form" class="visually-hidden"></button>
-
     </form>
 
-        <div class="row mb-3">
-            <div class="col">
-                <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example">
-                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Registration</button>
-                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="flight">Flight #</button>
-                    <button type="submit" form="search-form" class="btn btn-outline-info" data-search="airport">Airport</button>
+    <div class="row mx-0 gx-1">
+        <div class="col-4">
+            <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example">
+                <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Reg.</button>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul id="registration" class="dropdown-menu"></ul>
                 </div>
             </div>
         </div>
-
-<!--        <div class="row mb-3">-->
-<!--            <div class="col">-->
-<!--                <div class="btn-group btn-group-sm w-100" role="group" aria-label="ADSB Links">-->
-<!--                    <button type="button" class="btn btn-outline-success" data-href="https://globe.adsbexchange.com/">-->
-<!--                        ADSBx</button>-->
-<!--                    <button type="button" class="btn btn-outline-success" data-href="https://www.flightaware.com/live/">-->
-<!--                        FlightAware</button>-->
-<!--                    <button type="button" class="btn btn-outline-success" data-href="https://www.flightradar24.com/">-->
-<!--                        FlightRadar24</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="row mb-3">-->
-<!--            <div class="col">-->
-<!--                <div class="btn-group btn-group-sm w-100" role="group" aria-label="Search Dropdown">-->
-<!--                    <button class="btn btn-success popup-click" type="submit">Search Favorite</button>-->
-<!--                    <button class="btn btn-outline-success popup-click" type="button">All</button>-->
-<!--                    <div class="btn-group btn-group-sm" role="group">-->
-<!--                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
-<!--                        <ul class="dropdown-menu">-->
-<!--                            <li><a class="dropdown-item popup-click" href="#">FlightAware</a></li>-->
-<!--                            <li><a class="dropdown-item popup-click" href="#">AirFleet</a></li>-->
-<!--                            <li><a class="dropdown-item popup-click" href="#">JetPhoto</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </form>-->
+        <div class="col-4">
+            <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example 2">
+                <button type="submit" form="search-form" class="btn btn-outline-info" data-search="flight">Flight</button>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul id="flight" class="dropdown-menu"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example 2">
+                <button type="submit" form="search-form" class="btn btn-outline-info" data-search="airport">Airport</button>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul id="airport" class="dropdown-menu"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <hr class="">
 
@@ -116,9 +84,7 @@
             <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Country=N">
                 ASN USA</button>
             <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">
-                All 2023</button>
-<!--            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2022&sorteer=datekey_desc">-->
-<!--                2022</button>-->
+                ASN All 2023</button>
             <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Year</button>
                 <ul id="asn-all" class="dropdown-menu">
@@ -140,7 +106,10 @@
 
         <button class="btn btn-primary btn-sm popup-click" type="button"
                 data-href="html/options.html">Open Options</button>
+
     </div>
+
+    <hr class="">
 
     <div class="text-center">
         <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"

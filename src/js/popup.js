@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { openOptionsFor } from './exports.js'
+import { links, getLinkUrl, openOptionsFor } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
@@ -37,11 +37,22 @@ async function initPopup() {
     console.log(`popup.searchType: ${popup?.searchType}`)
     radio.checked = true
 
+    console.log(links)
+    for (const [key, value] of Object.entries(links)) {
+        // console.log(`${key}: ${value}`)
+        const ul = document.getElementById(key)
+        for (const [name, url] of Object.entries(value)) {
+            // console.log(`${name}: ${url}`)
+            createSearchLink(ul, url, name)
+        }
+    }
+
     console.log(bookmarks)
     if (bookmarks?.length) {
         document.getElementById('no-bookmarks').remove()
-        bookmarks.forEach(function (value, i) {
-            createBookmarkLink(i.toString(), value)
+        const ul = document.getElementById('bookmarks')
+        bookmarks.forEach(function (value) {
+            createBookmarkLink(ul, value)
         })
     }
 }
@@ -49,17 +60,36 @@ async function initPopup() {
 /**
  * Add Bookmark Links
  * @function createBookmarkLink
- * @param {String} number
- * @param {String} value
+ * @param {HTMLElement} ul
+ * @param {String} url
+ * @param {String} name
  */
-function createBookmarkLink(number, value = '') {
-    const ul = document.getElementById('bookmarks')
+function createSearchLink(ul, url, name = null) {
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
-    a.textContent = value.substring(8, 50)
-    a.dataset.title = value
-    a.dataset.href = value
+    a.textContent = name || url.substring(8, 50)
+    a.dataset.href = url
+    a.title = url
+    a.href = '#'
+    a.classList.add('dropdown-item', 'small')
+    a.addEventListener('click', searchForm)
+    li.appendChild(a)
+}
+
+/**
+ * Add Bookmark Links
+ * @function createBookmarkLink
+ * @param {HTMLElement} ul
+ * @param {String} url
+ */
+function createBookmarkLink(ul, url) {
+    const li = document.createElement('li')
+    ul.appendChild(li)
+    const a = document.createElement('a')
+    a.textContent = url.substring(8, 50)
+    a.dataset.href = url
+    a.title = url
     a.href = '#'
     a.classList.add('dropdown-item', 'small')
     a.addEventListener('click', popupLink)
@@ -104,10 +134,22 @@ async function saveSearchRadio(event) {
 async function searchForm(event) {
     event.preventDefault()
     console.log(event)
+    console.log('event.submitter:', event.submitter)
+    const searchTerm = document.getElementById('search-term')
+    console.log(`searchTerm.value: ${searchTerm.value}`)
     const { options } = await chrome.storage.sync.get(['options'])
     console.log(options)
     let search
-    if (event.submitter?.dataset?.search) {
+    if (event.target.classList.contains('dropdown-item')) {
+        let category = event.target.parentNode.parentNode.id
+        console.log(`category: ${category}`)
+        let key = event.target.textContent
+        console.log(`key: ${key}`)
+        const url = getLinkUrl(category, key, searchTerm.value)
+        console.log(`url: ${url}`)
+        await chrome.tabs.create({ active: true, url })
+        return
+    } else if (event.submitter?.dataset?.search) {
         search = event.submitter.dataset.search
     } else {
         search = document.querySelector(
@@ -116,8 +158,6 @@ async function searchForm(event) {
     }
     console.log(`search: ${search}`)
     console.log(options[search])
-    const searchTerm = document.getElementById('search-term')
-    console.log(`searchTerm.value: ${searchTerm.value}`)
     if (!searchTerm.value) {
         searchTerm.focus()
         return
@@ -142,10 +182,6 @@ async function openAllBookmarks() {
     console.log('openAllBookmarks')
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     console.log(bookmarks)
-    // bookmarks.forEach(async function (url) {
-    //     console.log(`url: ${url}`)
-    //     await chrome.tabs.create({ active: true, url })
-    // })
     if (!bookmarks?.length) {
         await chrome.tabs.create({
             active: true,
