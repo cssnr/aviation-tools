@@ -39,33 +39,41 @@ jobs:
             exit 1
           fi
 
-      - name: "Build Firefox"
-        id: web-ext-build
-        uses: kewisch/action-web-ext@v1
-        with:
-          cmd: build
-          source: src
-          filename: "{name}-{version}.xpi"
+#      - name: "Build Firefox"
+#        id: web-ext-build
+#        uses: kewisch/action-web-ext@v1
+#        with:
+#          cmd: build
+#          source: src
+#          filename: "{name}-{version}.xpi"
+#
+#      - name: "Setup Chrome"
+#        id: setup-chrome
+#        uses: browser-actions/setup-chrome@v1
+#        with:
+#          chrome-version: "1191187"
+#
+#      - name: "Build Chrome"
+#        run: |
+#          echo "${{ secrets.CHROME_PRIVATE_KEY }}" > .key
+#          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+#          ${{ steps.setup-chrome.outputs.chrome-path }} --version
+#          ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
+#          mv src.crx web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.crx
 
-      - name: "Setup Chrome"
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: "1191187"
-
-      - name: "Build Chrome"
+      - name: "Create Chrome ZIP Archives"
+        working-directory: src
         run: |
-          echo "${{ secrets.CHROME_PRIVATE_KEY }}" > .key
-          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-          ${{ steps.setup-chrome.outputs.chrome-path }} --version
-          ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
-          mv src.crx web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.crx
+          mkdir -p web-ext-artifacts
+          cp -f ../manifest-chrome.json manifest.json
+          zip "../web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}-chrome.zip" -r .
 
-      - name: "Create ZIP Archive"
-        working-directory: "src"
+      - name: "Create Firefox ZIP Archives"
+        working-directory: src
         run: |
-          ls -lAh .
-          zip "../web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.zip" -r .
+          mkdir -p web-ext-artifacts
+          cp -f ../manifest-firefox.json manifest.json
+          zip "../web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}-firefox.zip" -r .
 
       - name: "Archive Artifacts"
         uses: actions/upload-artifact@v3

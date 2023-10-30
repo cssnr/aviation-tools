@@ -1,26 +1,29 @@
+[![Build](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=src%2Fmanifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/src/manifest.json)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/XXXXXX?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/aviation-tools/XXXXXX)
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/aviation-tools?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/aviation-tools)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/XXXXXX?logo=google&logoColor=white&label=google%20users)](https://chrome.google.com/webstore/detail/aviation-tools/XXXXXX)
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/aviation-tools?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/aviation-tools)
 # Aviation Tools
 
 Modern Chrome and Firefox Web Extension to easily search and lookup Aviation related things on the internet,
 including Aircraft Registration, Flight #'s, and Airports, custom bookmarks with open all function, and much more...
 
-> **Warning**
->
-> This extension is currently **under development**. Many features may not function properly or at all...  
-> Until a release is uploaded, see the [Chrome](#chrome) or [Firefox](#firefox) development instructions.  
-
 *   [Download](#download)
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
-    -   [Chrome](#chrome-setup)
-    -   [Firefox](#firefox-setup)
+    -   [Chrome Setup](#chrome-setup)
+    -   [Firefox Setup](#firefox-setup)
 
 # Download
 
 _Coming Soon..._
 
-*   Firefox: https://addons.mozilla.org/addon/
-*   Chrome: https://chrome.google.com/webstore/detail/
+*   Chrome: https://chrome.google.com/webstore/detail/aviation-tools/XXXXXX
+*   Firefox: https://addons.mozilla.org/addon/aviation-tools
 
 # Features
 
@@ -50,7 +53,7 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Chrome Setup
 
-1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
+1.  Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Open Chrome, click the `3 dots` in the top right, click `Extensions`, click `Manage Extensions`.
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
@@ -61,7 +64,7 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 For development, you can and should load unpacked in Firefox as a temporary addon.
 This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
 
-1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
+1.  Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Load temporary from: `about:debugging#/runtime/this-firefox`
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 

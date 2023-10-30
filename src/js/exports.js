@@ -69,6 +69,8 @@ export function getLinkUrl(subkey, key, value) {
             flightradar: 'https://www.flightradar24.com/data/flights/',
         },
         airport: {
+            flightaware: 'https://flightaware.com/resources/airport/',
+            flightradar: 'https://www.flightradar24.com/data/airports/',
             airnav: 'https://www.airnav.com/airport/',
             liveatc: 'https://www.liveatc.net/search/?icao=',
         },
