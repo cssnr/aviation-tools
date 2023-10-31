@@ -139,6 +139,12 @@ async function searchForm(event) {
     console.log(`searchTerm.value: ${searchTerm.value}`)
     const { options } = await chrome.storage.sync.get(['options'])
     console.log(options)
+    if (!options) {
+        console.log('no options')
+        const url = chrome.runtime.getURL('html/options.html')
+        await chrome.tabs.create({ active: true, url })
+        return
+    }
     let search
     if (event.target.classList.contains('dropdown-item')) {
         let category = event.target.parentNode.parentNode.id
@@ -159,10 +165,17 @@ async function searchForm(event) {
     console.log(`search: ${search}`)
     console.log(options[search])
     if (!searchTerm.value) {
+        console.log('no searchTerm.value')
         searchTerm.focus()
         return
     }
-    await openOptionsFor(search, searchTerm.value)
+    const resp = await openOptionsFor(search, searchTerm.value)
+    console.log(`resp: ${resp}`)
+    if (!resp) {
+        console.error(`no options set for: ${search}`)
+        const url = chrome.runtime.getURL('html/options.html')
+        await chrome.tabs.create({ active: true, url })
+    }
     window.close()
 }
 

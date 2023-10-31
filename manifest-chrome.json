@@ -2,22 +2,19 @@
   "manifest_version": 3,
   "version": "0.0.1",
   "homepage_url": "https://github.com/cssnr/aviation-tools",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "aviation-tools@cssnr.com"
-    }
-  },
   "name": "Aviation Tools",
   "description": "Aviation Quick Search and Reference Tools.",
   "permissions": [
     "activeTab",
+    "clipboardWrite",
+    "contextMenus",
+    "notifications",
     "scripting",
     "storage",
-    "clipboardWrite",
-    "contextMenus"
+    "offscreen"
   ],
   "background": {
-    "service-worker": "js/service-worker.js",
+    "service_worker": "js/service-worker.js",
     "type": "module"
   },
   "options_ui": {

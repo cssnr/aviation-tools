@@ -65,7 +65,9 @@ For development, you can and should load unpacked in Firefox as a temporary addo
 This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
 
 1.  Download a [Release](https://github.com/cssnr/aviation-tools/releases).
-1.  Load temporary from: `about:debugging#/runtime/this-firefox`
+1.  Unzip the archive, place the folder where it must remain and note its location for later.
+1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
+1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 > **Note**

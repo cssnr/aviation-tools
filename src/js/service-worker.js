@@ -1,17 +1,17 @@
 // Background Service Worker JS
 
-import { openOptionsFor } from './exports.js'
+import { links, clipboardWrite, openOptionsFor } from './exports.js'
 
-chrome.runtime.onInstalled.addListener(function () {
+chrome.runtime.onInstalled.addListener(async function () {
     const contexts = [
-        // ['link', 'Link Menu'],
-        // ['page', 'Page Menu'],
+        // ['link', 'link', 'Link Menu'],
+        ['page', 'page', 'Page Menu'],
         ['selection', 'registration', 'Registration Search'],
         ['selection', 'flight', 'Flight # Search'],
         ['selection', 'airport', 'Airport Search'],
-        // ['audio', 'Audio Menu'],
-        // ['image', 'Image Menu'],
-        // ['video', 'Video Menu'],
+        // ['audio', 'audio', 'Audio Menu'],
+        // ['image', 'image', 'Image Menu'],
+        // ['video', 'video', 'Video Menu'],
     ]
     for (const context of contexts) {
         chrome.contextMenus.create({
@@ -20,14 +20,40 @@ chrome.runtime.onInstalled.addListener(function () {
             id: context[1],
         })
     }
+    console.log('chrome.runtime.onInstalled')
+    let { options } = (await chrome.storage.sync.get(['options'])) || {}
+    console.log('options:', options)
+    // Set All Options to true if not set
+    if (!options) {
+        for (const [key, value] of Object.entries(links)) {
+            // console.log(`${key}: ${value}`)
+            if (!options[key]) {
+                options[key] = {}
+            }
+            for (const [name] of Object.entries(value)) {
+                // console.log(`${name}: ${url}`)
+                options[key][name] = true
+            }
+        }
+        console.log('options:', options)
+        await chrome.storage.sync.set({ options: options })
+    }
 })
 
 chrome.contextMenus.onClicked.addListener(async function (ctx) {
     console.log('ctx:', ctx)
     console.log('ctx.menuItemId: ' + ctx.menuItemId)
-    await openOptionsFor(ctx.menuItemId, ctx.selectionText)
+    const searchTerm = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
+    if (!searchTerm) {
+        const url = chrome.runtime.getURL('html/options.html')
+        console.log(`url: ${url}`)
+        await chrome.tabs.create({ active: true, url })
+    }
+    console.log(`navigator.clipboard.writeText: searchTerm: ${searchTerm}`)
+    await clipboardWrite(searchTerm)
 })
 
-// chrome.notifications.onClicked.addListener((notificationId) => {
-//     console.log(`notifications.onClicked: ${notificationId}`)
-// })
+chrome.notifications.onClicked.addListener((notificationId) => {
+    console.log(`notifications.onClicked: ${notificationId}`)
+    chrome.notifications.clear(notificationId)
+})

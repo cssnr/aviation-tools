@@ -48,26 +48,37 @@ export function showToast(message, bsClass = 'success') {
 
 /**
  * Open Options for Category
- * WARNING: DUPLICATED CODE BLOCK from popup.js
  * @function openOptionsFor
  * @param {String} category - registration, flight, airport
  * @param {String} searchTerm
+ * @return {String}
  */
 export async function openOptionsFor(category, searchTerm) {
+    searchTerm = searchTerm.trim()
+    if (category === 'flight') {
+        searchTerm = searchTerm.toLowerCase().replace(/[\s-]+/g, '')
+    } else if (category === 'registration') {
+        searchTerm = searchTerm.toUpperCase()
+    }
+    let resp = null
     const { options } = await chrome.storage.sync.get(['options'])
+    if (!options) {
+        return null
+    }
     for (const [key, value] of Object.entries(options[category])) {
         console.log(`${key}: ${value}`)
         if (value) {
             const url = getLinkUrl(category, key, searchTerm)
             console.log(`url: ${url}`)
             await chrome.tabs.create({ active: true, url })
+            resp = searchTerm
         }
     }
+    return resp
 }
 
 /**
  * Open Options for Category
- * WARNING: DUPLICATED CODE BLOCK from popup.js
  * @function getLinkUrl
  * @param {string} subkey
  * @param {string} key
@@ -75,11 +86,35 @@ export async function openOptionsFor(category, searchTerm) {
  * @return {string}
  */
 export function getLinkUrl(subkey, key, value) {
-    if (subkey === 'flight') {
-        value = value.toLowerCase().replace(/[\s-]+/g, '')
-    }
+    // if (subkey === 'flight') {
+    //     value = value.toLowerCase().replace(/[\s-]+/g, '')
+    // }
     console.log(`${subkey}: ${key}: ${value}`)
     const link = links[subkey][key] + value.trim()
     console.log(`link: ${link}`)
     return link
+}
+
+/**
+ * Write value to Clipboard for Firefox and Chrome
+ * @function clipboardWrite
+ * @param {string} value
+ */
+export async function clipboardWrite(value) {
+    if (navigator.clipboard) {
+        // Firefox
+        await navigator.clipboard.writeText(value)
+    } else {
+        // Chrome
+        await chrome.offscreen.createDocument({
+            url: 'html/offscreen.html',
+            reasons: [chrome.offscreen.Reason.CLIPBOARD],
+            justification: 'Write text to the clipboard.',
+        })
+        await chrome.runtime.sendMessage({
+            type: 'copy-data-to-clipboard',
+            target: 'offscreen-doc',
+            data: value,
+        })
+    }
 }
