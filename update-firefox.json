@@ -1,0 +1,12 @@
+{
+  "addons": {
+    "{a6f6bee9-4a28-4646-a065-2fb2496284a1}": {
+      "updates": [
+        {
+          "version": "0.0.1",
+          "update_link": "https://github.com/cssnr/aviation-tools/releases/download/0.0.1/aviation_tools-firefox.xpi"
+        }
+      ]
+    }
+  }
+}
