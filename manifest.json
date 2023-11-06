@@ -1,9 +1,18 @@
 {
   "manifest_version": 3,
   "version": "0.0.1",
-  "homepage_url": "https://github.com/cssnr/aviation-tools",
   "name": "Aviation Tools",
-  "description": "Aviation Quick Search and Reference Tools.",
+  "description": "Aviation Quick Search and Lookup Tools.",
+  "homepage_url": "https://github.com/cssnr/aviation-tools",
+  "author": "Shane",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "Show Main Popup Action"
+    }
+  },
   "permissions": [
     "activeTab",
     "clipboardWrite",
