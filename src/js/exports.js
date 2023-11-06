@@ -23,6 +23,40 @@ export const links = {
 }
 
 /**
+ * Create Context Menus
+ * @function createContextMenus
+ */
+export async function createContextMenus() {
+    const contexts = [
+        // [['link'], 'link', 'Link Menu'],
+        [['page'], 'page', 'Page Menu'],
+        [['selection'], 'registration', 'Registration Search'],
+        [['selection'], 'flight', 'Flight # Search'],
+        [['selection'], 'airport', 'Airport Search'],
+        // [['audio'], 'audio', 'Audio Menu'],
+        // [['image'], 'image', 'Image Menu'],
+        // [['video'], 'video', 'Video Menu'],
+        [['page', 'selection'], 'separator', 'separator-1'],
+        [['page', 'link', 'image', 'selection'], 'options', 'Open Options'],
+    ]
+    for (const context of contexts) {
+        if (context[1] === 'separator') {
+            chrome.contextMenus.create({
+                type: context[1],
+                contexts: context[0],
+                id: context[2],
+            })
+        } else {
+            chrome.contextMenus.create({
+                title: context[2],
+                contexts: context[0],
+                id: context[1],
+            })
+        }
+    }
+}
+
+/**
  * Show Bootstrap Toast
  * Requires: jQuery
  * @function showToast

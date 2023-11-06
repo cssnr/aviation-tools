@@ -13,12 +13,29 @@
     <div class="row">
         <div class="col-md-8 col-12 m-auto">
             <div class="card">
-                <div class="card-body">
-                    <h1 class="text-center">Aviation Tools</h1>
-                    <img src="../images/logo128.png" class="img-fluid m-auto d-block" alt="Link Extractor" height="128" width="128">
-                    <p class="text-center lead"><span class="version"></span></p>
+                <div class="card-body pb-0">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
+                        <h1 class="">Aviation Tools</h1>
+                    </div>
+                    <p class="text-center mb-0">v<span class="version"></span></p>
+                    <table class="table table-sm table-borderless ">
+                        <caption class="visually-hidden">Keyboard Shortcuts</caption>
+                        <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Show Popup Keybind</td>
+                                <td class="text-end"><kbd id="mainKey">Unknown</kbd></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr class="my-2">
                     <form id="options-form">
-
+                        <div class="form-check form-switch fs-5">
+                            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
+                            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+                        </div>
+                        <hr class="my-2">
                         <div class="row mb-3">
                             <div class="col-sm-6 col-xl-4 col-12">
                                 <h5>Registration Defaults</h5>
@@ -84,7 +101,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <hr class="my-2">
+                        <div class="row">
                             <div class="col">
                                 <h5>Custom Bookmarks</h5>
                                 <p id="add-bookmark" class="badge text-bg-success" role="button">Add Bookmark</p>
@@ -92,12 +110,13 @@
                             </div>
                         </div>
                     </form>
+                    <hr class="mb-2">
                 </div>
-                <div class="text-center mb-3">
-                    <a class="icon-link icon-link-hover" target="_blank" rel="noopener"
+                <div class="text-center mb-2">
+                    <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
                        href="https://github.com/cssnr">Get Support</a>
                     |
-                    <a class="icon-link icon-link-hover" target="_blank" rel="noopener"
+                    <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
                        href="https://github.com/cssnr">Visit Homepage</a>
                 </div>
             </div>

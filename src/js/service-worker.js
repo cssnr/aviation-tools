@@ -1,45 +1,41 @@
-// Background Service Worker JS
+// JS Background Service Worker
 
-import { links, clipboardWrite, openOptionsFor } from './exports.js'
+import {
+    links,
+    clipboardWrite,
+    createContextMenus,
+    openOptionsFor,
+} from './exports.js'
 
 chrome.runtime.onInstalled.addListener(async function () {
-    const contexts = [
-        // [['link'], 'link', 'Link Menu'],
-        [['page'], 'page', 'Page Menu'],
-        [['selection'], 'registration', 'Registration Search'],
-        [['selection'], 'flight', 'Flight # Search'],
-        [['selection'], 'airport', 'Airport Search'],
-        // [['audio'], 'audio', 'Audio Menu'],
-        // [['image'], 'image', 'Image Menu'],
-        // [['video'], 'video', 'Video Menu'],
-    ]
-    for (const context of contexts) {
-        chrome.contextMenus.create({
-            title: context[2],
-            contexts: context[0],
-            id: context[1],
-        })
-    }
     console.log('chrome.runtime.onInstalled')
     let { options } = (await chrome.storage.sync.get(['options'])) || {}
     console.log('options:', options)
-    // Set All Options to true if !options
     if (!options) {
         await setNestedDefaults(links)
+    }
+    if (options.contextMenu) {
+        await createContextMenus()
     }
 })
 
 chrome.contextMenus.onClicked.addListener(async function (ctx) {
     console.log('ctx:', ctx)
     console.log('ctx.menuItemId: ' + ctx.menuItemId)
-    const searchTerm = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
-    if (!searchTerm) {
-        const url = chrome.runtime.getURL('html/options.html')
-        console.log(`url: ${url}`)
+
+    if (['options'].includes(ctx.menuItemId)) {
+        const url = chrome.runtime.getURL('/html/options.html')
         await chrome.tabs.create({ active: true, url })
+    } else {
+        const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
+        if (!term) {
+            const url = chrome.runtime.getURL('html/options.html')
+            console.log(`url: ${url}`)
+            await chrome.tabs.create({ active: true, url })
+        }
+        console.log(`navigator.clipboard.writeText: term: ${term}`)
+        await clipboardWrite(term)
     }
-    console.log(`navigator.clipboard.writeText: searchTerm: ${searchTerm}`)
-    await clipboardWrite(searchTerm)
 })
 
 chrome.notifications.onClicked.addListener((notificationId) => {
@@ -64,6 +60,7 @@ async function setNestedDefaults(defaults) {
             options[key][name] = true
         }
     }
+    options.contextMenu = true
     console.log('options:', options)
     await chrome.storage.sync.set({ options: options })
 }

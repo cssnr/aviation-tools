@@ -1,46 +1,11 @@
 {
-  "manifest_version": 3,
-  "version": "0.0.1",
-  "homepage_url": "https://github.com/cssnr/aviation-tools",
-  "name": "Aviation Tools",
-  "description": "Aviation Quick Search and Reference Tools.",
-  "permissions": [
-    "activeTab",
-    "clipboardWrite",
-    "contextMenus",
-    "notifications",
-    "scripting",
-    "storage"
-  ],
   "background": {
-    "scripts": ["js/service-worker.js"],
-    "type": "module"
-  },
-  "options_ui": {
-    "page": "html/options.html",
-    "open_in_tab": true
-  },
-  "action": {
-    "default_popup": "html/popup.html",
-    "default_title": "Aviation Tools",
-    "default_icon": {
-      "16": "images/logo16.png",
-      "32": "images/logo32.png",
-      "48": "images/logo48.png",
-      "96": "images/logo96.png",
-      "128": "images/logo128.png"
-    }
-  },
-  "icons": {
-    "16": "images/logo16.png",
-    "32": "images/logo32.png",
-    "48": "images/logo48.png",
-    "96": "images/logo96.png",
-    "128": "images/logo128.png"
+    "scripts": ["js/service-worker.js"]
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "aviation-tools@cssnr.com"
+      "id": "aviation-tools@cssnr.com",
+      "strict_min_version": "112.0"
     }
   }
 }

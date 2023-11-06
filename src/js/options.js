@@ -1,6 +1,6 @@
 // JS for options.html
 
-import { showToast } from './exports.js'
+import { createContextMenus, showToast } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('options-form').addEventListener('submit', saveOptions)
@@ -24,6 +24,7 @@ async function initOptions() {
                 options[subkey][key]
         }
     }
+    document.getElementById('contextMenu').checked = options.contextMenu
 
     console.log(bookmarks)
     if (bookmarks?.length) {
@@ -42,11 +43,10 @@ async function initOptions() {
  */
 async function saveOptions(event) {
     event.preventDefault()
-    console.log('saveOptions')
-    console.log(event)
-
+    console.log('saveOptions:', event)
     let options = {}
     let bookmarks = []
+
     Array.from(event.target.elements).forEach((input) => {
         if (input.type === 'checkbox') {
             const subkey = input.id.split('-')[0]
@@ -62,8 +62,17 @@ async function saveOptions(event) {
             bookmarks.push(input.value)
         }
     })
-    console.log(options)
     console.log(bookmarks)
+
+    options.contextMenu = document.getElementById('contextMenu').checked
+    if (options.contextMenu) {
+        chrome.contextMenus.removeAll()
+        await createContextMenus()
+    } else {
+        chrome.contextMenus.removeAll()
+    }
+    console.log(options)
+
     await chrome.storage.sync.set({ options, bookmarks })
     showToast('Options Saved')
 }

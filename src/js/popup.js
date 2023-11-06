@@ -113,7 +113,7 @@ async function popupLink(event) {
 /**
  * Save Default Radio on Change Callback
  * @function defaultSearchChange
- * @param {onchange} event
+ * @param {SubmitEvent} event
  */
 async function saveSearchRadio(event) {
     console.log('defaultSearchChange')
