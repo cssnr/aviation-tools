@@ -1,3 +1,4 @@
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/cjjhackeogffajjndfhemgniokonimin?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin)
 [![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/manifest.json)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
 [![Build](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
@@ -15,8 +16,18 @@ Upcoming Web Extension with various Aviation Tools...
 
 # Download
 
+<a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
+    <img alt="Chrome" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="42" height="42" /></a>
 <a href="https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi" target="_blank">
-<img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
+    <img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
+    <img alt="Edge" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
+    <img alt="Opera" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
+    <img alt="Brave" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
+    <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
   
 You can also browse the [Releases](https://github.com/cssnr/aviation-tools/releases).  
 Note: The zip archives are not signed.  
