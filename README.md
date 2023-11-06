@@ -29,8 +29,10 @@ Upcoming Web Extension with various Aviation Tools...
 <a href="https://chrome.google.com/webstore/detail/link-extractor/cjjhackeogffajjndfhemgniokonimin" target="_blank">
     <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
   
-You can also browse the [Releases](https://github.com/cssnr/aviation-tools/releases).  
-Note: The zip archives are not signed.  
+*   Download a [Chrome Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-chrome.crx) from GitHub
+*   Download a [Firefox Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi) from GitHub
+
+_Note: Firefox is currently only available from GitHub._
 
 # Features
 
