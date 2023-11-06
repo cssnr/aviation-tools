@@ -1,4 +1,4 @@
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=src%2Fmanifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/src/manifest.json)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/manifest.json)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
 [![Build](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
@@ -58,7 +58,7 @@ For more information on building, see the scripts in the [package.json](package.
 
 ## Chrome Setup
 
-1.  Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
+1.  Build or Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Open Chrome, click the `3 dots` in the top right, click `Extensions`, click `Manage Extensions`.
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
@@ -69,7 +69,7 @@ For more information on building, see the scripts in the [package.json](package.
 Note: Firefox Temporary addon's will **not** remain after restarting Firefox, therefore;
 it is very useful to keep addon storage after uninstall/restart with `keepStorageOnUninstall`.
 
-1.  Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
+1.  Build or Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
