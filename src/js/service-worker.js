@@ -41,10 +41,10 @@ chrome.contextMenus.onClicked.addListener(async function (ctx) {
     }
 })
 
-chrome.notifications.onClicked.addListener((notificationId) => {
-    console.log(`notifications.onClicked: ${notificationId}`)
-    chrome.notifications.clear(notificationId)
-})
+// chrome.notifications.onClicked.addListener((notificationId) => {
+//     console.log(`notifications.onClicked: ${notificationId}`)
+//     chrome.notifications.clear(notificationId)
+// })
 
 /**
  * Sets all Nested Keys to true
