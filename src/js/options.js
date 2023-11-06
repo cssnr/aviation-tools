@@ -34,6 +34,10 @@ async function initOptions() {
     } else {
         createBookmarkInput('0', '')
     }
+
+    const commands = await chrome.commands.getAll()
+    document.getElementById('mainKey').textContent =
+        commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
 }
 
 /**
