@@ -3,5 +3,6 @@
   "background": {
     "service_worker": "js/service-worker.js"
   },
-  "minimum_chrome_version": "88"
+  "minimum_chrome_version": "88",
+  "update_url": "https://raw.githubusercontent.com/cssnr/aviation-tools/master/updates.xml"
 }

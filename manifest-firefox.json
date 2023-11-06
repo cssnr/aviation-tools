@@ -6,7 +6,7 @@
     "gecko": {
       "id": "aviation-tools@cssnr.com",
       "strict_min_version": "112.0",
-      "update_url": "https://raw.githubusercontent.com/cssnr/aviation-tools/master/update-firefox.json"
+      "update_url": "https://raw.githubusercontent.com/cssnr/aviation-tools/master/updates.json"
     }
   }
 }
