@@ -15,10 +15,11 @@ Upcoming Web Extension with various Aviation Tools...
 
 # Download
 
-_Coming Soon..._
-
-To download, head over to the [Releases](https://github.com/cssnr/aviation-tools/releases)
-and then see the [Chrome](#chrome-setup) or [Firefox](#firefox-setup) Setup below for further instructions.
+<a href="https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi" target="_blank">
+<img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
+  
+You can also browse the [Releases](https://github.com/cssnr/aviation-tools/releases).  
+Note: The zip archives are not signed.  
 
 # Features
 
