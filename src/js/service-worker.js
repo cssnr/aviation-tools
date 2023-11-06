@@ -4,39 +4,28 @@ import { links, clipboardWrite, openOptionsFor } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(async function () {
     const contexts = [
-        // ['link', 'link', 'Link Menu'],
-        ['page', 'page', 'Page Menu'],
-        ['selection', 'registration', 'Registration Search'],
-        ['selection', 'flight', 'Flight # Search'],
-        ['selection', 'airport', 'Airport Search'],
-        // ['audio', 'audio', 'Audio Menu'],
-        // ['image', 'image', 'Image Menu'],
-        // ['video', 'video', 'Video Menu'],
+        // [['link'], 'link', 'Link Menu'],
+        [['page'], 'page', 'Page Menu'],
+        [['selection'], 'registration', 'Registration Search'],
+        [['selection'], 'flight', 'Flight # Search'],
+        [['selection'], 'airport', 'Airport Search'],
+        // [['audio'], 'audio', 'Audio Menu'],
+        // [['image'], 'image', 'Image Menu'],
+        // [['video'], 'video', 'Video Menu'],
     ]
     for (const context of contexts) {
         chrome.contextMenus.create({
             title: context[2],
-            contexts: [context[0]],
+            contexts: context[0],
             id: context[1],
         })
     }
     console.log('chrome.runtime.onInstalled')
     let { options } = (await chrome.storage.sync.get(['options'])) || {}
     console.log('options:', options)
-    // Set All Options to true if not set
+    // Set All Options to true if !options
     if (!options) {
-        for (const [key, value] of Object.entries(links)) {
-            // console.log(`${key}: ${value}`)
-            if (!options[key]) {
-                options[key] = {}
-            }
-            for (const [name] of Object.entries(value)) {
-                // console.log(`${name}: ${url}`)
-                options[key][name] = true
-            }
-        }
-        console.log('options:', options)
-        await chrome.storage.sync.set({ options: options })
+        await setNestedDefaults(links)
     }
 })
 
@@ -57,3 +46,24 @@ chrome.notifications.onClicked.addListener((notificationId) => {
     console.log(`notifications.onClicked: ${notificationId}`)
     chrome.notifications.clear(notificationId)
 })
+
+/**
+ * Sets all Nested Keys to true
+ * @function setNestedDefaults
+ * @param {Object} defaults
+ */
+async function setNestedDefaults(defaults) {
+    let options = {}
+    for (const [key, value] of Object.entries(defaults)) {
+        // console.log(`${key}: ${value}`)
+        if (!options[key]) {
+            options[key] = {}
+        }
+        for (const [name] of Object.entries(value)) {
+            // console.log(`${name}: ${url}`)
+            options[key][name] = true
+        }
+    }
+    console.log('options:', options)
+    await chrome.storage.sync.set({ options: options })
+}

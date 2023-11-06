@@ -172,7 +172,7 @@ async function searchForm(event) {
     const resp = await openOptionsFor(search, searchTerm.value)
     console.log(`resp: ${resp}`)
     if (!resp) {
-        console.error(`no options set for: ${search}`)
+        console.log(`no options set for: ${search}`)
         const url = chrome.runtime.getURL('html/options.html')
         await chrome.tabs.create({ active: true, url })
     }
