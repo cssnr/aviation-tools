@@ -12,11 +12,14 @@ chrome.runtime.onInstalled.addListener(async function () {
     let { options } = (await chrome.storage.sync.get(['options'])) || {}
     console.log('options:', options)
     if (!options) {
-        await setNestedDefaults(links)
+        options = await setNestedDefaults(links)
     }
     if (options.contextMenu) {
         await createContextMenus()
     }
+    chrome.runtime.setUninstallURL(
+        'https://github.com/cssnr/aviation-tools/issues'
+    )
 })
 
 chrome.contextMenus.onClicked.addListener(async function (ctx) {
@@ -47,6 +50,7 @@ chrome.notifications.onClicked.addListener((notificationId) => {
  * Sets all Nested Keys to true
  * @function setNestedDefaults
  * @param {Object} defaults
+ * @return {Object}
  */
 async function setNestedDefaults(defaults) {
     let options = {}
@@ -63,4 +67,5 @@ async function setNestedDefaults(defaults) {
     options.contextMenu = true
     console.log('options:', options)
     await chrome.storage.sync.set({ options: options })
+    return options
 }
