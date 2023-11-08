@@ -5,21 +5,38 @@ on:
   release:
     types: [published]
 
+env:
+  MOZILLA_ID: aviation-tools@cssnr.com
+
 jobs:
   build:
     name: 'Build'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    outputs:
+      version: ${{ steps.manifest.outputs.version }}
+      package_name: ${{ steps.manifest.outputs.package_name }}
+
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
+      - name: 'Parse Manifest'
+        id: manifest
+        run: |
+          # export version="$(jq '.version' < src/manifest.json)"
+          echo "version=$(jq '.version' < src/manifest.json)" >> "$GITHUB_OUTPUT"
+          export name="$(jq '.name' < src/manifest.json | tr '[:upper:]' '[:lower:]')"
+          echo "package_name=${name// /_}" >> "$GITHUB_OUTPUT"
+
       - name: 'Release Version Check'
         if: ${{ github.event_name == 'release' }}
         run: |
-          export version="$(jq '.version' < manifest.json | tr -d '"')"
-          if [ "${{ github.ref_name }}" != "${version}" ];then
+          # export version="$(jq '.version' < manifest.json | tr -d '"')"
+          echo ${{ github.ref_name }}
+          echo ${{ steps.manifest.outputs.version }}
+          if [ "${{ github.ref_name }}" != "${{ steps.manifest.outputs.version }}" ];then
             echo "Manifest Version ${version} does not match release tag ${{ github.ref_name }}"
             exit 1
           fi
@@ -48,3 +65,28 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+  publish:
+    name: 'Publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build]
+
+    steps:
+      - name: Publish Firefox
+        uses: maoserr/firefox_extension_publish@v1.0.4
+        with:
+          firefox_extension_id: ${{ env.MOZILLA_ID }}
+          api_key: ${{ secrets.FIREFOX_API_KEY }}
+          api_secret: ${{ secrets.FIREFOX_API_SECRET }}
+          file: web-ext-artifacts/${{ needs.build.outputs.package_name }}-firefox-${{ needs.build.outputs.version }}.zip
+#
+#      - uses: actions/download-artifact@v3
+#        with:
+#          name: my-artifact
+#          path: path/to/artifact
+#
+#      - name: Display structure of downloaded files
+#        run: ls -R
+#        working-directory: path/to/artifact
+#
