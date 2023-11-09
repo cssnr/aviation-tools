@@ -25,15 +25,13 @@ jobs:
       - name: 'Parse Manifest'
         id: manifest
         run: |
-          # export version="$(jq '.version' < manifest.json)"
-          echo "version=$(jq '.version' < manifest.json)" >> "$GITHUB_OUTPUT"
-          export name="$(jq '.name' < manifest.json | tr '[:upper:]' '[:lower:]')"
+          echo "version=$(jq '.version' < manifest.json | tr -d '"')" >> "$GITHUB_OUTPUT"
+          export name="$(jq '.name' < manifest.json | tr -d '"' | tr '[:upper:]' '[:lower:]')"
           echo "package_name=${name// /_}" >> "$GITHUB_OUTPUT"
 
       - name: 'Release Version Check'
         if: ${{ github.event_name == 'release' }}
         run: |
-          # export version="$(jq '.version' < manifest.json | tr -d '"')"
           echo ${{ github.ref_name }}
           echo ${{ steps.manifest.outputs.version }}
           if [ "${{ github.ref_name }}" != "${{ steps.manifest.outputs.version }}" ];then
