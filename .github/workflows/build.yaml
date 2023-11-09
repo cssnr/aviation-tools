@@ -73,13 +73,21 @@ jobs:
     needs: [build]
 
     steps:
-      - name: Publish Firefox
-        uses: maoserr/firefox_extension_publish@v1.0.4
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v3
         with:
-          firefox_extension_id: ${{ env.MOZILLA_ID }}
-          api_key: ${{ secrets.FIREFOX_API_KEY }}
-          api_secret: ${{ secrets.FIREFOX_API_SECRET }}
-          file: web-ext-artifacts/${{ needs.build.outputs.package_name }}-firefox-${{ needs.build.outputs.version }}.zip
+          name: artifacts
+
+      - name: 'Debug'
+        run: ls -R
+#
+#      - name: Publish Firefox
+#        uses: maoserr/firefox_extension_publish@v1.0.4
+#        with:
+#          firefox_extension_id: ${{ env.MOZILLA_ID }}
+#          api_key: ${{ secrets.FIREFOX_API_KEY }}
+#          api_secret: ${{ secrets.FIREFOX_API_SECRET }}
+#          file: web-ext-artifacts/${{ needs.build.outputs.package_name }}-firefox-${{ needs.build.outputs.version }}.zip
 #
 #      - uses: actions/download-artifact@v3
 #        with:
