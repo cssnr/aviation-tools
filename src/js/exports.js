@@ -28,15 +28,11 @@ export const links = {
  */
 export async function createContextMenus() {
     const contexts = [
-        // [['link'], 'link', 'Link Menu'],
         [['selection'], 'registration', 'Registration Search'],
         [['selection'], 'flight', 'Flight # Search'],
         [['selection'], 'airport', 'Airport Search'],
-        // [['audio'], 'audio', 'Audio Menu'],
-        // [['image'], 'image', 'Image Menu'],
-        // [['video'], 'video', 'Video Menu'],
-        [['selection'], 'separator', 'separator-1'],
-        [['page', 'link', 'image', 'selection'], 'options', 'Open Options'],
+        [['selection'], 'separator', 'separator-bottom'],
+        [['page', 'selection'], 'options', 'Open Options'],
     ]
     for (const context of contexts) {
         if (context[1] === 'separator') {

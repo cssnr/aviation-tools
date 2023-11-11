@@ -5,8 +5,9 @@ on:
   release:
     types: [published]
 
-#env:
-#  MOZILLA_ID: aviation-tools@cssnr.com
+env:
+  SRC_DIR: src
+  # MOZILLA_ID: aviation-tools@cssnr.com
 
 jobs:
   build:
@@ -44,10 +45,24 @@ jobs:
         with:
           node-version: 18
 
+      - name: 'Sign Mozilla Addon'
+        # if: ${{ github.event_name == 'release' }}
+        run: |
+          npm run manifest:firefox
+          npx web-ext sign --api-key="${{ secrets.FIREFOX_API_KEY }}" \
+            --api-secret="${{ secrets.FIREFOX_API_SECRET }}" \
+            --source-dir "${{ env.SRC_DIR }}"
+
+      - name: 'Debug 1'
+        run: ls -lA web-ext-artifacts
+
       - name: 'Build All'
         run: |
           npm install
           npm run build
+
+      - name: 'Debug 2'
+        run: ls -lA web-ext-artifacts
 
       - name: 'Upload to Actions'
         uses: actions/upload-artifact@v3
