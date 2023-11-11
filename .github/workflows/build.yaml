@@ -45,9 +45,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: 'Debug 1'
-        run: ls -lA web-ext-artifacts
-
       - name: 'Build All'
         run: |
           npm install
