@@ -7,16 +7,28 @@ import {
     openOptionsFor,
 } from './exports.js'
 
-chrome.runtime.onInstalled.addListener(async function () {
-    console.log('chrome.runtime.onInstalled')
+chrome.runtime.onInstalled.addListener(async function (details) {
+    console.log('chrome.runtime.onInstalled: details:', details)
+    // Set Default Options
     let { options } = (await chrome.storage.sync.get(['options'])) || {}
     console.log('options:', options)
     if (!options) {
         options = await setNestedDefaults(links)
     }
+    // Create Context Menus if Enabled
     if (options.contextMenu) {
         await createContextMenus()
     }
+    // Check if Updated and Show Release Notes
+    if (details.reason === 'update') {
+        const manifest = chrome.runtime.getManifest()
+        if (manifest.version !== details.previousVersion) {
+            const url = `https://github.com/cssnr/aviation-tools/releases/tag/${manifest.version}`
+            console.log(`url: ${url}`)
+            await chrome.tabs.create({ active: true, url })
+        }
+    }
+    // Set Uninstall URL
     chrome.runtime.setUninstallURL(
         'https://github.com/cssnr/aviation-tools/issues'
     )

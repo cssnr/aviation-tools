@@ -7,7 +7,6 @@ on:
 
 env:
   SRC_DIR: src
-  # MOZILLA_ID: aviation-tools@cssnr.com
 
 jobs:
   build:
@@ -16,6 +15,7 @@ jobs:
     timeout-minutes: 5
 
     outputs:
+      version: ${{ steps.manifest.outputs.version }}
       package_name: ${{ steps.manifest.outputs.package_name }}
 
     steps:
@@ -108,3 +108,14 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+#
+#  update:
+#    name: 'Update Manifest'
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 30
+#    needs: [build, publish]
+#    if: ${{ github.event_name == 'release' }}
+#
+#    steps:
+#      - name: 'Checkout'
+#        uses: actions/checkout@v3
