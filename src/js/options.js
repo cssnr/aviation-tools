@@ -25,6 +25,7 @@ async function initOptions() {
         }
     }
     document.getElementById('contextMenu').checked = options.contextMenu
+    document.getElementById('showUpdate').checked = options.showUpdate
 
     console.log(bookmarks)
     if (bookmarks?.length) {
@@ -69,6 +70,7 @@ async function saveOptions(event) {
     console.log(bookmarks)
 
     options.contextMenu = document.getElementById('contextMenu').checked
+    options.showUpdate = document.getElementById('showUpdate').checked
     if (options.contextMenu) {
         chrome.contextMenus.removeAll()
         await createContextMenus()

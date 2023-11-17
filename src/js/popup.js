@@ -103,8 +103,13 @@ function createBookmarkLink(ul, url) {
  * @param {MouseEvent} event
  */
 async function popupLink(event) {
-    console.log(event)
-    const url = chrome.runtime.getURL(event.target.dataset.href)
+    console.log('popupLink:', event)
+    let url
+    if (event.target.dataset.href.startsWith('http')) {
+        url = event.target.dataset.href
+    } else {
+        url = chrome.runtime.getURL(event.target.dataset.href)
+    }
     console.log(`url: ${url}`)
     await chrome.tabs.create({ active: true, url })
     window.close()
