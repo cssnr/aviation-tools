@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "name": "Aviation Tools",
   "description": "Aviation Quick Search and Lookup Tools.",
   "homepage_url": "https://github.com/cssnr/aviation-tools",
