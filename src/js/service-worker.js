@@ -66,6 +66,8 @@ chrome.contextMenus.onClicked.addListener(async function (ctx) {
  */
 async function setNestedDefaults(defaults) {
     let options = {}
+    options.contextMenu = true
+    options.showUpdate = true
     for (const [key, value] of Object.entries(defaults)) {
         // console.log(`${key}: ${value}`)
         if (!options[key]) {
@@ -76,7 +78,6 @@ async function setNestedDefaults(defaults) {
             options[key][name] = true
         }
     }
-    options.contextMenu = true
     console.log('options:', options)
     await chrome.storage.sync.set({ options: options })
     return options
