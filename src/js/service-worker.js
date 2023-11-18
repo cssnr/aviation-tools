@@ -19,8 +19,11 @@ chrome.runtime.onInstalled.addListener(async function (details) {
     if (options.contextMenu) {
         await createContextMenus()
     }
-    // Check if Updated and Show Release Notes
-    if (options.showUpdate && details.reason === 'update') {
+    // Check if Installed or Updated and Show Options or Release Notes
+    if (details.reason === 'install') {
+        const url = chrome.runtime.getURL('/html/options.html')
+        await chrome.tabs.create({ active: true, url })
+    } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
             const url = `https://github.com/cssnr/aviation-tools/releases/tag/${manifest.version}`
