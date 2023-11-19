@@ -1,6 +1,6 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/cjjhackeogffajjndfhemgniokonimin?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/manifest.json)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/manifest.json)
 [![Build](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
 # Aviation Tools
@@ -37,6 +37,9 @@ _Note: Firefox is currently only available from GitHub._
 
 # Features
 
+Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.   
+For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/aviation-tools/issues/new).
+
 *   Quick Search Registration, Flight Numbers, and Airports
 *   Search by Highlighting Text or Opening Popup Action
 *   Add Saved Bookmarks and Open All Bookmarks
@@ -44,8 +47,8 @@ _Note: Firefox is currently only available from GitHub._
 # Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Aviation Tools (A) icon, then;  
-**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
 **Chrome**, click the `Pin` icon.  
+**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
