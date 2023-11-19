@@ -109,6 +109,37 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+  mozilla-update:
+    name: 'Mozilla Addon Update JSON'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [publish-mozilla]
+    if: ${{ github.event_name == 'release' }}
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+
+      - name: 'Mozilla Addon Update'
+        uses: cssnr/mozilla-addon-update-action@master
+        with:
+          url: 'https://github.com/cssnr/aviation-tools/releases/download/{version}/aviation_tools-firefox.xpi'
+          manifest: manifest.json
+          update: update.json
+          addon_id: aviation-tools@cssnr.com
+
+      - name: 'Commit files'
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Update update.json"
+
+      - name: 'Push changes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
 #
 #  publish-chrome:
 #    name: 'Publish Chrome'
