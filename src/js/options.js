@@ -19,7 +19,7 @@ async function initOptions() {
     console.log(options)
     for (let subkey in options) {
         for (let key in options[subkey]) {
-            console.log(`${subkey}: ${key}: ${options[subkey][key]}`)
+            // console.log(`${subkey}: ${key}: ${options[subkey][key]}`)
             document.getElementById(`${subkey}-${key}`).checked =
                 options[subkey][key]
         }
@@ -47,8 +47,8 @@ async function initOptions() {
  * @param {MouseEvent} event
  */
 async function saveOptions(event) {
-    event.preventDefault()
     console.log('saveOptions:', event)
+    event.preventDefault()
     let options = {}
     let bookmarks = []
 
@@ -73,7 +73,7 @@ async function saveOptions(event) {
     options.showUpdate = document.getElementById('showUpdate').checked
     if (options.contextMenu) {
         chrome.contextMenus.removeAll()
-        await createContextMenus()
+        createContextMenus()
     } else {
         chrome.contextMenus.removeAll()
     }
@@ -112,8 +112,8 @@ function createBookmarkInput(number, value = '') {
  * @param {MouseEvent} event
  */
 function addBookmark(event) {
+    console.log('addBookmark:', event)
     event.preventDefault()
-    console.log(event)
     const el = document.getElementById('bookmarks')
     const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
     createBookmarkInput(next)
@@ -125,8 +125,8 @@ function addBookmark(event) {
  * @param {MouseEvent} event
  */
 function deleteBookmark(event) {
+    console.log('deleteBookmark:', event)
     event.preventDefault()
-    console.log(event)
     const inputs = document
         .getElementById('bookmarks')
         .getElementsByTagName('input').length

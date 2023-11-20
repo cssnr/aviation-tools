@@ -26,7 +26,7 @@ export const links = {
  * Create Context Menus
  * @function createContextMenus
  */
-export async function createContextMenus() {
+export function createContextMenus() {
     const contexts = [
         [['selection'], 'registration', 'Registration Search'],
         [['selection'], 'flight', 'Flight # Search'],

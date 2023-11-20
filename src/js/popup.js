@@ -15,6 +15,7 @@ document.getElementsByName('searchType').forEach((el) => {
 document
     .getElementById('all-bookmarks')
     .addEventListener('click', openAllBookmarks)
+
 document.getElementById('search-form').addEventListener('submit', searchForm)
 document.getElementById('search-term').focus()
 
