@@ -8,6 +8,7 @@ on:
 env:
   SRC_DIR: src
   CHROME_ID: cjjhackeogffajjndfhemgniokonimin
+  MOZILLA_ID: aviation-tools@cssnr.com
 
 jobs:
   build:
@@ -110,8 +111,8 @@ jobs:
           overwrite: true
           file_glob: true
 
-  mozilla-update:
-    name: 'Mozilla Addon Update JSON'
+  update-mozilla:
+    name: 'Update Mozilla'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [publish-mozilla]
@@ -125,9 +126,7 @@ jobs:
         uses: cssnr/mozilla-addon-update-action@master
         with:
           url: 'https://github.com/cssnr/aviation-tools/releases/download/{version}/aviation_tools-firefox.xpi'
-          manifest: manifest.json
-          update: update.json
-          addon_id: aviation-tools@cssnr.com
+          addon_id: ${{ env.MOZILLA_ID }}
 
       - name: 'Commit files'
         run: |
