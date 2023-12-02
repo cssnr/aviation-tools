@@ -1,14 +1,10 @@
 // JS Background Service Worker
 
-import {
-    links,
-    clipboardWrite,
-    createContextMenus,
-    openOptionsFor,
-} from './exports.js'
+import { links, clipboardWrite, openOptionsFor } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
+chrome.storage.onChanged.addListener(onChanged)
 
 const ghUrl = 'https://github.com/cssnr/aviation-tools'
 
@@ -22,13 +18,11 @@ async function onInstalled(details) {
     let { options } = await chrome.storage.sync.get(['options'])
     options = await setNestedDefaults(options, links)
     console.log('options:', options)
-
     if (options.contextMenu) {
         createContextMenus()
     }
     if (details.reason === 'install') {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
@@ -51,17 +45,40 @@ async function onClicked(ctx, tab) {
     console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
 
     if (['options'].includes(ctx.menuItemId)) {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else {
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         if (!term) {
-            const url = chrome.runtime.getURL('html/options.html')
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
+            chrome.runtime.openOptionsPage()
         }
         console.log(`navigator.clipboard.writeText: term: ${term}`)
         await clipboardWrite(term)
+    }
+}
+
+/**
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
+ */
+function onChanged(changes, namespace) {
+    console.log('onChanged:', changes, namespace)
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (
+            key === 'options' &&
+            oldValue &&
+            newValue &&
+            oldValue.contextMenu !== newValue.contextMenu
+        ) {
+            if (newValue?.contextMenu) {
+                console.log('Enabled contextMenu...')
+                createContextMenus()
+            } else {
+                console.log('Disabled contextMenu...')
+                chrome.contextMenus.removeAll()
+            }
+        }
     }
 }
 
@@ -94,4 +111,26 @@ async function setNestedDefaults(options, defaults) {
     console.log('options:', options)
     await chrome.storage.sync.set({ options: options })
     return options
+}
+
+/**
+ * Create Context Menus
+ * @function createContextMenus
+ */
+export function createContextMenus() {
+    const contexts = [
+        [['selection'], 'registration', 'normal', 'Registration Search'],
+        [['selection'], 'flight', 'normal', 'Flight # Search'],
+        [['selection'], 'airport', 'normal', 'Airport Search'],
+        [['selection'], 'separator-1', 'separator', 'separator'],
+        [['all'], 'options', 'normal', 'Open Options'],
+    ]
+    contexts.forEach((context) => {
+        chrome.contextMenus.create({
+            contexts: context[0],
+            id: context[1],
+            type: context[2],
+            title: context[3],
+        })
+    })
 }

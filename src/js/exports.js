@@ -23,35 +23,6 @@ export const links = {
 }
 
 /**
- * Create Context Menus
- * @function createContextMenus
- */
-export function createContextMenus() {
-    const contexts = [
-        [['selection'], 'registration', 'Registration Search'],
-        [['selection'], 'flight', 'Flight # Search'],
-        [['selection'], 'airport', 'Airport Search'],
-        [['selection'], 'separator', 'separator-bottom'],
-        [['page', 'selection'], 'options', 'Open Options'],
-    ]
-    for (const context of contexts) {
-        if (context[1] === 'separator') {
-            chrome.contextMenus.create({
-                type: context[1],
-                contexts: context[0],
-                id: context[2],
-            })
-        } else {
-            chrome.contextMenus.create({
-                title: context[2],
-                contexts: context[0],
-                id: context[1],
-            })
-        }
-    }
-}
-
-/**
  * Show Bootstrap Toast
  * Requires: jQuery
  * @function showToast

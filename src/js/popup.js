@@ -4,13 +4,11 @@ import { links, getLinkUrl, openOptionsFor } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
-document.querySelectorAll('[data-href]').forEach((el) => {
-    el.addEventListener('click', popupLink)
-})
+const popupLinks = document.querySelectorAll('[data-href]')
+popupLinks.forEach((el) => el.addEventListener('click', popLinks))
 
-document.getElementsByName('searchType').forEach((el) => {
-    el.addEventListener('change', saveSearchRadio)
-})
+const searchTypes = document.getElementsByName('searchType')
+searchTypes.forEach((el) => el.addEventListener('change', updateSearchType))
 
 document
     .getElementById('all-bookmarks')
@@ -93,35 +91,45 @@ function createBookmarkLink(ul, url) {
     a.title = url
     a.href = '#'
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', popupLink)
+    a.addEventListener('click', popLinks)
     li.appendChild(a)
 }
 
 /**
  * Popup Links Callback
  * because firefox needs us to call window.close() from the popup
- * @function popupLink
+ * @function popLinks
  * @param {MouseEvent} event
  */
-async function popupLink(event) {
-    console.log('popupLink:', event)
+async function popLinks(event) {
+    console.log('popLinks:', event)
+    event.preventDefault()
+    const anchor = event.target.closest('a')
     let url
-    if (event.target.dataset.href.startsWith('http')) {
-        url = event.target.dataset.href
-    } else {
-        url = chrome.runtime.getURL(event.target.dataset.href)
+    if (anchor?.dataset?.href.startsWith('http')) {
+        url = anchor.dataset.href
+    } else if (anchor?.dataset?.href === 'homepage') {
+        url = chrome.runtime.getManifest().homepage_url
+    } else if (anchor?.dataset?.href === 'options') {
+        chrome.runtime.openOptionsPage()
+        return window.close()
+    } else if (anchor?.dataset?.href) {
+        url = chrome.runtime.getURL(anchor.dataset.href)
     }
-    console.log(`url: ${url}`)
+    console.log('url:', url)
+    if (!url) {
+        return console.error('No dataset.href for anchor:', anchor)
+    }
     await chrome.tabs.create({ active: true, url })
-    window.close()
+    return window.close()
 }
 
 /**
- * Save Default Radio on Change Callback
- * @function defaultSearchChange
+ * Save Search Type Radio on Change Callback
+ * @function updateSearchType
  * @param {SubmitEvent} event
  */
-async function saveSearchRadio(event) {
+async function updateSearchType(event) {
     console.log('defaultSearchChange')
     console.log(event)
     // let { popup } = await chrome.storage.sync.get(['popup'])
@@ -147,9 +155,7 @@ async function searchForm(event) {
     console.log(options)
     if (!options) {
         console.log('no options')
-        const url = chrome.runtime.getURL('html/options.html')
-        await chrome.tabs.create({ active: true, url })
-        return
+        return chrome.runtime.openOptionsPage()
     }
     let search
     if (event.target.classList.contains('dropdown-item')) {
@@ -179,8 +185,7 @@ async function searchForm(event) {
     console.log(`resp: ${resp}`)
     if (!resp) {
         console.log(`no options set for: ${search}`)
-        const url = chrome.runtime.getURL('html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     }
     window.close()
 }
@@ -194,10 +199,7 @@ async function openAllBookmarks() {
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     console.log(bookmarks)
     if (!bookmarks?.length) {
-        await chrome.tabs.create({
-            active: true,
-            url: chrome.runtime.getURL('html/options.html'),
-        })
+        chrome.runtime.openOptionsPage()
     }
     for (const url of bookmarks) {
         console.log(`url: ${url}`)
