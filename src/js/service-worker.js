@@ -108,7 +108,7 @@ export function createContextMenus() {
     chrome.contextMenus.removeAll()
     const contexts = [
         [['selection'], 'registration', 'normal', 'Registration Search'],
-        [['selection'], 'flight', 'normal', 'Flight # Search'],
+        [['selection'], 'flight', 'normal', 'Flight Search'],
         [['selection'], 'airport', 'normal', 'Airport Search'],
         [['selection'], 'separator-1', 'separator', 'separator'],
         [['all'], 'options', 'normal', 'Open Options'],
@@ -150,9 +150,8 @@ async function setDefaultOptions(defaultOptions) {
             console.log(`Set ${key}:`, value)
         }
     }
-    const nestedChanges = await Promise.resolve(
-        setNestedDefaults(options, searchLinks)
-    )
+    const nestedChanges = setNestedDefaults(options, searchLinks)
+
     changed = changed || nestedChanges
     console.debug('changed', changed)
     if (changed) {
