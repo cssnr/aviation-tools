@@ -35,7 +35,7 @@ async function onInstalled(details) {
         setDefaultOptions({
             searchType: 'registration',
             contextMenu: true,
-            showUpdate: true,
+            showUpdate: false,
         })
     )
     console.log('options:', options)

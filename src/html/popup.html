@@ -14,7 +14,7 @@
 
 <div class="container-fluid p-3">
     <form id="search-form">
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col text-center">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col">
                 <label for="searchTerm" class="visually-hidden"></label>
                 <input id="searchTerm" class="form-control" type="text" placeholder="">
@@ -39,7 +39,7 @@
         <button type="submit" form="search-form" class="visually-hidden"></button>
     </form>
 
-    <div class="btn-group  w-100" role="group" aria-label="Search Buttons">
+    <div class="btn-group w-100 mb-2" role="group" aria-label="Search Buttons">
         <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Reg.</button>
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
@@ -57,47 +57,41 @@
         </div>
     </div>
 
-    <hr class="">
 
-    <div class="d-grid g-2 gap-3 mb-3">
-
-        <div class="btn-group " role="group" aria-label="Search Dropdown">
-            <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
-                <ul id="bookmarks" class="dropdown-menu">
-                    <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
-                </ul>
-            </div>
+    <div class="btn-group w-100 mb-2" role="group" aria-label="Search Dropdown">
+        <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
+            <ul id="bookmarks" class="dropdown-menu">
+                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
+            </ul>
         </div>
-
-<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
-<!--            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Country=N">-->
-<!--                ASN USA</button>-->
-<!--            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">-->
-<!--                ASN All 2023</button>-->
-<!--            <div class="btn-group btn-group-sm" role="group">-->
-<!--                <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Year</button>-->
-<!--                <ul id="asn-all" class="dropdown-menu">-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2022&sorteer=datekey_desc">2022</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2021&sorteer=datekey_desc">2020</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2020&sorteer=datekey_desc">2021</a></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://avherald.com/">-->
-<!--                AV Herald</button>-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">-->
-<!--                All 2023</button>-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://simpleflying.com/latest-news/">-->
-<!--                Simple Flying</button>-->
-<!--        </div>-->
-
-        <a class="btn btn-primary" role="button" href="../html/options.html">Open Options</a>
-
     </div>
+
+    <hr class="my-2">
+
+    <form id="options-form" class="mb-2">
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
+                <i class="fa-solid fa-circle-info ms-1"></i>
+            </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
+                Show Release Notes on Update
+                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
+                <i class="fa-solid fa-circle-info ms-1"></i>
+            </span>
+            </label>
+        </div>
+    </form>
+
+    <a class="btn btn-primary w-100" role="button" href="../html/options.html">Open Options</a>
 
     <hr class="">
 

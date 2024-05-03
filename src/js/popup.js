@@ -1,11 +1,23 @@
 // JS for popup.html
 
-import { searchLinks, getLinkUrl, openOptionsFor } from './exports.js'
+import {
+    searchLinks,
+    getLinkUrl,
+    openOptionsFor,
+    saveOptions,
+    updateOptions,
+} from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('#options-form input,select')
+    .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 document
     .getElementsByName('searchType')
     .forEach((el) => el.addEventListener('change', updateSearchType))
@@ -33,6 +45,7 @@ async function initPopup() {
         'bookmarks',
     ])
     console.debug('options, bookmarks:', options, bookmarks)
+    updateOptions(options)
 
     console.debug(`options.searchType:`, options.searchType)
     searchTerm.placeholder = options.searchType

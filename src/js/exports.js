@@ -97,50 +97,47 @@ export async function clipboardWrite(value) {
     }
 }
 
-// /**
-//  * Save Options Callback
-//  * @function saveOptions
-//  * @param {InputEvent} event
-//  */
-// export async function saveOptions(event) {
-//     console.debug('saveOptions:', event)
-//     const { options } = await chrome.storage.sync.get(['options'])
-//     let value
-//     if (event.target.type === 'checkbox') {
-//         value = event.target.checked
-//     } else if (event.target.type === 'number') {
-//         value = event.target.value.toString()
-//     } else {
-//         value = event.target.value
-//     }
-//     if (value !== undefined) {
-//         options[event.target.id] = value
-//         console.info(`Set: ${event.target.id}:`, value)
-//         await chrome.storage.sync.set({ options })
-//     } else {
-//         console.warn(`No Value for event.target.id: ${event.target.id}`)
-//     }
-// }
-
-// /**
-//  * Update Options based on typeof
-//  * @function initOptions
-//  * @param {Object} options
-//  */
-// export function updateOptions(options) {
-//     for (const [key, value] of Object.entries(options)) {
-//         // console.debug(`${key}: ${value}`)
-//         const el = document.getElementById(key)
-//         if (el) {
-//             if (typeof value === 'boolean') {
-//                 el.checked = value
-//             } else if (typeof value === 'string') {
-//                 el.value = value
-//             }
-//         }
-//         // el.classList.remove('is-invalid')
-//     }
-// }
+/**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+export async function saveOptions(event) {
+    console.debug('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key = event.target.id
+    let value
+    if (event.target.type === 'radio') {
+        key = event.target.name
+        const radios = document.getElementsByName(key)
+        for (const input of radios) {
+            if (input.checked) {
+                value = input.id
+                break
+            }
+        }
+    } else if (event.target.type === 'checkbox') {
+        value = event.target.checked
+    } else if (event.target.type === 'number') {
+        value = event.target.value.toString()
+    } else {
+        value = event.target.value?.trim()
+    }
+    if (value === undefined) {
+        return console.warn('No Value for key:', key)
+    }
+    // Handle Object Subkeys
+    if (key.includes('-')) {
+        const subkey = key.split('-')[1]
+        key = key.split('-')[0]
+        console.info(`Set: ${key}: ${subkey}:`, value)
+        options[key][subkey] = value
+    } else {
+        console.info(`Set: ${key}:`, value)
+        options[key] = value
+    }
+    await chrome.storage.sync.set({ options })
+}
 
 /**
  * Update Options based on type

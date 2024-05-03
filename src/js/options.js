@@ -1,6 +1,6 @@
 // JS for options.html
 
-import { showToast, updateOptions } from './exports.js'
+import { showToast, saveOptions, updateOptions } from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 
@@ -247,48 +247,6 @@ function onChanged(changes, namespace) {
             }
         }
     }
-}
-
-/**
- * Save Options Callback
- * @function saveOptions
- * @param {InputEvent} event
- */
-export async function saveOptions(event) {
-    console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target.id
-    let value
-    if (event.target.type === 'radio') {
-        key = event.target.name
-        const radios = document.getElementsByName(key)
-        for (const input of radios) {
-            if (input.checked) {
-                value = input.id
-                break
-            }
-        }
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
-    } else if (event.target.type === 'number') {
-        value = event.target.value.toString()
-    } else {
-        value = event.target.value?.trim()
-    }
-    if (value === undefined) {
-        return console.warn('No Value for key:', key)
-    }
-    // Handle Object Subkeys
-    if (key.includes('-')) {
-        const subkey = key.split('-')[1]
-        key = key.split('-')[0]
-        console.info(`Set: ${key}: ${subkey}:`, value)
-        options[key][subkey] = value
-    } else {
-        console.info(`Set: ${key}:`, value)
-        options[key] = value
-    }
-    await chrome.storage.sync.set({ options })
 }
 
 /**
