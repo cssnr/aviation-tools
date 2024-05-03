@@ -15,10 +15,13 @@ async function onStartup() {
     console.log('onStartup')
     if (typeof browser !== 'undefined') {
         console.log('Firefox CTX Menu Workaround')
-        const { options } = await chrome.storage.sync.get(['options'])
+        const { bookmarks, options } = await chrome.storage.sync.get([
+            'bookmarks',
+            'options',
+        ])
         console.debug('options:', options)
         if (options.contextMenu) {
-            createContextMenus()
+            createContextMenus(bookmarks)
         }
     }
 }
@@ -39,8 +42,10 @@ async function onInstalled(details) {
         })
     )
     console.log('options:', options)
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    console.log('bookmarks:', bookmarks)
     if (options.contextMenu) {
-        createContextMenus()
+        createContextMenus(bookmarks)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
@@ -64,10 +69,24 @@ async function onInstalled(details) {
  */
 async function onClicked(ctx, tab) {
     console.debug('onClicked:', ctx, tab)
+    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
     if (ctx.menuItemId === 'options') {
+        console.debug('options')
         chrome.runtime.openOptionsPage()
+    } else if (ctx.menuItemId.startsWith('bookmark')) {
+        console.debug('bookmark')
+        const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+        if (!bookmarks.length) {
+            chrome.runtime.openOptionsPage()
+        } else {
+            const idx = parseInt(ctx.menuItemId.split('-')[1])
+            // console.debug('idx:', idx)
+            const url = bookmarks[idx]
+            // console.debug('url:', url)
+            await chrome.tabs.create({ active: true, url })
+        }
     } else {
-        console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+        console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         if (!term) {
             chrome.runtime.openOptionsPage()
@@ -82,18 +101,27 @@ async function onClicked(ctx, tab) {
  * @param {Object} changes
  * @param {String} namespace
  */
-function onChanged(changes, namespace) {
+async function onChanged(changes, namespace) {
     // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
             if (oldValue.contextMenu !== newValue.contextMenu) {
                 if (newValue?.contextMenu) {
                     console.info('Enabled contextMenu...')
-                    createContextMenus()
+                    const { bookmarks } = await chrome.storage.sync.get([
+                        'bookmarks',
+                    ])
+                    createContextMenus(bookmarks)
                 } else {
                     console.info('Disabled contextMenu...')
                     chrome.contextMenus.removeAll()
                 }
+            }
+        } else if (namespace === 'sync' && key === 'bookmarks') {
+            const { options } = await chrome.storage.sync.get(['options'])
+            if (options?.contextMenu) {
+                console.log('Updating Context Menu Bookmarks...')
+                createContextMenus(newValue)
             }
         }
     }
@@ -102,16 +130,20 @@ function onChanged(changes, namespace) {
 /**
  * Create Context Menus
  * @function createContextMenus
+ * @param {Array} bookmarks
  */
-export function createContextMenus() {
-    console.log('createContextMenus')
+export function createContextMenus(bookmarks) {
+    console.log('createContextMenus', bookmarks)
     chrome.contextMenus.removeAll()
+    const ctx = ['all']
     const contexts = [
         [['selection'], 'registration', 'normal', 'Registration Search'],
         [['selection'], 'flight', 'normal', 'Flight Search'],
         [['selection'], 'airport', 'normal', 'Airport Search'],
         [['selection'], 'separator-1', 'separator', 'separator'],
-        [['all'], 'options', 'normal', 'Open Options'],
+        [ctx, 'bookmarks', 'normal', 'Bookmarks'],
+        [ctx, 'separator-2', 'separator', 'separator'],
+        [ctx, 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {
         chrome.contextMenus.create({
@@ -121,6 +153,18 @@ export function createContextMenus() {
             title: context[3],
         })
     })
+    if (bookmarks) {
+        bookmarks.forEach((url, i) => {
+            // console.log(`pattern: ${i}: ${pattern}`)
+            const title = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+            chrome.contextMenus.create({
+                parentId: 'bookmarks',
+                title: title,
+                contexts: ctx,
+                id: `bookmark-${i}`,
+            })
+        })
+    }
 }
 
 /**

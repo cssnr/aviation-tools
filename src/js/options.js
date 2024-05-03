@@ -60,18 +60,18 @@ function updateBookmarks(data) {
     const trashCan = document.querySelector('.fa-regular.fa-trash-can')
     data.forEach((value) => {
         const row = tbody.insertRow()
-        const button = document.createElement('a')
+        const delBtn = document.createElement('a')
         const svg = trashCan.cloneNode(true)
-        button.appendChild(svg)
-        button.title = 'Delete'
-        button.dataset.value = value
-        button.classList.add('link-danger')
-        button.setAttribute('role', 'button')
-        button.addEventListener('click', deleteBookmark)
+        delBtn.appendChild(svg)
+        delBtn.title = 'Delete'
+        delBtn.dataset.value = value
+        delBtn.classList.add('link-danger')
+        delBtn.setAttribute('role', 'button')
+        delBtn.addEventListener('click', deleteBookmark)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
         // cell1.dataset.idx = i.toString()
-        cell1.appendChild(button)
+        cell1.appendChild(delBtn)
 
         const link = document.createElement('a')
         // link.dataset.idx = idx
@@ -90,7 +90,7 @@ function updateBookmarks(data) {
         // cell2.id = `td-${i}`
         // cell2.dataset.idx = i.toString()
         cell2.classList.add('text-break')
-        cell2.setAttribute('role', 'button')
+        // cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
     })
 }

@@ -105,7 +105,7 @@ function createBookmarkLink(ul, url) {
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
-    a.textContent = url.substring(8, 50)
+    a.textContent = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
     a.href = url
     a.title = url
     a.classList.add('dropdown-item', 'small')
