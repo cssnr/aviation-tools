@@ -9,3 +9,7 @@ input::placeholder {
     text-align: center;
     text-transform: capitalize;
 }
+
+.search-buttons a.dropdown-item {
+    text-transform: capitalize;
+}

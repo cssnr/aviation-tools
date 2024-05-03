@@ -4,10 +4,10 @@ export const searchLinks = {
     registration: {
         flightaware: 'https://flightaware.com/resources/registration/',
         flightradar: 'https://www.flightradar24.com/data/aircraft/',
-        airfleets: 'https://www.airfleets.net/recherche/?key=',
         avherald:
             'https://avherald.com/h?opt=0&dosearch=1&search.x=0&search.y=0&search_term=',
         asn: 'https://aviation-safety.net/wikibase/dblist2.php?re=',
+        airfleets: 'https://www.airfleets.net/recherche/?key=',
         jetphotos: 'https://www.jetphotos.com/registration/',
     },
     flight: {
