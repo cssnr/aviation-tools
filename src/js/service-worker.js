@@ -1,12 +1,10 @@
 // JS Background Service Worker
 
-import { links, clipboardWrite, openOptionsFor } from './exports.js'
+import { searchLinks, clipboardWrite, openOptionsFor } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.storage.onChanged.addListener(onChanged)
-
-const ghUrl = 'https://github.com/cssnr/aviation-tools'
 
 /**
  * Installed Callback
@@ -15,23 +13,25 @@ const ghUrl = 'https://github.com/cssnr/aviation-tools'
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
+    const githubURL = 'https://github.com/cssnr/aviation-tools'
     let { options } = await chrome.storage.sync.get(['options'])
-    options = await setNestedDefaults(options, links)
+    options = await Promise.resolve(setNestedDefaults(options, searchLinks))
     console.log('options:', options)
     if (options.contextMenu) {
         createContextMenus()
     }
-    if (details.reason === 'install') {
+    if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
-    } else if (options.showUpdate && details.reason === 'update') {
-        const manifest = chrome.runtime.getManifest()
-        if (manifest.version !== details.previousVersion) {
-            const url = `${ghUrl}/releases/tag/${manifest.version}`
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
+    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+        if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
+            if (manifest.version !== details.previousVersion) {
+                const url = `${githubURL}/releases/tag/${manifest.version}`
+                await chrome.tabs.create({ url, active: false })
+            }
         }
     }
-    chrome.runtime.setUninstallURL(`${ghUrl}/issues`)
+    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**
@@ -43,8 +43,7 @@ async function onInstalled(details) {
 async function onClicked(ctx, tab) {
     console.log('contextMenuClick:', ctx, tab)
     console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
-
-    if (['options'].includes(ctx.menuItemId)) {
+    if (ctx.menuItemId === 'options') {
         chrome.runtime.openOptionsPage()
     } else {
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
@@ -63,20 +62,17 @@ async function onClicked(ctx, tab) {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-        if (
-            key === 'options' &&
-            oldValue &&
-            newValue &&
-            oldValue.contextMenu !== newValue.contextMenu
-        ) {
-            if (newValue?.contextMenu) {
-                console.log('Enabled contextMenu...')
-                createContextMenus()
-            } else {
-                console.log('Disabled contextMenu...')
-                chrome.contextMenus.removeAll()
+    // console.log('onChanged:', changes, namespace)
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
+            if (oldValue.contextMenu !== newValue.contextMenu) {
+                if (newValue?.contextMenu) {
+                    console.log('Enabled contextMenu...')
+                    createContextMenus()
+                } else {
+                    console.log('Disabled contextMenu...')
+                    chrome.contextMenus.removeAll()
+                }
             }
         }
     }
@@ -118,6 +114,8 @@ async function setNestedDefaults(options, defaults) {
  * @function createContextMenus
  */
 export function createContextMenus() {
+    console.log('createContextMenus')
+    chrome.contextMenus.removeAll()
     const contexts = [
         [['selection'], 'registration', 'normal', 'Registration Search'],
         [['selection'], 'flight', 'normal', 'Flight # Search'],

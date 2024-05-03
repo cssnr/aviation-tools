@@ -4,141 +4,144 @@
     <title>Aviation Tools</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/options.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
 <body>
 
 <div class="container-fluid p-3">
-    <div class="row">
-        <div class="col-md-8 col-12 m-auto">
-            <div class="card">
-                <div class="card-body pb-0">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
-                        <h1 class="">Aviation Tools</h1>
+<div class="row">
+<div class="col-md-8 col-12 m-auto">
+<div class="card">
+<div class="card-body pb-0">
+    <div class="d-flex justify-content-center align-items-center">
+        <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
+        <h1 class="">Aviation Tools</h1>
+    </div>
+    <p class="text-center mb-0">v<span class="version"></span></p>
+    <table class="table table-sm table-borderless ">
+        <caption class="visually-hidden">Keyboard Shortcuts</caption>
+        <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
+        <tbody>
+            <tr>
+                <td>Show Popup Keybind</td>
+                <td class="text-end"><kbd id="mainKey">Unknown</kbd></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr class="my-2">
+    <form id="options-form">
+        <div class="form-check form-switch fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+        </div>
+        <div class="form-check form-switch fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+        </div>
+        <hr class="my-2">
+        <div class="row mb-3">
+            <div class="col-sm-6 col-xl-4 col-12">
+                <h5>Registration Defaults</h5>
+                <div class="">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-flightaware">
+                        <label class="form-check-label" for="registration-flightaware">Flight Aware</label>
                     </div>
-                    <p class="text-center mb-0">v<span class="version"></span></p>
-                    <table class="table table-sm table-borderless ">
-                        <caption class="visually-hidden">Keyboard Shortcuts</caption>
-                        <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>Show Popup Keybind</td>
-                                <td class="text-end"><kbd id="mainKey">Unknown</kbd></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr class="my-2">
-                    <form id="options-form">
-                        <div class="form-check form-switch fs-5">
-                            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
-                            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
-                        </div>
-                        <div class="form-check form-switch fs-5">
-                            <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
-                            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
-                        </div>
-                        <hr class="my-2">
-                        <div class="row mb-3">
-                            <div class="col-sm-6 col-xl-4 col-12">
-                                <h5>Registration Defaults</h5>
-                                <div class="">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-flightaware">
-                                        <label class="form-check-label" for="registration-flightaware">Flight Aware</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-flightradar">
-                                        <label class="form-check-label" for="registration-flightradar">Flight Radar 24</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-airfleets">
-                                        <label class="form-check-label" for="registration-airfleets">Air Fleet</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-avherald">
-                                        <label class="form-check-label" for="registration-avherald">Avation Herald</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-asn">
-                                        <label class="form-check-label" for="registration-asn">Aviation Safety Network</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="registration-jetphotos">
-                                        <label class="form-check-label" for="registration-jetphotos">Jet Photos</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xl-4 col-12">
-                                <h5>Flight # Defaults</h5>
-                                <div class="">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flight-flightaware">
-                                        <label class="form-check-label" for="flight-flightaware">Flight Aware</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flight-flightradar">
-                                        <label class="form-check-label" for="flight-flightradar">Flight Radar 24</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xl-4 col-12">
-                                <h5>Airport Defaults</h5>
-                                <div class="">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="airport-flightaware">
-                                        <label class="form-check-label" for="airport-flightaware">Flight Aware</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="airport-flightradar">
-                                        <label class="form-check-label" for="airport-flightradar">Flight Radar 24</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="airport-airnav">
-                                        <label class="form-check-label" for="airport-airnav">Air Nav</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="airport-liveatc">
-                                        <label class="form-check-label" for="airport-liveatc">Live ATC</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="my-2">
-                        <div class="row">
-                            <div class="col">
-                                <h5>Custom Bookmarks</h5>
-                                <p id="add-bookmark" class="badge text-bg-success" role="button">Add Bookmark</p>
-                                <div id="bookmarks"></div>
-                            </div>
-                        </div>
-                    </form>
-                    <hr class="mb-2">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-flightradar">
+                        <label class="form-check-label" for="registration-flightradar">Flight Radar 24</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-airfleets">
+                        <label class="form-check-label" for="registration-airfleets">Air Fleet</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-avherald">
+                        <label class="form-check-label" for="registration-avherald">Avation Herald</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-asn">
+                        <label class="form-check-label" for="registration-asn">Aviation Safety Network</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-jetphotos">
+                        <label class="form-check-label" for="registration-jetphotos">Jet Photos</label>
+                    </div>
                 </div>
-                <div class="text-center mb-2">
-                    <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-                       href="https://github.com/cssnr/aviation-tools">Get Support</a>
-                    |
-                    <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-                       href="https://github.com/cssnr/aviation-tools">Visit Homepage</a>
+            </div>
+            <div class="col-sm-6 col-xl-4 col-12">
+                <h5>Flight # Defaults</h5>
+                <div class="">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flight-flightaware">
+                        <label class="form-check-label" for="flight-flightaware">Flight Aware</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flight-flightradar">
+                        <label class="form-check-label" for="flight-flightradar">Flight Radar 24</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-4 col-12">
+                <h5>Airport Defaults</h5>
+                <div class="">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="airport-flightaware">
+                        <label class="form-check-label" for="airport-flightaware">Flight Aware</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="airport-flightradar">
+                        <label class="form-check-label" for="airport-flightradar">Flight Radar 24</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="airport-airnav">
+                        <label class="form-check-label" for="airport-airnav">Air Nav</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="airport-liveatc">
+                        <label class="form-check-label" for="airport-liveatc">Live ATC</label>
+                    </div>
                 </div>
             </div>
         </div>
+        <hr class="my-2">
+        <div class="row">
+            <div class="col">
+                <h5>Custom Bookmarks</h5>
+                <p id="add-bookmark" class="badge text-bg-success" role="button">Add Bookmark</p>
+                <div id="bookmarks"></div>
+            </div>
+        </div>
+    </form>
+    <hr class="mb-2">
+    <div class="text-center mb-2">
+        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+           href="https://github.com/cssnr/aviation-tools">Get Support</a>
+        <svg><use xlink:href="#bi-dot" /></svg>
+        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+           href="homepage_url">Visit Homepage</a>
     </div>
-</div>
+</div> <!-- card-body -->
+</div> <!-- card -->
+</div> <!-- col -->
+</div> <!-- row -->
+</div> <!-- container -->
 
-<div id="bottom-container" class="position-fixed bottom-0 end-0">
-    <div id="toast-container" class=""></div>
-    <div class="d-flex justify-content-end mt-4">
-        <button id="submit" type="submit" form="options-form" class="btn btn-outline-success text-end">Save Options</button>
-    </div>
-</div>
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+</div> <!-- toast -->
+
+<div class="d-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
+        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+    </svg>
+</div> <!-- d-none -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
-<script type="text/javascript" src="../js/main.js"></script>
 <script type="module" src="../js/options.js"></script>
 
 </body>

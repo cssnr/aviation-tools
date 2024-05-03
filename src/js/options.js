@@ -1,10 +1,14 @@
 // JS for options.html
 
-import { showToast } from './exports.js'
+import { showToast, updateOptions } from './exports.js'
+
+chrome.storage.onChanged.addListener(onChanged)
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.getElementById('options-form').addEventListener('submit', saveOptions)
 document.getElementById('add-bookmark').addEventListener('click', addBookmark)
+document
+    .querySelectorAll('#options-form input,select')
+    .forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
  * Options Page Init
@@ -12,20 +16,17 @@ document.getElementById('add-bookmark').addEventListener('click', addBookmark)
  */
 async function initOptions() {
     console.log('initOptions')
+
+    const manifest = chrome.runtime.getManifest()
+    document.querySelector('.version').textContent = manifest.version
+    document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
+
     const { options, bookmarks } = await chrome.storage.sync.get([
         'options',
         'bookmarks',
     ])
     console.log(options)
-    for (let subkey in options) {
-        for (let key in options[subkey]) {
-            // console.log(`${subkey}: ${key}: ${options[subkey][key]}`)
-            document.getElementById(`${subkey}-${key}`).checked =
-                options[subkey][key]
-        }
-    }
-    document.getElementById('contextMenu').checked = options.contextMenu
-    document.getElementById('showUpdate').checked = options.showUpdate
+    updateOptions(options)
 
     console.log(bookmarks)
     if (bookmarks?.length) {
@@ -42,46 +43,103 @@ async function initOptions() {
 }
 
 /**
- * Save Options Click Callback
- * @function saveOptions
- * @param {MouseEvent} event
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
  */
-async function saveOptions(event) {
-    console.log('saveOptions:', event)
-    event.preventDefault()
-    let options = {}
-    let bookmarks = []
-
-    Array.from(event.target.elements).forEach((input) => {
-        if (input.type === 'checkbox') {
-            const subkey = input.id.split('-')[0]
-            const key = input.id.split('-')[1]
-            // console.log(`${subkey}: ${key}: ${input.checked}`)
-            if (options[subkey] === undefined) {
-                options[subkey] = {}
-            }
-            options[subkey][key] = input.checked
+function onChanged(changes, namespace) {
+    console.debug('onChanged:', changes, namespace)
+    for (const [key, { newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options') {
+            console.debug('newValue:', newValue)
+            updateOptions(newValue)
         }
-
-        if (input.classList.contains('bookmark-link') && input.value) {
-            bookmarks.push(input.value)
-        }
-    })
-    console.log(bookmarks)
-
-    options.contextMenu = document.getElementById('contextMenu').checked
-    options.showUpdate = document.getElementById('showUpdate').checked
-    // if (options.contextMenu) {
-    //     chrome.contextMenus.removeAll()
-    //     createContextMenus()
-    // } else {
-    //     chrome.contextMenus.removeAll()
-    // }
-    console.log(options)
-
-    await chrome.storage.sync.set({ options, bookmarks })
-    showToast('Options Saved')
+    }
 }
+
+/**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+export async function saveOptions(event) {
+    console.debug('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key = event.target.id
+    let value
+    if (event.target.type === 'radio') {
+        key = event.target.name
+        const radios = document.getElementsByName(key)
+        for (const input of radios) {
+            if (input.checked) {
+                value = input.id
+                break
+            }
+        }
+    } else if (event.target.type === 'checkbox') {
+        value = event.target.checked
+    } else if (event.target.type === 'number') {
+        value = event.target.value.toString()
+    } else {
+        value = event.target.value?.trim()
+    }
+    if (value === undefined) {
+        return console.warn('No Value for key:', key)
+    }
+    // Handle Object Subkeys
+    if (key.includes('-')) {
+        const subkey = key.split('-')[1]
+        key = key.split('-')[0]
+        console.info(`Set: ${key}: ${subkey}:`, value)
+        options[key][subkey] = value
+    } else {
+        console.info(`Set: ${key}:`, value)
+        options[key] = value
+    }
+    await chrome.storage.sync.set({ options })
+}
+
+// /**
+//  * @function saveOptions
+//  * @param {MouseEvent} event
+//  */
+// async function saveOptions(event) {
+//     console.log('oldSaveOptions:', event)
+//     event.preventDefault()
+//     const { options } = await chrome.storage.sync.get(['options'])
+//     let bookmarks = []
+//
+//     Array.from(event.target.elements).forEach((input) => {
+//         if (input.type === 'checkbox') {
+//             const subkey = input.id.split('-')[0]
+//             const key = input.id.split('-')[1]
+//             // console.log(`${subkey}: ${key}: ${input.checked}`)
+//             if (options[subkey] === undefined) {
+//                 options[subkey] = {}
+//             }
+//             options[subkey][key] = input.checked
+//         }
+//
+//         if (input.classList.contains('bookmark-link') && input.value) {
+//             bookmarks.push(input.value)
+//         }
+//     })
+//     console.log(bookmarks)
+//
+//     options.contextMenu = document.getElementById('contextMenu').checked
+//     options.showUpdate = document.getElementById('showUpdate').checked
+//     // if (options.contextMenu) {
+//     //     chrome.contextMenus.removeAll()
+//     //     createContextMenus()
+//     // } else {
+//     //     chrome.contextMenus.removeAll()
+//     // }
+//     console.log(options)
+//
+//     await chrome.storage.sync.set({ options, bookmarks })
+//     showToast('Options Saved')
+// }
 
 /**
  * Add Form Input for a Filter
@@ -125,11 +183,12 @@ function addBookmark(event) {
  * @param {MouseEvent} event
  */
 function deleteBookmark(event) {
-    console.log('deleteBookmark:', event)
+    console.log('deleteBookmark: event, this:', event, this)
     event.preventDefault()
-    const inputs = document
-        .getElementById('bookmarks')
-        .getElementsByTagName('input').length
+    const inputs = document.querySelectorAll('#bookmarks input').length
+    // const inputs = document
+    //     .getElementById('bookmarks')
+    //     .getElementsByTagName('input').length
     console.log(`inputs: ${inputs}`)
     if (inputs > 1) {
         const input = document.getElementById(`bookmark-${this.dataset.id}`)

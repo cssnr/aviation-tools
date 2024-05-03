@@ -1,8 +1,9 @@
-.toast {
-    max-width: 260px;
+/* CSS for options.html */
+
+.card {
+    min-width: 380px;
 }
 
-#bottom-container {
-    margin-bottom: 50px;
-    margin-right: 25px;
+.toast {
+    max-width: 260px;
 }

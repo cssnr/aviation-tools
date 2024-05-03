@@ -1,9 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aviation Tools</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css"  href="../css/popup.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
@@ -98,17 +101,29 @@
 
     <hr class="">
 
-    <div class="text-center">
-        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"
-           data-href="homepage">Aviation Tools</a> v<span class="version"></span>
+    <div class="d-flex justify-content-center align-items-center text-center small">
+        <img src="../images/logo16.png" width="16" height="16" alt="ASN Plus" title="ASN Plus">
+        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
+           href="homepage_url">Aviation Tools</a> v<span class="version"></span>
     </div>
 
-</div>
+</div> <!-- container -->
+
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container bottom-0 end-0 p-3"></div>
+</div> <!-- toast -->
+
+<div class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body text-break small"></div>
+        </div>
+    </div>
+</div> <!-- d-none -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
-<script type="text/javascript" src="../js/main.js"></script>
 <script type="module" src="../js/popup.js"></script>
 
 </body>

@@ -1,6 +1,6 @@
 // JS Exported Functions
 
-export const links = {
+export const searchLinks = {
     registration: {
         flightaware: 'https://flightaware.com/resources/registration/',
         flightradar: 'https://www.flightradar24.com/data/aircraft/',
@@ -20,30 +20,6 @@ export const links = {
         airnav: 'https://www.airnav.com/airport/',
         liveatc: 'https://www.liveatc.net/search/?icao=',
     },
-}
-
-/**
- * Show Bootstrap Toast
- * Requires: jQuery
- * @function showToast
- * @param {String} message
- * @param {String} bsClass
- */
-export function showToast(message, bsClass = 'success') {
-    // TODO: Remove jQuery Dependency
-    const toastEl = $(
-        '<div class="toast align-items-center border-0 my-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
-            '    <div class="d-flex">\n' +
-            '        <div class="toast-body">Options Saved</div>\n' +
-            '        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-            '    </div>\n' +
-            '</div>'
-    )
-    toastEl.find('.toast-body').text(message)
-    toastEl.addClass('text-bg-' + bsClass)
-    $('#toast-container').append(toastEl)
-    const toast = new bootstrap.Toast(toastEl)
-    toast.show()
 }
 
 /**
@@ -90,7 +66,7 @@ export function getLinkUrl(subkey, key, value) {
     //     value = value.toLowerCase().replace(/[\s-]+/g, '')
     // }
     console.log(`${subkey}: ${key}: ${value}`)
-    const link = links[subkey][key] + value.trim()
+    const link = searchLinks[subkey][key] + value.trim()
     console.log(`link: ${link}`)
     return link
 }
@@ -117,4 +93,130 @@ export async function clipboardWrite(value) {
             data: value,
         })
     }
+}
+
+// /**
+//  * Save Options Callback
+//  * @function saveOptions
+//  * @param {InputEvent} event
+//  */
+// export async function saveOptions(event) {
+//     console.debug('saveOptions:', event)
+//     const { options } = await chrome.storage.sync.get(['options'])
+//     let value
+//     if (event.target.type === 'checkbox') {
+//         value = event.target.checked
+//     } else if (event.target.type === 'number') {
+//         value = event.target.value.toString()
+//     } else {
+//         value = event.target.value
+//     }
+//     if (value !== undefined) {
+//         options[event.target.id] = value
+//         console.info(`Set: ${event.target.id}:`, value)
+//         await chrome.storage.sync.set({ options })
+//     } else {
+//         console.warn(`No Value for event.target.id: ${event.target.id}`)
+//     }
+// }
+
+// /**
+//  * Update Options based on typeof
+//  * @function initOptions
+//  * @param {Object} options
+//  */
+// export function updateOptions(options) {
+//     for (const [key, value] of Object.entries(options)) {
+//         // console.debug(`${key}: ${value}`)
+//         const el = document.getElementById(key)
+//         if (el) {
+//             if (typeof value === 'boolean') {
+//                 el.checked = value
+//             } else if (typeof value === 'string') {
+//                 el.value = value
+//             }
+//         }
+//         // el.classList.remove('is-invalid')
+//     }
+// }
+
+/**
+ * Update Options based on type
+ * @function initOptions
+ * @param {Object} options
+ */
+export function updateOptions(options) {
+    console.debug('updateOptions:', options)
+    for (let [key, value] of Object.entries(options)) {
+        if (typeof value === 'undefined') {
+            console.warn('Value undefined for key:', key)
+            continue
+        }
+        if (key.startsWith('radio')) {
+            key = value
+            value = true
+        }
+        console.debug(`${key}:`, value)
+        // console.debug('key:', key)
+        // console.debug('value:', value)
+        const el = document.getElementById(key)
+        // console.debug('el:', el)
+        // Handle Object Subkeys
+        if (typeof value === 'object') {
+            console.debug('Update Object value:', value)
+            for (const [subkey, checked] of Object.entries(value)) {
+                const subEl = document.getElementById(`${key}-${subkey}`)
+                if (subEl) {
+                    subEl.checked = checked
+                }
+            }
+            continue
+        }
+        if (!el) {
+            console.debug('element not found for key:', key)
+            continue
+        }
+        if (!['INPUT', 'SELECT'].includes(el.tagName)) {
+            el.textContent = value.toString()
+        } else if (el.type === 'checkbox') {
+            el.checked = value
+        } else {
+            el.value = value
+        }
+        if (el.dataset.related) {
+            hideShowElement(`#${el.dataset.related}`, value)
+        }
+    }
+}
+
+function hideShowElement(selector, show, speed = 'fast') {
+    const element = $(`${selector}`)
+    // console.debug('hideShowElement:', show, element)
+    if (show) {
+        element.show(speed)
+    } else {
+        element.hide(speed)
+    }
+}
+
+/**
+ * Show Bootstrap Toast
+ * @function showToast
+ * @param {String} message
+ * @param {String} type
+ */
+export function showToast(message, type = 'success') {
+    console.debug(`showToast: ${type}: ${message}`)
+    const clone = document.querySelector('.d-none .toast')
+    const container = document.getElementById('toast-container')
+    if (!clone || !container) {
+        return console.warn('Missing clone or container:', clone, container)
+    }
+    const element = clone.cloneNode(true)
+    element.querySelector('.toast-body').innerHTML = message
+    element.classList.add(`text-bg-${type}`)
+    container.appendChild(element)
+    const toast = new bootstrap.Toast(element)
+    element.addEventListener('mousemove', () => toast.hide())
+    toast.show()
 }
