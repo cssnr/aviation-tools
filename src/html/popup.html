@@ -1,9 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aviation Tools</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css"  href="../css/popup.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
@@ -11,7 +14,7 @@
 
 <div class="container-fluid p-3">
     <form id="search-form">
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col text-center">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
@@ -19,24 +22,24 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchFlight" value="flight">
-                    <label class="form-check-label small" for="searchFlight">Flight #</label>
+                    <label class="form-check-label small" for="searchFlight">Flight</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchAirport" value="airport">
-                    <label class="form-check-label small" for="searchAirport">Airport Code</label>
+                    <label class="form-check-label small" for="searchAirport">Airport</label>
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-2">
             <div class="col">
-                <label for="search-term" class="visually-hidden"></label>
-                <input id="search-term" class="form-control" type="text" placeholder="Registration, Flight # or Airport Code">
+                <label for="searchTerm" class="visually-hidden"></label>
+                <input id="searchTerm" class="form-control" type="text" placeholder="">
             </div>
         </div>
         <button type="submit" form="search-form" class="visually-hidden"></button>
     </form>
 
-    <div class="btn-group  w-100" role="group" aria-label="Search Buttons">
+    <div class="btn-group w-100 mb-2 search-buttons" role="group" aria-label="Search Buttons">
         <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Reg.</button>
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
@@ -54,61 +57,67 @@
         </div>
     </div>
 
-    <hr class="">
 
-    <div class="d-grid g-2 gap-3 mb-3">
-
-        <div class="btn-group " role="group" aria-label="Search Dropdown">
-            <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
-                <ul id="bookmarks" class="dropdown-menu">
-                    <li id="no-bookmarks"><a class="dropdown-item" href="#" data-href="options">No Saved Bookmarks</a></li>
-                </ul>
-            </div>
+    <div class="btn-group w-100" role="group" aria-label="Search Dropdown">
+        <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
+            <ul id="bookmarks" class="dropdown-menu">
+                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
+            </ul>
         </div>
-
-<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
-<!--            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Country=N">-->
-<!--                ASN USA</button>-->
-<!--            <button type="button" class="btn btn-outline-warning" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">-->
-<!--                ASN All 2023</button>-->
-<!--            <div class="btn-group btn-group-sm" role="group">-->
-<!--                <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Year</button>-->
-<!--                <ul id="asn-all" class="dropdown-menu">-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2022&sorteer=datekey_desc">2022</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2021&sorteer=datekey_desc">2020</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2020&sorteer=datekey_desc">2021</a></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://avherald.com/">-->
-<!--                AV Herald</button>-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://aviation-safety.net/wikibase/dblist.php?Year=2023&sorteer=datekey_desc">-->
-<!--                All 2023</button>-->
-<!--            <button type="button" class="btn btn-outline-info" data-href="https://simpleflying.com/latest-news/">-->
-<!--                Simple Flying</button>-->
-<!--        </div>-->
-
-        <a class="btn btn-primary" role="button" data-href="options">Open Options</a>
-
     </div>
 
-    <hr class="">
+    <hr class="my-2">
 
-    <div class="text-center">
-        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"
-           data-href="homepage">Aviation Tools</a> v<span class="version"></span>
+    <form id="options-form" class="mb-2">
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
+                <i class="fa-solid fa-circle-info ms-1"></i>
+            </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
+                Show Release Notes on Update
+                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
+                <i class="fa-solid fa-circle-info ms-1"></i>
+            </span>
+            </label>
+        </div>
+    </form>
+
+    <a class="btn btn-primary w-100" role="button" href="../html/options.html">Open Options</a>
+
+    <hr class="mt-2">
+
+    <div class="d-flex justify-content-center align-items-center text-center small">
+        <img src="../images/logo16.png" width="16" height="16" alt="ASN Plus" title="ASN Plus">
+        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
+           href="homepage_url">Aviation Tools</a> v<span class="version"></span>
     </div>
 
-</div>
+</div> <!-- container -->
+
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container bottom-0 end-0 p-3"></div>
+</div> <!-- toast -->
+
+<div class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body text-break small"></div>
+        </div>
+    </div>
+</div> <!-- d-none -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
-<script type="text/javascript" src="../js/main.js"></script>
 <script type="module" src="../js/popup.js"></script>
 
 </body>

@@ -1,12 +1,30 @@
 // JS Background Service Worker
 
-import { links, clipboardWrite, openOptionsFor } from './exports.js'
+import { searchLinks, clipboardWrite, openOptionsFor } from './exports.js'
 
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.storage.onChanged.addListener(onChanged)
 
-const ghUrl = 'https://github.com/cssnr/aviation-tools'
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox CTX Menu Workaround')
+        const { bookmarks, options } = await chrome.storage.sync.get([
+            'bookmarks',
+            'options',
+        ])
+        console.debug('options:', options)
+        if (options.contextMenu) {
+            createContextMenus(bookmarks)
+        }
+    }
+}
 
 /**
  * Installed Callback
@@ -15,23 +33,32 @@ const ghUrl = 'https://github.com/cssnr/aviation-tools'
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    let { options } = await chrome.storage.sync.get(['options'])
-    options = await setNestedDefaults(options, links)
+    const githubURL = 'https://github.com/cssnr/aviation-tools'
+    const options = await Promise.resolve(
+        setDefaultOptions({
+            searchType: 'registration',
+            contextMenu: true,
+            showUpdate: false,
+        })
+    )
     console.log('options:', options)
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    console.log('bookmarks:', bookmarks)
     if (options.contextMenu) {
-        createContextMenus()
+        createContextMenus(bookmarks)
     }
-    if (details.reason === 'install') {
+    if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
-    } else if (options.showUpdate && details.reason === 'update') {
-        const manifest = chrome.runtime.getManifest()
-        if (manifest.version !== details.previousVersion) {
-            const url = `${ghUrl}/releases/tag/${manifest.version}`
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
+    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+        if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
+            if (manifest.version !== details.previousVersion) {
+                const url = `${githubURL}/releases/tag/${manifest.version}`
+                await chrome.tabs.create({ active: false, url })
+            }
         }
     }
-    chrome.runtime.setUninstallURL(`${ghUrl}/issues`)
+    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**
@@ -41,17 +68,29 @@ async function onInstalled(details) {
  * @param {Tab} tab
  */
 async function onClicked(ctx, tab) {
-    console.log('contextMenuClick:', ctx, tab)
+    console.debug('onClicked:', ctx, tab)
     console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
-
-    if (['options'].includes(ctx.menuItemId)) {
+    if (ctx.menuItemId === 'options') {
+        console.debug('options')
         chrome.runtime.openOptionsPage()
+    } else if (ctx.menuItemId.startsWith('bookmark')) {
+        console.debug('bookmark')
+        const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+        if (!bookmarks.length) {
+            chrome.runtime.openOptionsPage()
+        } else {
+            const idx = parseInt(ctx.menuItemId.split('-')[1])
+            // console.debug('idx:', idx)
+            const url = bookmarks[idx]
+            // console.debug('url:', url)
+            await chrome.tabs.create({ active: true, url })
+        }
     } else {
+        console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         if (!term) {
             chrome.runtime.openOptionsPage()
         }
-        console.log(`navigator.clipboard.writeText: term: ${term}`)
         await clipboardWrite(term)
     }
 }
@@ -62,68 +101,49 @@ async function onClicked(ctx, tab) {
  * @param {Object} changes
  * @param {String} namespace
  */
-function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-        if (
-            key === 'options' &&
-            oldValue &&
-            newValue &&
-            oldValue.contextMenu !== newValue.contextMenu
-        ) {
-            if (newValue?.contextMenu) {
-                console.log('Enabled contextMenu...')
-                createContextMenus()
-            } else {
-                console.log('Disabled contextMenu...')
-                chrome.contextMenus.removeAll()
+async function onChanged(changes, namespace) {
+    // console.log('onChanged:', changes, namespace)
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
+            if (oldValue.contextMenu !== newValue.contextMenu) {
+                if (newValue?.contextMenu) {
+                    console.info('Enabled contextMenu...')
+                    const { bookmarks } = await chrome.storage.sync.get([
+                        'bookmarks',
+                    ])
+                    createContextMenus(bookmarks)
+                } else {
+                    console.info('Disabled contextMenu...')
+                    chrome.contextMenus.removeAll()
+                }
+            }
+        } else if (namespace === 'sync' && key === 'bookmarks') {
+            const { options } = await chrome.storage.sync.get(['options'])
+            if (options?.contextMenu) {
+                console.log('Updating Context Menu Bookmarks...')
+                createContextMenus(newValue)
             }
         }
     }
 }
 
 /**
- * Sets all Nested Keys to true
- * TODO: This only works on first install and will not update new options
- * @function setNestedDefaults
- * @param {Object} options
- * @param {Object} defaults
- * @return {Object}
- */
-async function setNestedDefaults(options, defaults) {
-    if (options) {
-        return options
-    }
-    options = {
-        contextMenu: true,
-        showUpdate: true,
-    }
-    for (const [key, value] of Object.entries(defaults)) {
-        // console.log(`${key}: ${value}`)
-        if (!options[key]) {
-            options[key] = {}
-        }
-        for (const [name] of Object.entries(value)) {
-            // console.log(`${name}: ${url}`)
-            options[key][name] = true
-        }
-    }
-    console.log('options:', options)
-    await chrome.storage.sync.set({ options: options })
-    return options
-}
-
-/**
  * Create Context Menus
  * @function createContextMenus
+ * @param {Array} bookmarks
  */
-export function createContextMenus() {
+export function createContextMenus(bookmarks) {
+    console.log('createContextMenus', bookmarks)
+    chrome.contextMenus.removeAll()
+    const ctx = ['all']
     const contexts = [
         [['selection'], 'registration', 'normal', 'Registration Search'],
-        [['selection'], 'flight', 'normal', 'Flight # Search'],
+        [['selection'], 'flight', 'normal', 'Flight Search'],
         [['selection'], 'airport', 'normal', 'Airport Search'],
         [['selection'], 'separator-1', 'separator', 'separator'],
-        [['all'], 'options', 'normal', 'Open Options'],
+        [ctx, 'bookmarks', 'normal', 'Bookmarks'],
+        [ctx, 'separator-2', 'separator', 'separator'],
+        [ctx, 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {
         chrome.contextMenus.create({
@@ -133,4 +153,80 @@ export function createContextMenus() {
             title: context[3],
         })
     })
+    if (bookmarks) {
+        bookmarks.forEach((url, i) => {
+            // console.log(`pattern: ${i}: ${pattern}`)
+            const title = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+            chrome.contextMenus.create({
+                parentId: 'bookmarks',
+                title: title,
+                contexts: ctx,
+                id: `bookmark-${i}`,
+            })
+        })
+    }
+}
+
+/**
+ * Set Default Options
+ * @function setDefaultOptions
+ * @param {Object} defaultOptions
+ * @return {Object}
+ */
+async function setDefaultOptions(defaultOptions) {
+    console.log('setDefaultOptions', defaultOptions)
+    let { bookmarks, options } = await chrome.storage.sync.get([
+        'bookmarks',
+        'options',
+    ])
+    if (!bookmarks) {
+        bookmarks = []
+        await chrome.storage.sync.set({ bookmarks })
+    }
+    options = options || {}
+    console.debug('options', options)
+    let changed = false
+    for (const [key, value] of Object.entries(defaultOptions)) {
+        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        if (options[key] === undefined) {
+            changed = true
+            options[key] = value
+            console.log(`Set ${key}:`, value)
+        }
+    }
+    const nestedChanges = setNestedDefaults(options, searchLinks)
+
+    changed = changed || nestedChanges
+    console.debug('changed', changed)
+    if (changed) {
+        await chrome.storage.sync.set({ options })
+        console.log('changed:', options)
+    }
+    return options
+}
+
+/**
+ * Sets all Nested Keys to true
+ * TODO: Make a function and combine with above function
+ * @function setNestedDefaults
+ * @param {Object} options
+ * @param {Object} defaults
+ * @return {Boolean}
+ */
+function setNestedDefaults(options, defaults) {
+    console.log('setNestedDefaults:', options, defaults)
+    let changed = false
+    for (const [key, value] of Object.entries(defaults)) {
+        console.log(`Nested: ${key}`, value)
+        if (!options[key]) {
+            options[key] = {}
+        }
+        for (const [subkey] of Object.entries(value)) {
+            if (typeof options[key][subkey] === 'undefined') {
+                options[key][subkey] = true
+                changed = true
+            }
+        }
+    }
+    return changed
 }
