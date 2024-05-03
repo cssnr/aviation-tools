@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', initOptions)
 document
     .querySelectorAll('#options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
-
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 document
     .getElementById('bookmarks-form')
     .addEventListener('submit', addBookmark)

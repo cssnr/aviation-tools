@@ -99,13 +99,23 @@
             </div>
         </div>
         <hr class="my-2">
-        <div class="form-check form-switch fs-5">
-            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
         </div>
-        <div class="form-check form-switch fs-5">
-            <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
+                Show Release Notes on Update
+                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
         </div>
     </form>
 
