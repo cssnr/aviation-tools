@@ -30,6 +30,7 @@ export const searchLinks = {
  * @return {String}
  */
 export async function openOptionsFor(category, searchTerm) {
+    console.debug('openOptionsFor:', category, searchTerm)
     searchTerm = searchTerm.trim()
     if (category === 'flight') {
         searchTerm = searchTerm.toLowerCase().replace(/[\s-]+/g, '')
@@ -77,6 +78,7 @@ export function getLinkUrl(subkey, key, value) {
  * @param {string} value
  */
 export async function clipboardWrite(value) {
+    console.debug('clipboardWrite:', value)
     if (navigator.clipboard) {
         // Firefox
         await navigator.clipboard.writeText(value)

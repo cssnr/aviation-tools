@@ -3,9 +3,8 @@
 import { searchLinks, getLinkUrl, openOptionsFor } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
-document.getElementById('search-form').addEventListener('submit', searchForm)
 document
-    .querySelectorAll('[data-href]')
+    .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
 document
     .getElementsByName('searchType')
@@ -13,6 +12,11 @@ document
 document
     .getElementById('all-bookmarks')
     .addEventListener('click', openAllBookmarks)
+
+const searchForm = document.getElementById('search-form')
+const searchTerm = document.getElementById('searchTerm')
+
+searchForm.addEventListener('submit', searchFormSubmit)
 
 /**
  * Initialize Popup
@@ -24,16 +28,17 @@ async function initPopup() {
     document.querySelector('.version').textContent = manifest.version
     document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
 
-    const { popup, bookmarks } = await chrome.storage.sync.get([
-        'popup',
+    const { options, bookmarks } = await chrome.storage.sync.get([
+        'options',
         'bookmarks',
     ])
-    console.debug('popup, bookmarks:', popup, bookmarks)
-    const radio = document.getElementById(
-        popup?.searchType || 'searchRegistration'
-    )
-    // console.debug(`popup.searchType: ${popup?.searchType}`)
-    radio.checked = true
+    console.debug('options, bookmarks:', options, bookmarks)
+
+    console.debug(`options.searchType:`, options.searchType)
+    searchTerm.placeholder = options.searchType
+    document.querySelector(
+        `input[name="searchType"][value="${options.searchType}"]`
+    ).checked = true
 
     console.debug('searchLinks:', searchLinks)
     for (const [key, value] of Object.entries(searchLinks)) {
@@ -54,7 +59,7 @@ async function initPopup() {
         })
     }
 
-    document.getElementById('search-term').focus()
+    searchTerm.focus()
 }
 
 /**
@@ -73,7 +78,7 @@ function createSearchLink(ul, url, name = null) {
     a.title = url
     a.href = '#'
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', searchForm)
+    a.addEventListener('click', searchFormSubmit)
     li.appendChild(a)
 }
 
@@ -97,8 +102,8 @@ function createBookmarkLink(ul, url) {
 }
 
 /**
- * Popup Links Callback
- * because firefox needs us to call window.close() from the popup
+ * Popup Links Click Callback
+ * Firefox requires a call to window.close()
  * @function popupLinks
  * @param {MouseEvent} event
  */
@@ -106,21 +111,22 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
+    console.debug(`anchor.href: ${anchor.href}`, anchor)
     let url
-    if (anchor?.dataset?.href.startsWith('http')) {
-        url = anchor.dataset.href
-    } else if (anchor?.dataset?.href === 'homepage') {
-        url = chrome.runtime.getManifest().homepage_url
-    } else if (anchor?.dataset?.href === 'options') {
+    if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
         return window.close()
-    } else if (anchor?.dataset?.href) {
-        url = chrome.runtime.getURL(anchor.dataset.href)
+    } else if (
+        anchor.href.startsWith('http') ||
+        anchor.href.startsWith('chrome-extension')
+    ) {
+        // console.debug(`http or chrome-extension`)
+        url = anchor.href
+    } else {
+        // console.debug(`else chrome.runtime.getURL`)
+        url = chrome.runtime.getURL(anchor.href)
     }
-    console.debug('url:', url)
-    if (!url) {
-        return console.error('No dataset.href for anchor:', anchor)
-    }
+    console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
     return window.close()
 }
@@ -132,23 +138,23 @@ async function popupLinks(event) {
  */
 async function updateSearchType(event) {
     console.debug('defaultSearchChange', event)
-    // let { popup } = await chrome.storage.sync.get(['popup'])
-    const popup = {}
-    popup.searchType = event.target.id
-    console.debug(`${popup.searchType}: ${event.target.id}`)
-    await chrome.storage.sync.set({ popup })
-    await searchForm(event)
+    let { options } = await chrome.storage.sync.get(['options'])
+    options.searchType = event.target.value
+    console.debug(`options.searchType: ${event.target.value}`)
+    await chrome.storage.sync.set({ options })
+    searchTerm.placeholder = options.searchType
+    await searchFormSubmit(event)
 }
 
 /**
  * Search Form Submit Callback
- * @function saveOptions
+ * @function searchFormSubmit
  * @param {SubmitEvent} event
  */
-async function searchForm(event) {
-    console.debug('searchForm:', event)
+async function searchFormSubmit(event) {
+    console.debug('searchFormSubmit:', event)
     event.preventDefault()
-    const searchTerm = document.getElementById('search-term')
+    // const searchTerm = document.getElementById('searchTerm')
     console.debug(`searchTerm.value: ${searchTerm.value}`)
     const { options } = await chrome.storage.sync.get(['options'])
     let search

@@ -2,9 +2,26 @@
 
 import { searchLinks, clipboardWrite, openOptionsFor } from './exports.js'
 
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.storage.onChanged.addListener(onChanged)
+
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox CTX Menu Workaround')
+        const { options } = await chrome.storage.sync.get(['options'])
+        console.debug('options:', options)
+        if (options.contextMenu) {
+            createContextMenus()
+        }
+    }
+}
 
 /**
  * Installed Callback
@@ -14,8 +31,13 @@ chrome.storage.onChanged.addListener(onChanged)
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/aviation-tools'
-    let { options } = await chrome.storage.sync.get(['options'])
-    options = await Promise.resolve(setNestedDefaults(options, searchLinks))
+    const options = await Promise.resolve(
+        setDefaultOptions({
+            searchType: 'registration',
+            contextMenu: true,
+            showUpdate: true,
+        })
+    )
     console.log('options:', options)
     if (options.contextMenu) {
         createContextMenus()
@@ -27,7 +49,7 @@ async function onInstalled(details) {
             const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
-                await chrome.tabs.create({ url, active: false })
+                await chrome.tabs.create({ active: false, url })
             }
         }
     }
@@ -41,16 +63,15 @@ async function onInstalled(details) {
  * @param {Tab} tab
  */
 async function onClicked(ctx, tab) {
-    console.log('contextMenuClick:', ctx, tab)
-    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+    console.debug('onClicked:', ctx, tab)
     if (ctx.menuItemId === 'options') {
         chrome.runtime.openOptionsPage()
     } else {
+        console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         if (!term) {
             chrome.runtime.openOptionsPage()
         }
-        console.log(`navigator.clipboard.writeText: term: ${term}`)
         await clipboardWrite(term)
     }
 }
@@ -67,46 +88,15 @@ function onChanged(changes, namespace) {
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
             if (oldValue.contextMenu !== newValue.contextMenu) {
                 if (newValue?.contextMenu) {
-                    console.log('Enabled contextMenu...')
+                    console.info('Enabled contextMenu...')
                     createContextMenus()
                 } else {
-                    console.log('Disabled contextMenu...')
+                    console.info('Disabled contextMenu...')
                     chrome.contextMenus.removeAll()
                 }
             }
         }
     }
-}
-
-/**
- * Sets all Nested Keys to true
- * TODO: This only works on first install and will not update new options
- * @function setNestedDefaults
- * @param {Object} options
- * @param {Object} defaults
- * @return {Object}
- */
-async function setNestedDefaults(options, defaults) {
-    if (options) {
-        return options
-    }
-    options = {
-        contextMenu: true,
-        showUpdate: true,
-    }
-    for (const [key, value] of Object.entries(defaults)) {
-        // console.log(`${key}: ${value}`)
-        if (!options[key]) {
-            options[key] = {}
-        }
-        for (const [name] of Object.entries(value)) {
-            // console.log(`${name}: ${url}`)
-            options[key][name] = true
-        }
-    }
-    console.log('options:', options)
-    await chrome.storage.sync.set({ options: options })
-    return options
 }
 
 /**
@@ -131,4 +121,69 @@ export function createContextMenus() {
             title: context[3],
         })
     })
+}
+
+/**
+ * Set Default Options
+ * @function setDefaultOptions
+ * @param {Object} defaultOptions
+ * @return {Object}
+ */
+async function setDefaultOptions(defaultOptions) {
+    console.log('setDefaultOptions', defaultOptions)
+    let { bookmarks, options } = await chrome.storage.sync.get([
+        'bookmarks',
+        'options',
+    ])
+    if (!bookmarks) {
+        bookmarks = []
+        await chrome.storage.sync.set({ bookmarks })
+    }
+    options = options || {}
+    console.debug('options', options)
+    let changed = false
+    for (const [key, value] of Object.entries(defaultOptions)) {
+        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        if (options[key] === undefined) {
+            changed = true
+            options[key] = value
+            console.log(`Set ${key}:`, value)
+        }
+    }
+    const nestedChanges = await Promise.resolve(
+        setNestedDefaults(options, searchLinks)
+    )
+    changed = changed || nestedChanges
+    console.debug('changed', changed)
+    if (changed) {
+        await chrome.storage.sync.set({ options })
+        console.log('changed:', options)
+    }
+    return options
+}
+
+/**
+ * Sets all Nested Keys to true
+ * TODO: Make a function and combine with above function
+ * @function setNestedDefaults
+ * @param {Object} options
+ * @param {Object} defaults
+ * @return {Boolean}
+ */
+function setNestedDefaults(options, defaults) {
+    console.log('setNestedDefaults:', options, defaults)
+    let changed = false
+    for (const [key, value] of Object.entries(defaults)) {
+        console.log(`Nested: ${key}`, value)
+        if (!options[key]) {
+            options[key] = {}
+        }
+        for (const [subkey] of Object.entries(value)) {
+            if (typeof options[key][subkey] === 'undefined') {
+                options[key][subkey] = true
+                changed = true
+            }
+        }
+    }
+    return changed
 }
