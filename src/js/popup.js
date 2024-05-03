@@ -93,9 +93,8 @@ function createBookmarkLink(ul, url) {
     ul.appendChild(li)
     const a = document.createElement('a')
     a.textContent = url.substring(8, 50)
-    a.dataset.href = url
+    a.href = url
     a.title = url
-    a.href = '#'
     a.classList.add('dropdown-item', 'small')
     a.addEventListener('click', popupLinks)
     li.appendChild(a)
