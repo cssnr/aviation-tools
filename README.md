@@ -29,6 +29,9 @@ Upcoming Web Extension with various Aviation Tools...
 <a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
     <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
 
+All **Chromium** Based Browsers can install the extension from the
+[Chrome Web Store](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin).
+
 *   Download a [Chrome Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-chrome.crx) from GitHub
 *   Download a [Firefox Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi) from GitHub
 
@@ -36,12 +39,12 @@ _Note: Firefox is currently only available from GitHub._
 
 # Features
 
-Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.   
-For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/aviation-tools/issues/new).
-
 *   Quick Search Registration, Flight Numbers, and Airports
 *   Search by Highlighting Text or Opening Popup Action
 *   Add Saved Bookmarks and Open All Bookmarks
+
+Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.   
+For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/aviation-tools/issues/new).
 
 # Configuration
 
@@ -53,6 +56,8 @@ To open the options, click on the icon (from above) then click `Open Options`.
 
 # Development
 
+**Quick Start**
+
 To install and run chrome or firefox with web-ext.
 ```shell
 npm isntall
@@ -60,7 +65,7 @@ npm run chrome
 npm run firefox
 ```
 
-To Load Unpacked/Temporary Add-on make a `manifest.json` first.
+To Load Unpacked/Temporary Add-on make a `manifest.json` and run from the [src](src) folder.
 ```shell
 npm run manifest:chrome
 npm run manifest:firefox
@@ -68,10 +73,30 @@ npm run manifest:firefox
 
 For more information on web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
 To pass additional arguments to an `npm run` command, use `--`.  
-Example: `npm run chrome -- --chromium-binary=...`  
+Example: `npm run chrome -- --chromium-binary=...`
 
-See [gulpfile.js](gulpfile.js) for more information on `postinstall`.  
-For more information on building, see the scripts in the [package.json](package.json) file.  
+## Building
+
+Install the requirements and copy libraries into the `src/dist` directory by running `npm install`.
+See [gulpfile.js](gulpfile.js) for more information on `postinstall`.
+```shell
+npm install
+```
+
+To load unpacked or temporary addon from the [src](src) folder, you must generate the `src/manifest.json` for the desired browser.
+```shell
+npm run manifest:chrome
+npm run manifest:firefox
+```
+
+If you would like to create a `.zip` archive of the [src](src) directory for the desired browser.
+```shell
+npm run build
+npm run build:chrome
+npm run build:firefox
+```
+
+For more information on building, see the scripts in the [package.json](package.json) file.
 
 ## Chrome Setup
 
@@ -94,6 +119,6 @@ it is very useful to keep addon storage after uninstall/restart with `keepStorag
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 
-1.  Run `npm run build:firefox` then use `web-ext-artifacts/link_extractor-firefox-0.1.0.zip`.
+1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.

@@ -3,6 +3,7 @@
 import {
     searchLinks,
     getLinkUrl,
+    openAllBookmarks,
     openOptionsFor,
     saveOptions,
     updateOptions,
@@ -197,24 +198,6 @@ async function searchFormSubmit(event) {
     if (!resp) {
         console.debug(`no options set for: ${search}`)
         chrome.runtime.openOptionsPage()
-    }
-    window.close()
-}
-
-/**
- * Open All Bookmarks Callback
- * @function openAllBookmarks
- */
-async function openAllBookmarks() {
-    console.debug('openAllBookmarks')
-    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
-    console.debug(bookmarks)
-    if (!bookmarks?.length) {
-        chrome.runtime.openOptionsPage()
-    }
-    for (const url of bookmarks) {
-        console.debug(`url: ${url}`)
-        await chrome.tabs.create({ active: true, url })
     }
     window.close()
 }

@@ -73,28 +73,21 @@ export function getLinkUrl(subkey, key, value) {
 }
 
 /**
- * Write value to Clipboard for Firefox and Chrome
- * @function clipboardWrite
- * @param {string} value
+ * Open All Bookmarks Callback
+ * @function openAllBookmarks
  */
-export async function clipboardWrite(value) {
-    console.debug('clipboardWrite:', value)
-    if (navigator.clipboard) {
-        // Firefox
-        await navigator.clipboard.writeText(value)
-    } else {
-        // Chrome
-        await chrome.offscreen.createDocument({
-            url: 'html/offscreen.html',
-            reasons: [chrome.offscreen.Reason.CLIPBOARD],
-            justification: 'Write text to the clipboard.',
-        })
-        await chrome.runtime.sendMessage({
-            type: 'copy-data-to-clipboard',
-            target: 'offscreen-doc',
-            data: value,
-        })
+export async function openAllBookmarks() {
+    console.debug('openAllBookmarks')
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    console.debug(bookmarks)
+    if (!bookmarks?.length) {
+        chrome.runtime.openOptionsPage()
     }
+    for (const url of bookmarks) {
+        console.debug(`url: ${url}`)
+        await chrome.tabs.create({ active: true, url })
+    }
+    window.close()
 }
 
 /**
@@ -218,4 +211,29 @@ export function showToast(message, type = 'success') {
     const toast = new bootstrap.Toast(element)
     element.addEventListener('mousemove', () => toast.hide())
     toast.show()
+}
+
+/**
+ * Write value to Clipboard for Firefox and Chrome
+ * @function clipboardWrite
+ * @param {string} value
+ */
+export async function clipboardWrite(value) {
+    console.debug('clipboardWrite:', value)
+    if (navigator.clipboard) {
+        // Firefox
+        await navigator.clipboard.writeText(value)
+    } else {
+        // Chrome
+        await chrome.offscreen.createDocument({
+            url: 'html/offscreen.html',
+            reasons: [chrome.offscreen.Reason.CLIPBOARD],
+            justification: 'Write text to the clipboard.',
+        })
+        await chrome.runtime.sendMessage({
+            type: 'copy-data-to-clipboard',
+            target: 'offscreen-doc',
+            data: value,
+        })
+    }
 }
