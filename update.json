@@ -45,6 +45,10 @@
         {
           "version": "0.1.1",
           "update_link": "https://github.com/cssnr/aviation-tools/releases/download/0.1.1/aviation_tools-firefox.xpi"
+        },
+        {
+          "version": "0.1.2",
+          "update_link": "https://github.com/cssnr/aviation-tools/releases/download/0.1.2/aviation_tools-firefox.xpi"
         }
       ]
     }
