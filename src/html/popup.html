@@ -13,31 +13,16 @@
 <body>
 
 <div class="container-fluid p-3">
-    <form id="search-form">
-        <div class="row mb-2">
-            <div class="col text-center">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
-                    <label class="form-check-label small" for="searchRegistration">Registration</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchType" id="searchFlight" value="flight">
-                    <label class="form-check-label small" for="searchFlight">Flight</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchType" id="searchAirport" value="airport">
-                    <label class="form-check-label small" for="searchAirport">Airport</label>
-                </div>
-            </div>
+
+    <div class="btn-group w-100 mb-2" role="group" aria-label="Search Dropdown">
+        <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
+            <ul id="bookmarks" class="dropdown-menu">
+                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
+            </ul>
         </div>
-        <div class="row mb-2">
-            <div class="col">
-                <label for="searchTerm" class="visually-hidden"></label>
-                <input id="searchTerm" class="form-control" type="text" placeholder="">
-            </div>
-        </div>
-        <button type="submit" form="search-form" class="visually-hidden"></button>
-    </form>
+    </div>
 
     <div class="btn-group w-100 mb-2 search-buttons" role="group" aria-label="Search Buttons">
         <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Reg.</button>
@@ -57,16 +42,34 @@
         </div>
     </div>
 
+    <form id="search-form">
 
-    <div class="btn-group w-100" role="group" aria-label="Search Dropdown">
-        <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
-            <ul id="bookmarks" class="dropdown-menu">
-                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
-            </ul>
+        <div class="row mb-2">
+            <div class="col">
+                <label for="searchTerm" class="visually-hidden"></label>
+                <input id="searchTerm" class="form-control" type="text" placeholder="">
+            </div>
         </div>
-    </div>
+        <button type="submit" form="search-form" class="visually-hidden"></button>
+
+        <div class="row mb-2">
+            <div class="col text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
+                    <label class="form-check-label small" for="searchRegistration">Registration</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchFlight" value="flight">
+                    <label class="form-check-label small" for="searchFlight">Flight</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchType" id="searchAirport" value="airport">
+                    <label class="form-check-label small" for="searchAirport">Airport</label>
+                </div>
+            </div>
+        </div>
+
+    </form>
 
     <hr class="my-2">
 
@@ -91,9 +94,7 @@
         </div>
     </form>
 
-    <a class="btn btn-primary w-100" role="button" href="../html/options.html">Open Options</a>
-
-    <hr class="mt-2">
+    <a class="btn btn-primary w-100 mb-2" role="button" href="../html/options.html">Open Options</a>
 
     <div class="d-flex justify-content-center align-items-center text-center small">
         <img src="../images/logo16.png" width="16" height="16" alt="ASN Plus" title="ASN Plus">

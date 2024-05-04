@@ -77,7 +77,11 @@ function updateBookmarks(data) {
 
         const link = document.createElement('a')
         // link.dataset.idx = idx
-        link.text = value
+        const text = value
+            .replace(/(^\w+:|^)\/\//, '')
+            .replace(/\/$/, '')
+            .substring(0, 50)
+        link.textContent = text
         link.title = value
         link.classList.add(
             'link-body-emphasis',

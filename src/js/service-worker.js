@@ -1,6 +1,11 @@
 // JS Background Service Worker
 
-import { searchLinks, clipboardWrite, openOptionsFor } from './exports.js'
+import {
+    searchLinks,
+    clipboardWrite,
+    openAllBookmarks,
+    openOptionsFor,
+} from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
@@ -78,6 +83,8 @@ async function onClicked(ctx, tab) {
         const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
         if (!bookmarks.length) {
             chrome.runtime.openOptionsPage()
+        } else if (ctx.menuItemId === 'bookmark-all') {
+            await openAllBookmarks()
         } else {
             const idx = parseInt(ctx.menuItemId.split('-')[1])
             // console.debug('idx:', idx)
@@ -149,19 +156,35 @@ export function createContextMenus(bookmarks) {
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
-            type: context[2],
             title: context[3],
+            type: context[2],
         })
     })
     if (bookmarks) {
+        chrome.contextMenus.create({
+            contexts: ctx,
+            id: `bookmark-all`,
+            parentId: 'bookmarks',
+            title: 'Open All Bookmarks',
+        })
+        chrome.contextMenus.create({
+            contexts: ctx,
+            id: `bookmark-sep`,
+            parentId: 'bookmarks',
+            title: 'Open All Bookmarks',
+            type: 'separator',
+        })
         bookmarks.forEach((url, i) => {
             // console.log(`pattern: ${i}: ${pattern}`)
-            const title = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+            const title = url
+                .replace(/(^\w+:|^)\/\//, '')
+                .replace(/\/$/, '')
+                .substring(0, 50)
             chrome.contextMenus.create({
-                parentId: 'bookmarks',
-                title: title,
                 contexts: ctx,
                 id: `bookmark-${i}`,
+                parentId: 'bookmarks',
+                title: title,
             })
         })
     }
