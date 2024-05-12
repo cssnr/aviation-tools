@@ -160,7 +160,7 @@ export function createContextMenus(bookmarks) {
             type: context[2],
         })
     })
-    if (bookmarks) {
+    if (bookmarks.length) {
         chrome.contextMenus.create({
             contexts: ctx,
             id: `bookmark-all`,
@@ -171,7 +171,6 @@ export function createContextMenus(bookmarks) {
             contexts: ctx,
             id: `bookmark-sep`,
             parentId: 'bookmarks',
-            title: 'Open All Bookmarks',
             type: 'separator',
         })
         bookmarks.forEach((url, i) => {

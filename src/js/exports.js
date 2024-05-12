@@ -85,7 +85,7 @@ export async function openAllBookmarks() {
     }
     for (const url of bookmarks) {
         console.debug(`url: ${url}`)
-        await chrome.tabs.create({ active: true, url })
+        await chrome.tabs.create({ active: false, url })
     }
     window.close()
 }
