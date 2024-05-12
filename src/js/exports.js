@@ -83,11 +83,9 @@ export async function openAllBookmarks() {
     if (!bookmarks?.length) {
         chrome.runtime.openOptionsPage()
     }
-    let active = true
     for (const url of bookmarks) {
         console.debug(`url: ${url}`)
-        await chrome.tabs.create({ active, url })
-        active = false
+        chrome.tabs.create({ active: true, url }).then()
     }
     window.close()
 }
