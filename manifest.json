@@ -13,6 +13,9 @@
       "description": "Show Main Popup Action"
     }
   },
+  "omnibox": {
+    "keyword": "av"
+  },
   "permissions": ["clipboardWrite", "contextMenus", "storage"],
   "background": {
     "type": "module"

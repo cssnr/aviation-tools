@@ -11,6 +11,11 @@ chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.storage.onChanged.addListener(onChanged)
+chrome.omnibox.onInputChanged.addListener(onInputChanged)
+chrome.omnibox.onInputCancelled.addListener(onInputCancelled)
+chrome.omnibox.onInputEntered.addListener(onInputEntered)
+
+const omniboxDefault = 'Aviation Tools - airport, flight, registration'
 
 /**
  * On Startup Callback
@@ -64,6 +69,9 @@ async function onInstalled(details) {
         }
     }
     await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
+    chrome.omnibox.setDefaultSuggestion({
+        description: omniboxDefault,
+    })
 }
 
 /**
@@ -95,9 +103,6 @@ async function onClicked(ctx, tab) {
     } else {
         console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
-        if (!term) {
-            chrome.runtime.openOptionsPage()
-        }
         await clipboardWrite(term)
     }
 }
@@ -132,6 +137,98 @@ async function onChanged(changes, namespace) {
             }
         }
     }
+}
+
+async function parseInput(text) {
+    console.debug('parseInput:', text)
+    text = text.trim()
+    const split = text.split(' ')
+    const length = split.length
+    let command = split.shift().toLowerCase()
+    let search = split.join('')
+    if (length === 1) {
+        command = ''
+        search = text
+    }
+    console.debug('command:', command)
+    if (command.startsWith('r') && 'registration'.includes(command)) {
+        return ['registration', search]
+    } else if (command.startsWith('f') && 'flight'.includes(command)) {
+        return ['flight', search]
+    } else if (command.startsWith('a') && 'airport'.includes(command)) {
+        return ['airport', search]
+    } else {
+        search = text.replace(/ /g, '')
+        let { options } = await chrome.storage.sync.get(['options'])
+        return [options.searchType, search]
+    }
+}
+
+/**
+ * Omnibox Input Changed Callback
+ * @function onInputChanged
+ * @param {String} text
+ * @param {Function} suggest
+ */
+async function onInputChanged(text, suggest) {
+    console.debug('onInputChanged:', text, suggest)
+    text = text.trim()
+    const split = text.split(' ')
+    // console.debug('split:', split)
+    if (split.length) {
+        let command = split.shift().toLowerCase()
+        // console.debug('command:', command)
+        let search = split.join('')
+        console.debug('search:', search)
+        if (command.startsWith('r') && 'registration'.includes(command)) {
+            chrome.omnibox.setDefaultSuggestion({
+                description: 'Aviation Tools - Registration Search',
+            })
+        } else if (command.startsWith('f') && 'flight'.includes(command)) {
+            chrome.omnibox.setDefaultSuggestion({
+                description: 'Aviation Tools - Flight Search',
+            })
+        } else if (command.startsWith('a') && 'airport'.includes(command)) {
+            chrome.omnibox.setDefaultSuggestion({
+                description: 'Aviation Tools - Airport Search',
+            })
+        } else {
+            let { options } = await chrome.storage.sync.get(['options'])
+            // search = text.replace(/\s/g, '')
+            const type =
+                options.searchType.charAt(0).toUpperCase() +
+                options.searchType.slice(1)
+            chrome.omnibox.setDefaultSuggestion({
+                description: `Aviation Tools - ${type} Search`,
+            })
+        }
+    }
+}
+
+/**
+ * Omnibox Input Cancelled Callback
+ * @function onInputCancelled
+ */
+async function onInputCancelled() {
+    console.debug('onInputCancelled')
+    chrome.omnibox.setDefaultSuggestion({
+        description: omniboxDefault,
+    })
+}
+
+/**
+ * Omnibox Input Entered Callback
+ * @function onInputEntered
+ * @param {String} text
+ */
+async function onInputEntered(text) {
+    console.debug('onInputEntered:', text)
+    text = text.trim()
+    // console.debug('text:', text)
+    let [type, search] = await parseInput(text)
+    console.debug('type:', type)
+    console.debug('search:', search)
+    openOptionsFor(type, search)
 }
 
 /**

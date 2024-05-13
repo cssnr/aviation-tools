@@ -48,7 +48,6 @@ async function initPopup() {
     console.debug('options, bookmarks:', options, bookmarks)
     updateOptions(options)
 
-    console.debug(`options.searchType:`, options.searchType)
     searchTerm.placeholder = options.searchType
     document.querySelector(
         `input[name="searchType"][value="${options.searchType}"]`
@@ -64,7 +63,6 @@ async function initPopup() {
         }
     }
 
-    console.debug('bookmarks:', bookmarks)
     if (bookmarks?.length) {
         document.getElementById('no-bookmarks').remove()
         const ul = document.getElementById('bookmarks')
@@ -124,20 +122,16 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    console.debug(`anchor.href: ${anchor.href}`, anchor)
+    const href = anchor.getAttribute('href').replace(/^\.+/g, '')
+    console.debug('href:', href)
     let url
-    if (anchor.href.endsWith('html/options.html')) {
+    if (href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
         return window.close()
-    } else if (
-        anchor.href.startsWith('http') ||
-        anchor.href.startsWith('chrome-extension')
-    ) {
-        // console.debug(`http or chrome-extension`)
-        url = anchor.href
+    } else if (href.startsWith('http')) {
+        url = href
     } else {
-        // console.debug(`else chrome.runtime.getURL`)
-        url = chrome.runtime.getURL(anchor.href)
+        url = chrome.runtime.getURL(href)
     }
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
@@ -167,37 +161,22 @@ async function updateSearchType(event) {
 async function searchFormSubmit(event) {
     console.debug('searchFormSubmit:', event)
     event.preventDefault()
-    // const searchTerm = document.getElementById('searchTerm')
-    console.debug(`searchTerm.value: ${searchTerm.value}`)
-    const { options } = await chrome.storage.sync.get(['options'])
-    let search
-    if (event.target.classList.contains('dropdown-item')) {
-        let category = event.target.parentNode.parentNode.id
-        console.debug(`category: ${category}`)
-        let key = event.target.textContent
-        console.debug(`key: ${key}`)
-        const url = getLinkUrl(category, key, searchTerm.value)
-        console.debug(`url: ${url}`)
-        await chrome.tabs.create({ active: true, url })
-        return
-    } else if (event.submitter?.dataset?.search) {
-        search = event.submitter.dataset.search
-    } else {
-        search = document.querySelector(
-            'input[name="searchType"]:checked'
-        ).value
-    }
-    console.debug(`search: ${search}`, options[search])
     if (!searchTerm.value) {
         console.debug('no searchTerm.value')
-        searchTerm.focus()
-        return
+        return searchTerm.focus()
     }
-    const resp = await openOptionsFor(search, searchTerm.value)
-    console.debug(`resp: ${resp}`)
-    if (!resp) {
-        console.debug(`no options set for: ${search}`)
-        chrome.runtime.openOptionsPage()
+    if (event.target.classList.contains('dropdown-item')) {
+        let category = event.target.parentNode.parentNode.id
+        let key = event.target.textContent
+        const url = getLinkUrl(category, key, searchTerm.value)
+        await chrome.tabs.create({ active: true, url })
+    } else if (event.submitter?.dataset?.search) {
+        const category = event.submitter.dataset.search
+        await openOptionsFor(category, searchTerm.value)
+    } else {
+        const category = document.querySelector(
+            'input[name="searchType"]:checked'
+        ).value
+        await openOptionsFor(category, searchTerm.value)
     }
-    window.close()
 }
