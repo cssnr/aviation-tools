@@ -37,21 +37,21 @@ export async function openOptionsFor(category, searchTerm) {
     } else if (category === 'registration') {
         searchTerm = searchTerm.toUpperCase()
     }
-    let resp = null
     const { options } = await chrome.storage.sync.get(['options'])
-    if (!options) {
-        return null
-    }
+    let count = 0
     for (const [key, value] of Object.entries(options[category])) {
-        console.log(`${key}: ${value}`)
+        // console.log(`${key}: ${value}`)
         if (value) {
+            count += 1
             const url = getLinkUrl(category, key, searchTerm)
             console.log(`url: ${url}`)
             await chrome.tabs.create({ active: true, url })
-            resp = searchTerm
         }
     }
-    return resp
+    if (!count) {
+        chrome.runtime.openOptionsPage()
+    }
+    return searchTerm
 }
 
 /**
@@ -85,7 +85,7 @@ export async function openAllBookmarks() {
     }
     for (const url of bookmarks) {
         console.debug(`url: ${url}`)
-        await chrome.tabs.create({ active: true, url })
+        chrome.tabs.create({ active: true, url }).then()
     }
     window.close()
 }

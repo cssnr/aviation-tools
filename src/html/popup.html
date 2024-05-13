@@ -15,7 +15,8 @@
 <div class="container-fluid p-3">
 
     <div class="btn-group w-100 mb-2" role="group" aria-label="Search Dropdown">
-        <button id="all-bookmarks" class="btn btn-success" type="button">Open All Bookmarks</button>
+        <button id="all-bookmarks" class="btn btn-success" type="button">
+            <i class="fa-solid fa-up-right-from-square me-2"></i> Open All Bookmarks</button>
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
             <ul id="bookmarks" class="dropdown-menu">
@@ -23,6 +24,8 @@
             </ul>
         </div>
     </div>
+
+    <button type="submit" form="search-form" class="visually-hidden"></button>
 
     <div class="btn-group w-100 mb-2 search-buttons" role="group" aria-label="Search Buttons">
         <button type="submit" form="search-form" class="btn btn-outline-info" data-search="registration">Reg.</button>
@@ -47,10 +50,9 @@
         <div class="row mb-2">
             <div class="col">
                 <label for="searchTerm" class="visually-hidden"></label>
-                <input id="searchTerm" class="form-control" type="text" placeholder="">
+                <input id="searchTerm" class="form-control" type="text" placeholder="" required>
             </div>
         </div>
-        <button type="submit" form="search-form" class="visually-hidden"></button>
 
         <div class="row mb-2">
             <div class="col text-center">
@@ -94,7 +96,8 @@
         </div>
     </form>
 
-    <a class="btn btn-primary w-100 mb-2" role="button" href="../html/options.html">Open Options</a>
+    <a class="btn btn-primary w-100 mb-2" role="button" href="../html/options.html">
+        <i class="fa-solid fa-sliders me-2"></i> Open Options</a>
 
     <div class="d-flex justify-content-center align-items-center text-center small">
         <img src="../images/logo16.png" width="16" height="16" alt="ASN Plus" title="ASN Plus">
