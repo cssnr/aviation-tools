@@ -33,6 +33,8 @@ async function domContentLoaded() {
         metarInput.value = metar
     }
     processMetar()
+    metarInput.focus()
+    metarInput.select()
 }
 
 function processMetar(event) {
