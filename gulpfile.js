@@ -34,7 +34,13 @@ gulp.task('jquery', () => {
         .pipe(gulp.dest('src/dist/jquery'))
 })
 
+gulp.task('metar', () => {
+    return gulp
+        .src('node_modules/metar-js/lib/metar.js')
+        .pipe(gulp.dest('src/dist/metar'))
+})
+
 gulp.task(
     'default',
-    gulp.parallel('bootstrap', 'clipboard', 'fontawesome', 'jquery')
+    gulp.parallel('bootstrap', 'clipboard', 'fontawesome', 'jquery', 'metar')
 )

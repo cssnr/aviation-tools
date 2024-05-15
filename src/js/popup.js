@@ -135,7 +135,7 @@ async function popupLinks(event) {
     }
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
-    return window.close()
+    window.close()
 }
 
 /**
@@ -161,22 +161,29 @@ async function updateSearchType(event) {
 async function searchFormSubmit(event) {
     console.debug('searchFormSubmit:', event)
     event.preventDefault()
-    if (!searchTerm.value) {
+    const value = searchTerm.value.trim()
+    if (!value) {
         console.debug('no searchTerm.value')
         return searchTerm.focus()
     }
-    if (event.target.classList.contains('dropdown-item')) {
+    if (value.startsWith('METAR')) {
+        const href = chrome.runtime.getURL('/html/metar.html')
+        const url = new URL(href)
+        url.searchParams.append('metar', value)
+        await chrome.tabs.create({ active: true, url: url.href })
+    } else if (event.target.classList.contains('dropdown-item')) {
         let category = event.target.parentNode.parentNode.id
         let key = event.target.textContent
-        const url = getLinkUrl(category, key, searchTerm.value)
+        const url = getLinkUrl(category, key, value)
         await chrome.tabs.create({ active: true, url })
     } else if (event.submitter?.dataset?.search) {
         const category = event.submitter.dataset.search
-        await openOptionsFor(category, searchTerm.value)
+        await openOptionsFor(category, value)
     } else {
         const category = document.querySelector(
             'input[name="searchType"]:checked'
         ).value
-        await openOptionsFor(category, searchTerm.value)
+        await openOptionsFor(category, value)
     }
+    window.close()
 }

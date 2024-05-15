@@ -100,6 +100,11 @@ async function onClicked(ctx, tab) {
             // console.debug('url:', url)
             await chrome.tabs.create({ active: true, url })
         }
+    } else if (ctx.menuItemId.startsWith('metar')) {
+        const href = chrome.runtime.getURL('/html/metar.html')
+        const url = new URL(href)
+        url.searchParams.append('metar', ctx.selectionText)
+        await chrome.tabs.create({ active: true, url: url.href })
     } else {
         console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
@@ -244,9 +249,11 @@ export function createContextMenus(bookmarks) {
         [['selection'], 'registration', 'normal', 'Registration Search'],
         [['selection'], 'flight', 'normal', 'Flight Search'],
         [['selection'], 'airport', 'normal', 'Airport Search'],
-        [['selection'], 'separator-1', 'separator', 'separator'],
+        [['selection'], 'sep-1', 'separator', 'separator'],
+        [['selection'], 'metar', 'normal', 'METAR Decode'],
+        [['selection'], 'sep-2', 'separator', 'separator'],
         [ctx, 'bookmarks', 'normal', 'Bookmarks'],
-        [ctx, 'separator-2', 'separator', 'separator'],
+        [ctx, 'sep-3', 'separator', 'separator'],
         [ctx, 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {

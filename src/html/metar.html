@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aviation Tools - METAR</title>
+    <link rel="icon" href="../images/logo16.png" sizes="any">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script type="text/javascript" src="../js/theme.js"></script>
+</head>
+<body>
+
+<div class="container-fluid p-3">
+    <div class="row">
+        <div class="col-12">
+            <h1>Aviation Tools - METAR</h1>
+            <form id="metar-form">
+                <div class="mb-3">
+                    <label for="metar-input" class="form-label"><i class="fa-solid fa-cloud-sun"></i> METAR</label>
+                    <div class="input-group input-group-lg mb-3">
+                        <input id="metar-input" type="text" class="form-control" placeholder="METAR" aria-label="Recipient's username" aria-describedby="submit">
+                        <button class="btn btn-outline-secondary" type="submit" id="submit">Go</button>
+                        <button class="btn btn-outline-secondary" type="button" id="clear">Clear</button>
+                    </div>
+                </div>
+            </form>
+            <table class="table table-bordered  table-striped-columns" id="metar-table">
+                <thead class="visually-hidden">
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                <tr>
+                    <th scope="row">Airport/Date</th>
+                    <td>
+                        <span data-type="airport" class="fw-bold"></span> on
+                        Day <span data-type="day" class="fw-bold"></span>,
+                        Hour <span data-type="hour" class="fw-bold"></span>,
+                        Min <span data-type="min" class="fw-bold"></span>
+                    </td>
+                </tr>
+<!--                <tr>-->
+<!--                    <th scope="row">Date</th>-->
+<!--                    <td>-->
+<!--                        Day <span data-type="day" class="fw-bold"></span> - -->
+<!--                        Hour <span data-type="hour" class="fw-bold"></span> - -->
+<!--                        Min <span data-type="min" class="fw-bold"></span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+                <tr>
+                    <th scope="row">Atmosphere</th>
+                    <td>
+                        Temperature <span data-type="temperature" class="fw-bold"></span>&deg;C,
+                        Dewpoint <span data-type="dewPoint" class="fw-bold"></span>&deg;C,
+                        QNH <span data-type="qnh" class="fw-bold"></span> HPa
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Clouds</th>
+                    <td data-type="clouds"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Wind</th>
+                    <td>
+                        From <span data-type="course" class="fw-bold"></span>&deg;
+                        at <span data-type="speed" class="fw-bold"></span>
+                        <span data-type="measure" class=""></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Visibility</th>
+                    <td>
+                        <span data-type="distance" class="fw-bold"></span>
+                        <span data-type="direction" class=""></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> <!-- container -->
+
+<button type="button" class="btn btn-outline-primary" id="back-to-top">
+    <i class="fa-regular fa-square-caret-up"></i>
+</button> <!-- back-to-top -->
+
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+</div> <!-- toast -->
+
+<div class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="toast-body"></div>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
+        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+    </svg>
+</div> <!-- d-none -->
+
+<script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="../dist/metar/metar.js"></script>
+<script type="module" src="../js/main.js"></script>
+<script type="module" src="../js/metar.js"></script>
+
+</body>
+</html>
