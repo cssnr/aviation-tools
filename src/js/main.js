@@ -1,6 +1,6 @@
 // JS for pages
 
-import { showToast } from './exports.js'
+import { debounce, showToast } from './exports.js'
 
 if (typeof ClipboardJS !== 'undefined') {
     const clipboard = new ClipboardJS('.clip')
@@ -41,19 +41,5 @@ function onScroll() {
         backToTop.style.display = 'block'
     } else {
         backToTop.style.display = 'none'
-    }
-}
-
-/**
- * DeBounce Function
- * @function debounce
- * @param {Function} fn
- * @param {Number} timeout
- */
-function debounce(fn, timeout = 250) {
-    let timeoutID
-    return (...args) => {
-        clearTimeout(timeoutID)
-        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }

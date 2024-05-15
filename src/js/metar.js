@@ -1,6 +1,6 @@
 // JS for metar.html
 
-// import { parseMetar } from '../dist/metar.js'
+import { parseMetar } from '../dist/metar-taf-parser/metar-taf-parser.js'
 
 document.addEventListener('DOMContentLoaded', domContentLoaded)
 // document
@@ -40,7 +40,13 @@ async function domContentLoaded() {
 function processMetar(event) {
     console.debug('processMetar:', event)
     event?.preventDefault()
-    const metar = parseMetar(metarInput.value)
+    let metar
+    try {
+        metar = parseMetar(metarInput.value)
+    } catch (e) {
+        console.log(e)
+        return
+    }
     console.log('metar:', metar)
     if (!metar || typeof metar !== 'object') {
         return console.info('no metar')
@@ -48,28 +54,38 @@ function processMetar(event) {
     for (const [key, value] of Object.entries(metar)) {
         console.debug(`${key}:`, value)
         if (key === 'clouds') {
-            const element = metarTable.querySelector('[data-type="clouds"]')
-            element.innerHTML = ''
-            for (const cloud of value) {
-                const span = document.createElement('span')
-                span.innerHTML = `<strong>${cloud.code}</strong> at <strong>${cloud.base}</strong>`
-                element.appendChild(span)
-                element.appendChild(document.createTextNode(' and '))
-            }
-            element.removeChild(element.lastChild)
+            processClouds(value)
         } else if (typeof value === 'object') {
             for (const [subKey, subValue] of Object.entries(value)) {
-                updateTable(subKey, subValue)
+                const sk = `${key}-${subKey}`
+                updateElement(sk, subValue)
             }
         } else {
-            updateTable(key, value)
+            updateElement(key, value)
         }
     }
 }
 
-function updateTable(key, value) {
+function updateElement(key, value) {
     const element = metarTable.querySelector(`[data-type="${key}"]`)
     if (element) {
         element.textContent = value.toString()
     }
+}
+
+function processClouds(clouds) {
+    const element = metarTable.querySelector('[data-type="clouds"]')
+    element.innerHTML = ''
+    const seen = []
+    for (const cloud of clouds) {
+        if (seen.includes(`${cloud.quantity}-${cloud.height}`)) {
+            continue
+        }
+        seen.push(`${cloud.quantity}-${cloud.height}`)
+        const span = document.createElement('span')
+        span.innerHTML = `<strong>${cloud.quantity}</strong> at <strong>${cloud.height}</strong>`
+        element.appendChild(span)
+        element.appendChild(document.createTextNode(' - '))
+    }
+    element.removeChild(element.lastChild)
 }

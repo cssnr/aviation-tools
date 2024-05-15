@@ -38,10 +38,9 @@
                 <tr>
                     <th scope="row">Airport/Date</th>
                     <td>
-                        <span data-type="airport" class="fw-bold"></span> on
-                        Day <span data-type="day" class="fw-bold"></span>,
-                        Hour <span data-type="hour" class="fw-bold"></span>,
-                        Min <span data-type="min" class="fw-bold"></span>
+                        <span data-type="station" class="fw-bold"></span> on
+                        <span data-type="day" class="fw-bold"></span> at
+                        <span data-type="hour" class="fw-bold"></span>:<span data-type="minute" class="fw-bold"></span> Zulu
                     </td>
                 </tr>
 <!--                <tr>-->
@@ -55,9 +54,9 @@
                 <tr>
                     <th scope="row">Atmosphere</th>
                     <td>
-                        Temperature <span data-type="temperature" class="fw-bold"></span>&deg;C,
-                        Dewpoint <span data-type="dewPoint" class="fw-bold"></span>&deg;C,
-                        QNH <span data-type="qnh" class="fw-bold"></span> HPa
+                        Temp <span data-type="temperature" class="fw-bold"></span>&deg;C,
+                        Dew <span data-type="dewPoint" class="fw-bold"></span>&deg;C,
+                        QNH <span data-type="altimeter-value" class="fw-bold"></span> <span data-type="altimeter-unit"></span>
                     </td>
                 </tr>
                 <tr>
@@ -67,16 +66,16 @@
                 <tr>
                     <th scope="row">Wind</th>
                     <td>
-                        From <span data-type="course" class="fw-bold"></span>&deg;
-                        at <span data-type="speed" class="fw-bold"></span>
-                        <span data-type="measure" class=""></span>
+                        From <span data-type="wind-degrees" class="fw-bold"></span>&deg;
+                        at <span data-type="wind-speed" class="fw-bold"></span>
+                        <span data-type="wind-unit" class=""></span>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">Visibility</th>
                     <td>
-                        <span data-type="distance" class="fw-bold"></span>
-                        <span data-type="direction" class=""></span>
+                        <span data-type="visibility-value" class="fw-bold"></span>
+                        <span data-type="visibility-unit" class=""></span>
                     </td>
                 </tr>
                 </tbody>
@@ -105,7 +104,7 @@
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
-<script type="text/javascript" src="../dist/metar/metar.js"></script>
+<!--<script type="text/javascript" src="../dist/metar/metar.js"></script>-->
 <script type="module" src="../js/main.js"></script>
 <script type="module" src="../js/metar.js"></script>
 

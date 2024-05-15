@@ -15,7 +15,8 @@
     "bootstrap": "^5.3.3",
     "clipboard": "^2.0.11",
     "jquery": "^3.7.1",
-    "metar-js": "^0.0.5"
+    "metar-js": "^0.0.5",
+    "metar-taf-parser": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
