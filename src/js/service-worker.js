@@ -32,7 +32,7 @@ async function onStartup() {
         ])
         console.debug('options:', options)
         if (options.contextMenu) {
-            createContextMenus(bookmarks)
+            createContextMenus(options, bookmarks)
         }
     }
 }
@@ -56,7 +56,7 @@ async function onInstalled(details) {
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     console.log('bookmarks:', bookmarks)
     if (options.contextMenu) {
-        createContextMenus(bookmarks)
+        createContextMenus(options, bookmarks)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
@@ -129,7 +129,7 @@ async function onChanged(changes, namespace) {
                     const { bookmarks } = await chrome.storage.sync.get([
                         'bookmarks',
                     ])
-                    createContextMenus(bookmarks)
+                    createContextMenus(newValue, bookmarks)
                 } else {
                     console.info('Disabled contextMenu...')
                     chrome.contextMenus.removeAll()
@@ -139,7 +139,7 @@ async function onChanged(changes, namespace) {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
                 console.log('Updating Context Menu Bookmarks...')
-                createContextMenus(newValue)
+                createContextMenus(options, newValue)
             }
         }
     }
@@ -240,10 +240,11 @@ async function onInputEntered(text) {
 /**
  * Create Context Menus
  * @function createContextMenus
+ * @param {Object} options
  * @param {Array} bookmarks
  */
-export function createContextMenus(bookmarks) {
-    console.log('createContextMenus', bookmarks)
+export function createContextMenus(options, bookmarks) {
+    console.log('createContextMenus:', options, bookmarks)
     chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
@@ -251,9 +252,9 @@ export function createContextMenus(bookmarks) {
         [['selection'], 'decode', 'normal', 'Decode'],
         [['selection'], 'sep-1', 'separator', 'separator'],
         [['selection'], 'sep-2', 'separator', 'separator'],
-        [ctx, 'bookmarks', 'normal', 'Bookmarks'],
-        [ctx, 'sep-3', 'separator', 'separator'],
-        [ctx, 'options', 'normal', 'Open Options'],
+        [['all'], 'bookmarks', 'normal', 'Bookmarks'],
+        [['all'], 'sep-3', 'separator', 'separator'],
+        [['all'], 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {
         chrome.contextMenus.create({
@@ -287,13 +288,13 @@ export function createContextMenus(bookmarks) {
     })
     if (bookmarks.length) {
         chrome.contextMenus.create({
-            contexts: ctx,
+            contexts: ['all'],
             id: `bookmark-all`,
             parentId: 'bookmarks',
             title: 'Open All Bookmarks',
         })
         chrome.contextMenus.create({
-            contexts: ctx,
+            contexts: ['all'],
             id: `bookmark-sep`,
             parentId: 'bookmarks',
             type: 'separator',
@@ -305,7 +306,7 @@ export function createContextMenus(bookmarks) {
                 .replace(/\/$/, '')
                 .substring(0, 50)
             chrome.contextMenus.create({
-                contexts: ctx,
+                contexts: ['all'],
                 id: `bookmark-${i}`,
                 parentId: 'bookmarks',
                 title: title,
