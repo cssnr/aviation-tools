@@ -2,6 +2,7 @@
 
 import {
     searchLinks,
+    toolsLinks,
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
@@ -246,11 +247,9 @@ export function createContextMenus(bookmarks) {
     chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
-        [['selection'], 'registration', 'normal', 'Registration Search'],
-        [['selection'], 'flight', 'normal', 'Flight Search'],
-        [['selection'], 'airport', 'normal', 'Airport Search'],
+        [['selection'], 'search', 'normal', 'Search'],
+        [['selection'], 'decode', 'normal', 'Decode'],
         [['selection'], 'sep-1', 'separator', 'separator'],
-        [['selection'], 'metar', 'normal', 'METAR Decode'],
         [['selection'], 'sep-2', 'separator', 'separator'],
         [ctx, 'bookmarks', 'normal', 'Bookmarks'],
         [ctx, 'sep-3', 'separator', 'separator'],
@@ -262,6 +261,28 @@ export function createContextMenus(bookmarks) {
             id: context[1],
             title: context[3],
             type: context[2],
+        })
+    })
+    const search = [
+        [['selection'], 'registration', 'normal', 'Registration Search'],
+        [['selection'], 'flight', 'normal', 'Flight Search'],
+        [['selection'], 'airport', 'normal', 'Airport Search'],
+    ]
+    search.forEach((ctx) => {
+        chrome.contextMenus.create({
+            contexts: ctx[0],
+            id: ctx[1],
+            parentId: 'search',
+            title: ctx[3],
+        })
+    })
+    const decode = [[['selection'], 'metar', 'normal', 'METAR Decode']]
+    decode.forEach((ctx) => {
+        chrome.contextMenus.create({
+            contexts: ctx[0],
+            id: ctx[1],
+            parentId: 'decode',
+            title: ctx[3],
         })
     })
     if (bookmarks.length) {
@@ -320,9 +341,9 @@ async function setDefaultOptions(defaultOptions) {
             console.log(`Set ${key}:`, value)
         }
     }
-    const nestedChanges = setNestedDefaults(options, searchLinks)
-
-    changed = changed || nestedChanges
+    const linksChanges = setNestedDefaults(options, searchLinks)
+    const toolsChanges = setNestedDefaults(options, toolsLinks)
+    changed = changed || linksChanges || toolsChanges
     console.debug('changed', changed)
     if (changed) {
         await chrome.storage.sync.set({ options })
