@@ -20,9 +20,6 @@ export const searchLinks = {
         airnav: 'https://www.airnav.com/airport/',
         liveatc: 'https://www.liveatc.net/search/?icao=',
     },
-}
-
-export const toolsLinks = {
     tools: {
         weather: 'https://aviationweather.gov/',
         wind: 'https://e6bx.com/density-altitude/',
@@ -31,6 +28,15 @@ export const toolsLinks = {
         modes: 'https://www.avionictools.com/icao.php',
         adsb: 'https://globe.adsbexchange.com/',
     },
+}
+
+export const toolsNames = {
+    weather: 'Weather',
+    wind: 'Wind',
+    density: 'Density Altitude',
+    flightplan: 'Flight Planning',
+    modes: 'Mode S Hex',
+    adsb: 'ADS-B',
 }
 
 /**

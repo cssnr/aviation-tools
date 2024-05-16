@@ -2,7 +2,7 @@
 
 import {
     searchLinks,
-    toolsLinks,
+    toolsNames,
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
@@ -87,6 +87,12 @@ async function onClicked(ctx, tab) {
     if (ctx.menuItemId === 'options') {
         console.debug('options')
         chrome.runtime.openOptionsPage()
+    } else if (ctx.menuItemId.startsWith('tools-')) {
+        const key = ctx.menuItemId.split('-')[1]
+        console.debug('key:', key)
+        const url = searchLinks.tools[key]
+        console.debug('url:', url)
+        await chrome.tabs.create({ active: true, url })
     } else if (ctx.menuItemId.startsWith('bookmark')) {
         console.debug('bookmark')
         const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
@@ -123,17 +129,15 @@ async function onChanged(changes, namespace) {
     // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
-            if (oldValue.contextMenu !== newValue.contextMenu) {
-                if (newValue?.contextMenu) {
-                    console.info('Enabled contextMenu...')
-                    const { bookmarks } = await chrome.storage.sync.get([
-                        'bookmarks',
-                    ])
-                    createContextMenus(newValue, bookmarks)
-                } else {
-                    console.info('Disabled contextMenu...')
-                    chrome.contextMenus.removeAll()
-                }
+            if (newValue?.contextMenu) {
+                console.info('Enabled contextMenu...')
+                const { bookmarks } = await chrome.storage.sync.get([
+                    'bookmarks',
+                ])
+                createContextMenus(newValue, bookmarks)
+            } else {
+                console.info('Disabled contextMenu...')
+                chrome.contextMenus.removeAll()
             }
         } else if (namespace === 'sync' && key === 'bookmarks') {
             const { options } = await chrome.storage.sync.get(['options'])
@@ -246,12 +250,12 @@ async function onInputEntered(text) {
 export function createContextMenus(options, bookmarks) {
     console.log('createContextMenus:', options, bookmarks)
     chrome.contextMenus.removeAll()
-    const ctx = ['all']
     const contexts = [
         [['selection'], 'search', 'normal', 'Search'],
         [['selection'], 'decode', 'normal', 'Decode'],
         [['selection'], 'sep-1', 'separator', 'separator'],
         [['selection'], 'sep-2', 'separator', 'separator'],
+        [['all'], 'tools', 'normal', 'Tools'],
         [['all'], 'bookmarks', 'normal', 'Bookmarks'],
         [['all'], 'sep-3', 'separator', 'separator'],
         [['all'], 'options', 'normal', 'Open Options'],
@@ -286,6 +290,16 @@ export function createContextMenus(options, bookmarks) {
             title: ctx[3],
         })
     })
+    for (const [key, value] of Object.entries(toolsNames)) {
+        if (options.tools[key]) {
+            chrome.contextMenus.create({
+                contexts: ['all'],
+                id: `tools-${key}`,
+                parentId: 'tools',
+                title: value,
+            })
+        }
+    }
     if (bookmarks.length) {
         chrome.contextMenus.create({
             contexts: ['all'],
@@ -343,8 +357,7 @@ async function setDefaultOptions(defaultOptions) {
         }
     }
     const linksChanges = setNestedDefaults(options, searchLinks)
-    const toolsChanges = setNestedDefaults(options, toolsLinks)
-    changed = changed || linksChanges || toolsChanges
+    changed = changed || linksChanges
     console.debug('changed', changed)
     if (changed) {
         await chrome.storage.sync.set({ options })
