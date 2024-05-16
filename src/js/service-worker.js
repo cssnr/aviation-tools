@@ -2,7 +2,7 @@
 
 import {
     searchLinks,
-    toolsNames,
+    // toolsNames,
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
@@ -290,13 +290,14 @@ export function createContextMenus(options, bookmarks) {
             title: ctx[3],
         })
     })
-    for (const [key, value] of Object.entries(toolsNames)) {
+    for (const key of Object.keys(searchLinks.tools)) {
+        console.log('key:', key)
         if (options.tools[key]) {
             chrome.contextMenus.create({
                 contexts: ['all'],
                 id: `tools-${key}`,
                 parentId: 'tools',
-                title: value,
+                title: key,
             })
         }
     }

@@ -30,15 +30,6 @@ export const searchLinks = {
     },
 }
 
-export const toolsNames = {
-    weather: 'Weather',
-    wind: 'Wind',
-    density: 'Density Altitude',
-    flightplan: 'Flight Planning',
-    modes: 'Mode S Hex',
-    adsb: 'ADS-B',
-}
-
 /**
  * Open Options for Category
  * @function openOptionsFor
