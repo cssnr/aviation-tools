@@ -34,7 +34,25 @@ gulp.task('jquery', () => {
         .pipe(gulp.dest('src/dist/jquery'))
 })
 
+gulp.task('metar-taf-parser', () => {
+    return gulp
+        .src(
+            [
+                'node_modules/metar-taf-parser/metar-taf-parser.js',
+                'node_modules/metar-taf-parser/locale/**',
+            ],
+            { base: 'node_modules/metar-taf-parser' }
+        )
+        .pipe(gulp.dest('src/dist/metar-taf-parser'))
+})
+
 gulp.task(
     'default',
-    gulp.parallel('bootstrap', 'clipboard', 'fontawesome', 'jquery')
+    gulp.parallel(
+        'bootstrap',
+        'clipboard',
+        'fontawesome',
+        'jquery',
+        'metar-taf-parser'
+    )
 )
