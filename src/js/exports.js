@@ -20,6 +20,14 @@ export const searchLinks = {
         airnav: 'https://www.airnav.com/airport/',
         liveatc: 'https://www.liveatc.net/search/?icao=',
     },
+    tools: {
+        weather: 'https://aviationweather.gov/',
+        wind: 'https://e6bx.com/density-altitude/',
+        density: 'https://e6bx.com/density-altitude/',
+        flightplan: 'https://skyvector.com/',
+        modes: 'https://www.avionictools.com/icao.php',
+        adsb: 'https://globe.adsbexchange.com/',
+    },
 }
 
 /**
@@ -149,14 +157,11 @@ export function updateOptions(options) {
             value = true
         }
         console.debug(`${key}:`, value)
-        // console.debug('key:', key)
-        // console.debug('value:', value)
         const el = document.getElementById(key)
-        // console.debug('el:', el)
         // Handle Object Subkeys
         if (typeof value === 'object') {
-            console.debug('Update Object value:', value)
             for (const [subkey, checked] of Object.entries(value)) {
+                // console.debug(`subkey: ${subkey}:`, value)
                 const subEl = document.getElementById(`${key}-${subkey}`)
                 if (subEl) {
                     subEl.checked = checked

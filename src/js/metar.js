@@ -76,6 +76,9 @@ function updateElement(key, value) {
 function processClouds(clouds) {
     const element = metarTable.querySelector('[data-type="clouds"]')
     element.innerHTML = ''
+    if (!clouds.length) {
+        return console.debug('no clouds')
+    }
     const seen = []
     for (const cloud of clouds) {
         if (seen.includes(`${cloud.quantity}-${cloud.height}`)) {
