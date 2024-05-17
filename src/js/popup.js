@@ -57,6 +57,10 @@ async function initPopup() {
     for (const [key, value] of Object.entries(searchLinks)) {
         // console.debug(`${key}: ${value}`)
         const ul = document.getElementById(key)
+        if (!ul) {
+            console.debug('skipping:', key)
+            continue
+        }
         for (const [name, url] of Object.entries(value)) {
             // console.debug(`${name}: ${url}`)
             createSearchLink(ul, url, name)
