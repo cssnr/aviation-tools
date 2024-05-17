@@ -87,7 +87,10 @@ async function onClicked(ctx, tab) {
     if (ctx.menuItemId === 'options') {
         console.debug('options')
         chrome.runtime.openOptionsPage()
-    } else if (ctx.menuItemId.startsWith('tools-')) {
+    } else if (ctx.menuItemId.startsWith('tools')) {
+        if (ctx.menuItemId === 'tools') {
+            return chrome.runtime.openOptionsPage()
+        }
         const key = ctx.menuItemId.split('-')[1]
         console.debug('key:', key)
         const url = searchLinks.tools[key]
@@ -297,7 +300,7 @@ export function createContextMenus(options, bookmarks) {
                 contexts: ['all'],
                 id: `tools-${key}`,
                 parentId: 'tools',
-                title: key,
+                title: key.charAt(0).toUpperCase() + key.slice(1),
             })
         }
     }
