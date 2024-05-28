@@ -25,9 +25,7 @@ document
     .getElementById('import-bookmarks')
     .addEventListener('click', importBookmarks)
 
-const bookmarksTable = document.getElementById('bookmarks-table')
 const bookmarksInput = document.getElementById('bookmarks-input')
-// TODO: Verify this should be a 'change' event
 bookmarksInput.addEventListener('change', inputBookmarks)
 
 /**
@@ -56,7 +54,9 @@ async function initOptions() {
  */
 function updateBookmarks(data) {
     console.debug('updateBookmarks:', data)
-    const tbody = bookmarksTable.querySelector('tbody')
+    const tbody = document
+        .getElementById('bookmarks-table')
+        .querySelector('tbody')
     tbody.innerHTML = ''
     const trashCan = document.querySelector('.fa-regular.fa-trash-can')
     data.forEach((value) => {
@@ -195,7 +195,7 @@ async function importBookmarks(event) {
  * @param {InputEvent} event
  */
 async function inputBookmarks(event) {
-    console.debug('inputBookmarks:', event, bookmarksInput)
+    console.debug('inputBookmarks:', event)
     event.preventDefault()
     const fileReader = new FileReader()
     fileReader.onload = async function doImport() {
