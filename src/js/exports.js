@@ -186,6 +186,10 @@ export function updateOptions(options) {
     }
 }
 
+/**
+ * Not Currently Used as there is no data-related elements
+ * @function updateManifest
+ */
 function hideShowElement(selector, show, speed = 'fast') {
     const element = $(`${selector}`)
     // console.debug('hideShowElement:', show, element)
@@ -194,6 +198,20 @@ function hideShowElement(selector, show, speed = 'fast') {
     } else {
         element.hide(speed)
     }
+}
+
+/**
+ * Update DOM with Manifest Details
+ * @function updateManifest
+ */
+export function updateManifest() {
+    const manifest = chrome.runtime.getManifest()
+    document
+        .querySelectorAll('.version')
+        .forEach((el) => (el.textContent = manifest.version))
+    document
+        .querySelectorAll('[href="homepage_url"]')
+        .forEach((el) => (el.href = manifest.homepage_url))
 }
 
 /**

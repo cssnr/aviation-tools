@@ -7,6 +7,7 @@ import {
     openOptionsFor,
     saveOptions,
     updateOptions,
+    updateManifest,
 } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
@@ -17,19 +18,19 @@ document
     .querySelectorAll('#options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
-    .querySelectorAll('[data-bs-toggle="tooltip"]')
-    .forEach((el) => new bootstrap.Tooltip(el))
-document
     .getElementsByName('searchType')
     .forEach((el) => el.addEventListener('change', updateSearchType))
 document
+    .getElementById('search-form')
+    .addEventListener('submit', searchFormSubmit)
+document
     .getElementById('all-bookmarks')
     .addEventListener('click', openAllBookmarks)
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
-const searchForm = document.getElementById('search-form')
 const searchTerm = document.getElementById('searchTerm')
-
-searchForm.addEventListener('submit', searchFormSubmit)
 
 /**
  * Initialize Popup
@@ -37,9 +38,7 @@ searchForm.addEventListener('submit', searchFormSubmit)
  */
 async function initPopup() {
     console.debug('initPopup')
-    const manifest = chrome.runtime.getManifest()
-    document.querySelector('.version').textContent = manifest.version
-    document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
+    updateManifest()
 
     const { options, bookmarks } = await chrome.storage.sync.get([
         'options',

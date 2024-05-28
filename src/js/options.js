@@ -1,9 +1,13 @@
 // JS for options.html
 
-import { showToast, saveOptions, updateOptions } from './exports.js'
+import {
+    showToast,
+    saveOptions,
+    updateManifest,
+    updateOptions,
+} from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
-
 document.addEventListener('DOMContentLoaded', initOptions)
 document
     .querySelectorAll('#options-form input,select')
@@ -23,7 +27,7 @@ document
 
 const bookmarksTable = document.getElementById('bookmarks-table')
 const bookmarksInput = document.getElementById('bookmarks-input')
-
+// TODO: Verify this should be a 'change' event
 bookmarksInput.addEventListener('change', inputBookmarks)
 
 /**
@@ -33,21 +37,16 @@ bookmarksInput.addEventListener('change', inputBookmarks)
 async function initOptions() {
     console.log('initOptions')
 
-    const manifest = chrome.runtime.getManifest()
-    document.querySelector('.version').textContent = manifest.version
-    document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
+    updateManifest()
+    await setShortcuts()
 
     const { options, bookmarks } = await chrome.storage.sync.get([
         'options',
         'bookmarks',
     ])
-    console.log(options)
+    // console.debug('options, bookmarks:', options, bookmarks)
     updateOptions(options)
     updateBookmarks(bookmarks)
-
-    await setShortcuts({
-        mainKey: '_execute_action',
-    })
 }
 
 /**
@@ -258,116 +257,23 @@ function onChanged(changes, namespace) {
 /**
  * Set Keyboard Shortcuts
  * @function setShortcuts
- * @param {Object} mapping { elementID: name }
+ * @param {String} selector
  */
-async function setShortcuts(mapping) {
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+    const table = document.querySelector(selector)
+    const tbody = table.querySelector('tbody')
+    const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
-    for (const [elementID, name] of Object.entries(mapping)) {
-        // console.debug(`${elementID}: ${name}`)
-        const command = commands.find((x) => x.name === name)
-        if (command?.shortcut) {
-            // console.debug(`${elementID}: ${command.shortcut}`)
-            const el = document.getElementById(elementID)
-            if (el) {
-                el.textContent = command.shortcut
-            }
+    for (const command of commands) {
+        // console.debug('command:', command)
+        const row = source.cloneNode(true)
+        // TODO: Chrome does not parse the description for _execute_action in manifest.json
+        let description = command.description
+        if (!description && command.name === '_execute_action') {
+            description = 'Show Popup'
         }
+        row.querySelector('.description').textContent = description
+        row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
+        tbody.appendChild(row)
     }
 }
-
-// /**
-//  * @function saveOptions
-//  * @param {MouseEvent} event
-//  */
-// async function saveOptions(event) {
-//     console.log('oldSaveOptions:', event)
-//     event.preventDefault()
-//     const { options } = await chrome.storage.sync.get(['options'])
-//     let bookmarks = []
-//
-//     Array.from(event.target.elements).forEach((input) => {
-//         if (input.type === 'checkbox') {
-//             const subkey = input.id.split('-')[0]
-//             const key = input.id.split('-')[1]
-//             // console.log(`${subkey}: ${key}: ${input.checked}`)
-//             if (options[subkey] === undefined) {
-//                 options[subkey] = {}
-//             }
-//             options[subkey][key] = input.checked
-//         }
-//
-//         if (input.classList.contains('bookmark-link') && input.value) {
-//             bookmarks.push(input.value)
-//         }
-//     })
-//     console.log(bookmarks)
-//
-//     options.contextMenu = document.getElementById('contextMenu').checked
-//     options.showUpdate = document.getElementById('showUpdate').checked
-//     // if (options.contextMenu) {
-//     //     chrome.contextMenus.removeAll()
-//     //     createContextMenus()
-//     // } else {
-//     //     chrome.contextMenus.removeAll()
-//     // }
-//     console.log(options)
-//
-//     await chrome.storage.sync.set({ options, bookmarks })
-//     showToast('Options Saved')
-// }
-
-// /**
-//  * Add Form Input for a Filter
-//  * @function createBookmarkInput
-//  * @param {String} number
-//  * @param {String} value
-//  */
-// function createBookmarkInput(number, value = '') {
-//     const el = document.getElementById('bookmarks')
-//     const input = document.createElement('input')
-//     input.id = `bookmark-${number}`
-//     input.value = value
-//     input.classList.add('form-control', 'mb-0', 'bookmark-link')
-//     const a = document.createElement('a')
-//     a.textContent = 'Remove'
-//     a.href = '#'
-//     a.dataset.id = number
-//     a.classList.add('small')
-//     a.addEventListener('click', deleteBookmark)
-//
-//     el.appendChild(a)
-//     el.appendChild(input)
-// }
-//
-// /**
-//  * Add Bookmark Click Callback
-//  * @function addBookmark
-//  * @param {MouseEvent} event
-//  */
-// function addBookmark(event) {
-//     console.log('addBookmark:', event)
-//     event.preventDefault()
-//     const el = document.getElementById('bookmarks')
-//     const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
-//     createBookmarkInput(next)
-// }
-//
-// /**
-//  * Delete Filter Click Callback
-//  * @function deleteBookmark
-//  * @param {MouseEvent} event
-//  */
-// function deleteBookmark(event) {
-//     console.log('deleteBookmark: event, this:', event, this)
-//     event.preventDefault()
-//     const inputs = document.querySelectorAll('#bookmarks input').length
-//     // const inputs = document
-//     //     .getElementById('bookmarks')
-//     //     .getElementsByTagName('input').length
-//     console.log(`inputs: ${inputs}`)
-//     if (inputs > 1) {
-//         const input = document.getElementById(`bookmark-${this.dataset.id}`)
-//         this.parentNode.removeChild(input)
-//         this.parentNode.removeChild(this)
-//     }
-// }

@@ -2,7 +2,6 @@
 
 import {
     searchLinks,
-    // toolsNames,
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
