@@ -5,7 +5,6 @@ import { debounce, showToast } from './exports.js'
 if (typeof ClipboardJS !== 'undefined') {
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
-        // console.debug('clipboard.success:', event)
         const text = event.text.trim()
         console.debug(`text: "${text}"`)
         if (event.trigger.dataset.toast) {
@@ -14,8 +13,7 @@ if (typeof ClipboardJS !== 'undefined') {
             showToast('Copied to Clipboard')
         }
     })
-    clipboard.on('error', function (event) {
-        // console.debug('clipboard.error:', event)
+    clipboard.on('error', function () {
         showToast('Clipboard Copy Failed', 'warning')
     })
 }

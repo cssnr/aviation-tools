@@ -22,16 +22,18 @@
         <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
         <h1 class="">Aviation Tools</h1>
     </div>
-    <p class="text-center mb-0">v<span class="version"></span></p>
-    <table class="table table-sm table-borderless table-hover">
+    <div class="clearfix"></div>
+    <p class="text-center lead">v<span class="version"></span></p>
+    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-        <tbody>
+        <tbody></tbody>
+        <tfoot class="d-none">
         <tr>
-            <td>Show Popup Action <i class="fa-regular fa-keyboard ms-1"></i></td>
-            <td class="text-end" title="Keyboard Shortcut"><kbd id="mainKey">Not Set</kbd></td>
+            <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
+            <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
         </tr>
-        </tbody>
+        </tfoot>
     </table>
     <hr class="my-2">
     <form id="options-form">
@@ -46,6 +48,10 @@
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="registration-flightradar">
                         <label class="form-check-label" for="registration-flightradar">Flight Radar 24</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="registration-adsbx">
+                        <label class="form-check-label" for="registration-adsbx">ADS-B Exchange</label>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="registration-avherald">
@@ -168,7 +174,7 @@
     <form id="bookmarks-form">
         <label class="form-label" for="add-bookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
         <div class="input-group mb-1">
-            <input type="text" class="form-control" placeholder="Bookmark URL" aria-label="Filter" id="add-bookmark" aria-describedby="add-bookmark-btn" required>
+            <input id="add-bookmark" type="text" class="form-control" placeholder="Bookmark URL" aria-label="Filter" aria-describedby="add-bookmark-btn" autocomplete="url" required autofocus>
             <button class="btn btn-outline-success" type="submit" id="add-bookmark-btn">
                 Add <i class="fa-solid fa-plus ms-1"></i>
             </button>
