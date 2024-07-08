@@ -1,8 +1,9 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/cjjhackeogffajjndfhemgniokonimin?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/aviation-tools?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/aviation-tools/blob/master/manifest.json)
-[![Build](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
+[![Build](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
+[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/aviation-tools/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
+[![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Aviation Tools
 
 Upcoming Web Extension with various Aviation Tools...
@@ -10,24 +11,19 @@ Upcoming Web Extension with various Aviation Tools...
 *   [Download](#download)
 *   [Features](#features)
 *   [Configuration](#configuration)
+*   [Support](#support)
 *   [Development](#development)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
 
 # Download
 
-<a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
-    <img alt="Chrome" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="42" height="42" /></a>
-<a href="https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi" target="_blank">
-    <img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
-    <img alt="Edge" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
-    <img alt="Opera" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
-    <img alt="Brave" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin" target="_blank">
-    <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
+[![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
+[![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi)
+[![Edge](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/edge_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
+[![Brave](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/brave_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
+[![Opera](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/opera_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
+[![Chromium](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chromium_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
 
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin).
@@ -54,6 +50,24 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Aviation Tools (A
 **Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
 
 To open the options, click on the icon (from above) then click `Open Options`.
+
+# Support
+
+For help using the web extension, utilize any these resources:
+
+- Q&A Discussion: https://github.com/cssnr/aviation-tools/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/aviation-tools/discussions/categories/feature-requests
+
+If you are experiencing an issue/bug or getting unexpected results, use:
+
+- Report an Issue: https://github.com/cssnr/aviation-tools/issues
+- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+
+Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
+Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 
@@ -116,7 +130,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
-1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
+1.  Optional: open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)
