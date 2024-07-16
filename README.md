@@ -53,21 +53,19 @@ To open the options, click on the icon (from above) then click `Open Options`.
 
 # Support
 
-For help using the web extension, utilize any these resources:
+For help using the web extension see:
 
 - Q&A Discussion: https://github.com/cssnr/aviation-tools/discussions/categories/q-a
 - Request a Feature: https://github.com/cssnr/aviation-tools/discussions/categories/feature-requests
 
-If you are experiencing an issue/bug or getting unexpected results, use:
+If you are experiencing an issue/bug or getting unexpected results, you can:
 
 - Report an Issue: https://github.com/cssnr/aviation-tools/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+- Provide General Feedback: https://cssnr.github.io/feedback
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
-
-Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 

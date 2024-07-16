@@ -13,33 +13,32 @@
 </head>
 <body class="h-100">
 
-<!--<div class="container-fluid p-3 h-100">-->
-<!--<div class="d-flex align-items-center h-100">-->
-<!--<div id="options-wrapper" class="col-xxl-8 col-md-10 col-12 m-auto rounded rounded-4 p-3">-->
 <div class="d-flex align-items-center justify-content-center pt-3 px-1 px-sm-3 h-100 w-100">
-<div class="m-auto pb-4 w-100" style="max-width: 100%;">
+<div class="m-auto pb-4 w-100">
 <div id="options-wrapper" class="glass-outline blur rounded rounded-4 p-3 m-auto w-100">
 
     <div class="d-flex justify-content-center align-items-center">
         <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
         <h1 class="">Aviation Tools</h1>
     </div>
-    <div class="clearfix"></div>
     <p class="text-center lead">v<span class="version"></span></p>
+
     <div id="table-wrapper" class="glass-bg rounded rounded-3 py-1 px-2">
-    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover mb-1">
-        <caption class="visually-hidden">Keyboard Shortcuts</caption>
-        <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-        <tbody></tbody>
-        <tfoot class="d-none">
-        <tr>
-            <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
-            <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
-        </tr>
-        </tfoot>
-    </table>
+        <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover mb-1">
+            <caption class="visually-hidden">Keyboard Shortcuts</caption>
+            <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
+            <tbody></tbody>
+            <tfoot class="d-none">
+            <tr>
+                <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
+                <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
+            </tr>
+            </tfoot>
+        </table>
     </div>
-    <hr class="my-2">
+
+    <hr>
+
     <form class="options-form">
         <div class="row mb-3">
             <div class="col-md-4 col-sm-6 col-12">
@@ -111,7 +110,7 @@
             </div>
         </div>
 
-        <hr class="">
+        <hr>
 
         <div class="row mb-3">
             <h5>Tools</h5>
@@ -153,7 +152,7 @@
             </div>
         </div>
 
-        <hr class="">
+        <hr>
 
         <div class="form-check form-switch">
             <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
@@ -175,7 +174,7 @@
         </div>
     </form>
 
-    <hr class="">
+    <hr>
 
     <form id="bookmarks-form">
         <label class="form-label" for="add-bookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
@@ -216,7 +215,6 @@
                 <i class="fa-solid fa-circle-info ms-1"></i>
             </span>
         </h5>
-
         <div class=" ms-1 ms-sm-3">
             <div class="form-check form-check-inline mb-2 mb-sm-0">
                 <input class="form-check-input" type="radio" name="radioBackground" id="bgNone" value="none">
@@ -232,7 +230,6 @@
             </div>
             <a id="reset-background" class="float-end align-bottom small" role="button">Reset</a>
         </div>
-
         <div class="ms-0 ms-sm-3">
             <div id="bgPictureInput" class="input-group">
                     <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image or empty for default.">
@@ -263,7 +260,6 @@
 </div> <!-- options-wrapper -->
 </div> <!-- m-auto -->
 </div> <!-- d-flex -->
-
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
