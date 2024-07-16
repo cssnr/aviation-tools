@@ -6,36 +6,41 @@ body {
 
 #options-wrapper {
     /*width: 100%;*/
-    max-width: 1199px;
+    max-width: 720px;
+}
+
+.blur {
     backdrop-filter: blur(6px);
 }
 
-[data-bs-theme='dark'] #options-wrapper {
+[data-bs-theme='dark'] .glass-outline {
     background-color: rgba(0 0 0 / 50%);
     border: 1px solid rgba(255 255 255 / 15%);
     filter: drop-shadow(15px 15px 12px #000);
 }
 
-[data-bs-theme='light'] #options-wrapper {
+[data-bs-theme='light'] .glass-outline {
     background-color: rgba(255 255 255 / 60%);
     border: 1px solid rgba(0 0 0 / 17.5%);
 }
 
-[data-bs-theme='dark'] .form-control {
+[data-bs-theme='dark'] .form-control,
+[data-bs-theme='dark'] .glass-bg {
     background-color: rgba(0 0 0 / 50%);
 }
 
-[data-bs-theme='light'] .form-control {
+[data-bs-theme='light'] .form-control,
+[data-bs-theme='light'] .glass-bg {
     background-color: rgba(255 255 255 / 50%);
 }
 
-[data-bs-theme='dark'] #table-wrapper {
-    background-color: rgba(0 0 0 / 50%);
-}
+/*[data-bs-theme='dark'] .glass-bg {*/
+/*    background-color: rgba(0 0 0 / 50%);*/
+/*}*/
 
-[data-bs-theme='light'] #table-wrapper {
-    background-color: rgba(255 255 255 / 50%);
-}
+/*[data-bs-theme='light'] .glass-bg {*/
+/*    background-color: rgba(255 255 255 / 50%);*/
+/*}*/
 
 .table {
     --bs-table-bg: initial; /* or unset */

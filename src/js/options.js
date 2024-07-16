@@ -14,8 +14,11 @@ document
     .getElementById('reset-background')
     .addEventListener('click', resetBackground)
 document
-    .querySelectorAll('#options-form input,select')
+    .querySelectorAll('.options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('.options-form')
+    .forEach((el) => el.addEventListener('submit', (e) => e.preventDefault()))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))

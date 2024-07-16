@@ -11,6 +11,12 @@
         "default": "Alt+Shift+A"
       },
       "description": "Show Main Popup Action"
+    },
+    "openBookmarks": {
+      "suggested_key": {
+        "default": "Alt+Shift+Z"
+      },
+      "description": "Open All Bookmarks"
     }
   },
   "omnibox": {
