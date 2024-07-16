@@ -10,6 +10,7 @@ import {
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
+document.getElementById('pin-notice').addEventListener('click', pinClick)
 document
     .getElementById('reset-background')
     .addEventListener('click', resetBackground)
@@ -41,7 +42,7 @@ bookmarksInput.addEventListener('change', inputBookmarks)
  */
 async function initOptions() {
     console.log('initOptions')
-
+    checkInstall()
     updateManifest()
     await setShortcuts()
 
@@ -55,19 +56,40 @@ async function initOptions() {
     updateBookmarks(bookmarks)
 }
 
+function checkInstall() {
+    // const searchParams = new URLSearchParams(window.location.search)
+    // const install = searchParams.get('install')
+    // if (install) {
+    if (window.location.search.includes('?install=new')) {
+        history.pushState(null, '', location.href.split('?')[0])
+        const pin = document.getElementById('pin-notice')
+        pin.classList.remove('d-none')
+        if (navigator.userAgent.includes('Firefox/')) {
+            console.log('Firefox')
+            pin.querySelector('.firefox').classList.remove('d-none')
+        } else if (navigator.userAgent.includes('Edg/')) {
+            console.log('Edge')
+            pin.querySelector('.edge').classList.remove('d-none')
+        } else {
+            console.log('Chromium/Other')
+            pin.querySelector('.chromium').classList.remove('d-none')
+        }
+    }
+}
+
 /**
  * Update Filters Table
  * @function updateBookmarks
- * @param {Array} data
+ * @param {String[]} bookmarks
  */
-function updateBookmarks(data) {
-    console.debug('updateBookmarks:', data)
+function updateBookmarks(bookmarks) {
+    console.debug('updateBookmarks:', bookmarks)
     const tbody = document
         .getElementById('bookmarks-table')
         .querySelector('tbody')
     tbody.innerHTML = ''
     const trashCan = document.querySelector('.fa-regular.fa-trash-can')
-    data.forEach((value) => {
+    bookmarks.forEach((value) => {
         const row = tbody.insertRow()
         const delBtn = document.createElement('a')
         const svg = trashCan.cloneNode(true)
@@ -84,11 +106,11 @@ function updateBookmarks(data) {
 
         const link = document.createElement('a')
         // link.dataset.idx = idx
-        const text = value
+        link.textContent = value
             .replace(/(^\w+:|^)\/\//, '')
             .replace(/\/$/, '')
             .substring(0, 50)
-        link.textContent = text
+        // link.textContent = text
         link.title = value
         link.classList.add(
             'link-body-emphasis',
@@ -326,6 +348,17 @@ async function resetBackground(event) {
     // form.submit()
     await saveOptions(event)
     showToast('Background Image URL Reset.')
+}
+
+/**
+ * Pin Animation Click Callback
+ * @function pinClick
+ * @param {MouseEvent} event
+ */
+function pinClick(event) {
+    const div = event.target.closest('div')
+    console.log('div:', div)
+    div.classList.add('d-none')
 }
 
 /**
