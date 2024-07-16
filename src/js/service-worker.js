@@ -47,6 +47,8 @@ async function onInstalled(details) {
     const options = await Promise.resolve(
         setDefaultOptions({
             searchType: 'registration',
+            radioBackground: 'bgPicture',
+            pictureURL: 'https://images.cssnr.com/aviation',
             contextMenu: true,
             showUpdate: false,
         })

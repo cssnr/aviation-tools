@@ -11,6 +11,9 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
+    .getElementById('reset-background')
+    .addEventListener('click', resetBackground)
+document
     .querySelectorAll('#options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
@@ -45,6 +48,7 @@ async function initOptions() {
     ])
     // console.debug('options, bookmarks:', options, bookmarks)
     updateOptions(options)
+    setBackground(options)
     updateBookmarks(bookmarks)
 }
 
@@ -99,6 +103,22 @@ function updateBookmarks(data) {
         // cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
     })
+}
+
+/**
+ * Set Background
+ * @function setBackground
+ * @param {Object} options
+ */
+function setBackground(options) {
+    console.debug('setBackground:', options.radioBackground, options.pictureURL)
+    if (options.radioBackground === 'bgPicture') {
+        const url = options.pictureURL || 'https://images.cssnr.com/aviation'
+        document.body.style.background = `url('${url}') no-repeat center fixed`
+        document.body.style.backgroundSize = 'cover'
+    } else {
+        document.body.style.cssText = ''
+    }
 }
 
 /**
@@ -244,10 +264,19 @@ function textFileDownload(filename, text) {
  */
 function onChanged(changes, namespace) {
     console.debug('onChanged:', changes, namespace)
-    for (const [key, { newValue }] of Object.entries(changes)) {
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync') {
             if (key === 'options') {
                 updateOptions(newValue)
+                if (oldValue.radioBackground !== newValue.radioBackground) {
+                    setBackground(newValue)
+                }
+                if (
+                    oldValue.pictureURL !== newValue.pictureURL ||
+                    oldValue.videoURL !== newValue.videoURL
+                ) {
+                    setBackground(newValue)
+                }
             } else if (key === 'bookmarks') {
                 updateBookmarks(newValue)
             }
@@ -277,6 +306,23 @@ async function setShortcuts(selector = '#keyboard-shortcuts') {
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
     }
+}
+
+/**
+ * Reset Background Option Callback
+ * @function resetBackground
+ * @param {InputEvent} event
+ */
+async function resetBackground(event) {
+    console.log('resetBackground:', event)
+    event.preventDefault()
+    const pictureURL = document.getElementById('pictureURL')
+    pictureURL.value = 'https://images.cssnr.com/aviation'
+    pictureURL.focus()
+    // const form = document.getElementById('options-form')
+    // form.submit()
+    await saveOptions(event)
+    showToast('Background Image URL Reset.')
 }
 
 /**

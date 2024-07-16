@@ -13,11 +13,13 @@
 </head>
 <body class="h-100">
 
-<div class="container-fluid p-3 h-100">
-<div class="d-flex align-items-center h-100">
-<div class="col-xxl-8 col-md-10 col-12 m-auto">
-<div class="card mb-3">
-<div class="card-body">
+<!--<div class="container-fluid p-3 h-100">-->
+<!--<div class="d-flex align-items-center h-100">-->
+<!--<div id="options-wrapper" class="col-xxl-8 col-md-10 col-12 m-auto rounded rounded-4 p-3">-->
+<div class="d-flex align-items-center justify-content-center pt-3 px-1 px-sm-3 h-100 w-100">
+<div class="m-auto pb-4 w-100" style="max-width: 100%;">
+<div id="options-wrapper" class="rounded rounded-4 p-3 m-auto w-100">
+
     <div class="d-flex justify-content-center align-items-center">
         <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
         <h1 class="">Aviation Tools</h1>
@@ -38,7 +40,7 @@
     <hr class="my-2">
     <form id="options-form">
         <div class="row mb-3">
-            <div class="col-xl-4 col-sm-6 col-12">
+            <div class="col-md-4 col-sm-6 col-12">
                 <h5>Registration Defaults</h5>
                 <div class="">
                     <div class="form-check form-switch">
@@ -71,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-sm-6 col-12">
+            <div class="col-md-4 col-sm-6 col-12">
                 <h5>Flight # Defaults</h5>
                 <div class="">
                     <div class="form-check form-switch">
@@ -84,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-sm-6 col-12">
+            <div class="col-md-4 col-sm-6 col-12">
                 <h5>Airport Defaults</h5>
                 <div class="">
                     <div class="form-check form-switch">
@@ -107,7 +109,8 @@
             </div>
         </div>
 
-        <hr class="my-2">
+        <hr class="">
+
         <div class="row mb-3">
             <h5>Tools</h5>
             <div class="col-xl-4 col-sm-6 col-12">
@@ -148,7 +151,8 @@
             </div>
         </div>
 
-        <hr class="my-2">
+        <hr class="">
+
         <div class="form-check form-switch">
             <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
             <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
@@ -167,9 +171,41 @@
                 </span>
             </label>
         </div>
+
+        <h5 class="mt-3">
+            Options Page Background
+            <span class="small" data-bs-toggle="tooltip" data-bs-title="Disabled, Random/Custom Picture or Video Looping.">
+                <i class="fa-solid fa-circle-info ms-1"></i>
+            </span>
+        </h5>
+
+        <div class=" ms-1 ms-sm-3">
+            <div class="form-check form-check-inline mb-2 mb-sm-0">
+                <input class="form-check-input" type="radio" name="radioBackground" id="bgNone" value="none">
+                <label class="form-check-label" for="bgNone">
+                    <i class="fa-regular fa-square"></i> None
+                </label>
+            </div>
+            <div class="form-check form-check-inline mb-2">
+                <input class="form-check-input" type="radio" name="radioBackground" id="bgPicture" value="picture">
+                <label class="form-check-label" for="bgPicture">
+                    <i class="fa-regular fa-image"></i> Picture
+                </label>
+            </div>
+            <a id="reset-background" class="float-end align-bottom small" role="button">Reset</a>
+        </div>
+
+        <div class="ms-0 ms-sm-3">
+            <div id="bgPictureInput" class="input-group">
+                    <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image or empty for default.">
+                        <i class="fa-solid fa-circle-info"></i></span>
+                <input type="text" class="form-control" placeholder="Background Picture URL" aria-label="Background Picture URL"
+                       id="pictureURL" name="pictureURL" aria-describedby="picture-addon">
+            </div>
+        </div>
     </form>
 
-    <hr class="my-2">
+    <hr class="">
 
     <form id="bookmarks-form">
         <label class="form-label" for="add-bookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
@@ -188,18 +224,20 @@
         <a id="export-bookmarks" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
             Export <i class="fa-solid fa-file-arrow-down ms-1"></i></a>
     </div>
-    <table id="bookmarks-table" class="table table-sm table-hover bg-transparent">
-        <caption>
-            Bookmarks <i class="fa-solid fa-bookmark"></i>
-        </caption>
-        <thead><tr>
-            <th scope="col" class="text-center" style="width: 36px;">
-                <i class="fa-solid fa-trash-can"></i>
-            </th>
-            <th scope="col">URL</th>
-        </tr></thead>
-        <tbody></tbody>
-    </table>
+    <div class="border border-1 rounded mt-2">
+        <table id="bookmarks-table" class="table table-sm table-hover">
+            <caption>
+                Bookmarks <i class="fa-solid fa-bookmark"></i>
+            </caption>
+            <thead><tr>
+                <th scope="col" class="text-center" style="width: 36px;">
+                    <i class="fa-solid fa-trash-can"></i>
+                </th>
+                <th scope="col">Bookmark URL</th>
+            </tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
     <p class="fst-italic small mt-3">
         <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.
@@ -217,11 +255,11 @@
         <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://github.com/cssnr/aviation-tools/issues">Open Issue</a>
     </div>
-</div> <!-- card-body -->
-</div> <!-- card -->
-</div> <!-- col -->
-</div> <!-- flex -->
-</div> <!-- container -->
+
+</div> <!-- options-wrapper -->
+</div> <!-- m-auto -->
+</div> <!-- d-flex -->
+
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
