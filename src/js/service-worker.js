@@ -10,6 +10,7 @@ import {
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
+chrome.commands.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
 chrome.omnibox.onInputChanged.addListener(onInputChanged)
 chrome.omnibox.onInputCancelled.addListener(onInputCancelled)
@@ -47,6 +48,8 @@ async function onInstalled(details) {
     const options = await Promise.resolve(
         setDefaultOptions({
             searchType: 'registration',
+            radioBackground: 'bgPicture',
+            pictureURL: 'https://images.cssnr.com/aviation',
             contextMenu: true,
             showUpdate: false,
         })
@@ -58,7 +61,10 @@ async function onInstalled(details) {
         createContextMenus(options, bookmarks)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        chrome.runtime.openOptionsPage()
+        // chrome.runtime.openOptionsPage()
+        let url = chrome.runtime.getURL('/html/options.html') + '?install=new'
+        console.log(`url: ${url}`)
+        await chrome.tabs.create({ active: true, url })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
             const manifest = chrome.runtime.getManifest()
@@ -118,6 +124,20 @@ async function onClicked(ctx, tab) {
         console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         await clipboardWrite(term)
+    }
+}
+
+/**
+ * On Command Callback
+ * @function onCommand
+ * @param {String} command
+ */
+async function onCommand(command) {
+    console.debug('onCommand:', command)
+    if (command === 'openBookmarks') {
+        await openAllBookmarks()
+    } else {
+        console.warn('Unknown command:', command)
     }
 }
 

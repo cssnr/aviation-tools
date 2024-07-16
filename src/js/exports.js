@@ -118,6 +118,9 @@ export async function saveOptions(event) {
                 break
             }
         }
+    } else if (key === 'reset-background') {
+        key = 'pictureURL'
+        value = 'https://images.cssnr.com/aviation'
     } else if (event.target.type === 'checkbox') {
         value = event.target.checked
     } else if (event.target.type === 'number') {
@@ -176,7 +179,7 @@ export function updateOptions(options) {
         }
         if (!['INPUT', 'SELECT'].includes(el.tagName)) {
             el.textContent = value.toString()
-        } else if (el.type === 'checkbox') {
+        } else if (['checkbox', 'radio'].includes(el.type)) {
             el.checked = value
         } else {
             el.value = value

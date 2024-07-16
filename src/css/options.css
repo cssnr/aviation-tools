@@ -1,9 +1,78 @@
 /* CSS for options.html */
 
-.card {
-    min-width: 380px;
+body {
+    min-width: 400px;
 }
 
-.toast {
-    max-width: 260px;
+#options-wrapper {
+    max-width: 800px;
+}
+
+.blur {
+    backdrop-filter: blur(6px);
+}
+
+[data-bs-theme='dark'] .glass-outline {
+    background-color: rgba(0 0 0 / 50%);
+    border: 1px solid rgba(255 255 255 / 15%);
+    filter: drop-shadow(15px 15px 12px #000);
+}
+
+[data-bs-theme='light'] .glass-outline {
+    background-color: rgba(255 255 255 / 60%);
+    border: 1px solid rgba(0 0 0 / 17.5%);
+}
+
+[data-bs-theme='dark'] .form-control,
+[data-bs-theme='dark'] .glass-bg {
+    background-color: rgba(0 0 0 / 50%);
+}
+
+[data-bs-theme='light'] .form-control,
+[data-bs-theme='light'] .glass-bg {
+    background-color: rgba(255 255 255 / 50%);
+}
+
+.table {
+    --bs-table-bg: initial;
+}
+
+#pin-notice {
+    position: fixed;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+[data-bs-theme='dark'] #pin-notice {
+    text-shadow:
+        0 0 3px #000,
+        0 0 6px #000,
+        0 0 9px #000,
+        0 0 12px #000;
+}
+
+[data-bs-theme='light'] #pin-notice {
+    text-shadow:
+        0 0 3px #fff,
+        0 0 6px #fff,
+        0 0 9px #fff,
+        0 0 12px #fff;
+}
+
+.bounce {
+    animation: bounce 4s infinite;
+}
+
+@keyframes bounce {
+    0% {
+        top: 0;
+    }
+    50% {
+        top: 30px;
+    }
+    100% {
+        top: 0;
+    }
 }

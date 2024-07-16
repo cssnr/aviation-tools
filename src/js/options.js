@@ -10,9 +10,16 @@ import {
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
+document.getElementById('pin-notice').addEventListener('click', pinClick)
 document
-    .querySelectorAll('#options-form input,select')
+    .getElementById('reset-background')
+    .addEventListener('click', resetBackground)
+document
+    .querySelectorAll('.options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('.options-form')
+    .forEach((el) => el.addEventListener('submit', (e) => e.preventDefault()))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -35,7 +42,7 @@ bookmarksInput.addEventListener('change', inputBookmarks)
  */
 async function initOptions() {
     console.log('initOptions')
-
+    checkInstall()
     updateManifest()
     await setShortcuts()
 
@@ -45,22 +52,44 @@ async function initOptions() {
     ])
     // console.debug('options, bookmarks:', options, bookmarks)
     updateOptions(options)
+    setBackground(options)
     updateBookmarks(bookmarks)
+}
+
+function checkInstall() {
+    // const searchParams = new URLSearchParams(window.location.search)
+    // const install = searchParams.get('install')
+    // if (install) {
+    if (window.location.search.includes('?install=new')) {
+        history.pushState(null, '', location.href.split('?')[0])
+        const pin = document.getElementById('pin-notice')
+        pin.classList.remove('d-none')
+        if (navigator.userAgent.includes('Firefox/')) {
+            console.log('Firefox')
+            pin.querySelector('.firefox').classList.remove('d-none')
+        } else if (navigator.userAgent.includes('Edg/')) {
+            console.log('Edge')
+            pin.querySelector('.edge').classList.remove('d-none')
+        } else {
+            console.log('Chromium/Other')
+            pin.querySelector('.chromium').classList.remove('d-none')
+        }
+    }
 }
 
 /**
  * Update Filters Table
  * @function updateBookmarks
- * @param {Array} data
+ * @param {String[]} bookmarks
  */
-function updateBookmarks(data) {
-    console.debug('updateBookmarks:', data)
+function updateBookmarks(bookmarks) {
+    console.debug('updateBookmarks:', bookmarks)
     const tbody = document
         .getElementById('bookmarks-table')
         .querySelector('tbody')
     tbody.innerHTML = ''
     const trashCan = document.querySelector('.fa-regular.fa-trash-can')
-    data.forEach((value) => {
+    bookmarks.forEach((value) => {
         const row = tbody.insertRow()
         const delBtn = document.createElement('a')
         const svg = trashCan.cloneNode(true)
@@ -77,11 +106,11 @@ function updateBookmarks(data) {
 
         const link = document.createElement('a')
         // link.dataset.idx = idx
-        const text = value
+        link.textContent = value
             .replace(/(^\w+:|^)\/\//, '')
             .replace(/\/$/, '')
             .substring(0, 50)
-        link.textContent = text
+        // link.textContent = text
         link.title = value
         link.classList.add(
             'link-body-emphasis',
@@ -99,6 +128,22 @@ function updateBookmarks(data) {
         // cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
     })
+}
+
+/**
+ * Set Background
+ * @function setBackground
+ * @param {Object} options
+ */
+function setBackground(options) {
+    console.debug('setBackground:', options.radioBackground, options.pictureURL)
+    if (options.radioBackground === 'bgPicture') {
+        const url = options.pictureURL || 'https://images.cssnr.com/aviation'
+        document.body.style.background = `url('${url}') no-repeat center fixed`
+        document.body.style.backgroundSize = 'cover'
+    } else {
+        document.body.style.cssText = ''
+    }
 }
 
 /**
@@ -244,10 +289,19 @@ function textFileDownload(filename, text) {
  */
 function onChanged(changes, namespace) {
     console.debug('onChanged:', changes, namespace)
-    for (const [key, { newValue }] of Object.entries(changes)) {
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync') {
             if (key === 'options') {
                 updateOptions(newValue)
+                if (oldValue.radioBackground !== newValue.radioBackground) {
+                    setBackground(newValue)
+                }
+                if (
+                    oldValue.pictureURL !== newValue.pictureURL ||
+                    oldValue.videoURL !== newValue.videoURL
+                ) {
+                    setBackground(newValue)
+                }
             } else if (key === 'bookmarks') {
                 updateBookmarks(newValue)
             }
@@ -277,6 +331,34 @@ async function setShortcuts(selector = '#keyboard-shortcuts') {
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
     }
+}
+
+/**
+ * Reset Background Option Callback
+ * @function resetBackground
+ * @param {InputEvent} event
+ */
+async function resetBackground(event) {
+    console.log('resetBackground:', event)
+    event.preventDefault()
+    const pictureURL = document.getElementById('pictureURL')
+    pictureURL.value = 'https://images.cssnr.com/aviation'
+    pictureURL.focus()
+    // const form = document.getElementById('options-form')
+    // form.submit()
+    await saveOptions(event)
+    showToast('Background Image URL Reset.')
+}
+
+/**
+ * Pin Animation Click Callback
+ * @function pinClick
+ * @param {MouseEvent} event
+ */
+function pinClick(event) {
+    const div = event.target.closest('div')
+    console.log('div:', div)
+    div.classList.add('d-none')
 }
 
 /**
