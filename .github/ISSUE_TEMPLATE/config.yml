@@ -2,11 +2,11 @@ blank_issues_enabled: true
 contact_links:
     - name: '💡 Request a Feature'
       about: Request a New Feature or Enhancement in the Discussions.
-      url: https://github.com/cssnr/asn-plus/discussions/new?category=feature-requests
+      url: https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests
 
     - name: '❔ Ask a Question'
       about: Ask a General Question or start a Discussions.
-      url: https://github.com/cssnr/asn-plus/discussions/new?category=q-a
+      url: https://github.com/cssnr/aviation-tools/discussions/new?category=q-a
 
     - name: '💬 Join Discord'
       about: Chat with us about Issues, Features, Questions and More.
@@ -14,4 +14,4 @@ contact_links:
 
     - name: '📝 Submit Feedback'
       about: Send General Feedback.
-      url: https://cssnr.github.io/feedback/?app=ASN%20Plus
+      url: https://cssnr.github.io/feedback/?app=Aviation%20Tools
