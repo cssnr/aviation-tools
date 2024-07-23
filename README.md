@@ -1,8 +1,10 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/cjjhackeogffajjndfhemgniokonimin?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
-[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github)](https://github.com/cssnr/aviation-tools/releases/latest)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github&logoColor=white)](https://github.com/cssnr/aviation-tools/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/aviation-tools/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/aviation-tools?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/aviation-tools/graphs/commit-activity)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/aviation-tools?logo=htmx&logoColor=white)](https://github.com/cssnr/aviation-tools)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Aviation Tools
 
@@ -15,8 +17,9 @@ Upcoming Web Extension with various Aviation Tools...
 *   [Development](#development)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
+*   [Contributing](#Contributing)
 
-# Download
+## Download
 
 [![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
 [![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi)
@@ -34,7 +37,7 @@ All **Chromium** Based Browsers can install the extension from the
 > [!IMPORTANT]  
 > Firefox is currently only available from a [GitHub Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi).
 
-# Features
+## Features
 
 *   Quick Search Registration, Flight Numbers, and Airports
 *   Search by Highlighting Text or Opening Popup Action
@@ -43,7 +46,7 @@ All **Chromium** Based Browsers can install the extension from the
 Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.   
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/aviation-tools/issues/new).
 
-# Configuration
+## Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Aviation Tools (A) icon, then;  
 **Chrome**, click the `Pin` icon.  
@@ -51,7 +54,7 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Aviation Tools (A
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
-# Support
+## Support
 
 For help using the web extension see:
 
@@ -66,6 +69,8 @@ If you are experiencing an issue/bug or getting unexpected results, you can:
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+To support this project, see the [Contributing](#Contributing) section at the bottom.
 
 # Development
 
@@ -114,7 +119,7 @@ npm run build:firefox
 
 For more information on building, see the scripts section in the [package.json](package.json) file.
 
-## Chrome Setup
+### Chrome Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -122,7 +127,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-## Firefox Setup
+### Firefox Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/aviation-tools/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -136,3 +141,22 @@ You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension
 1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
+
+# Contributing
+
+Currently, the best way to contribute to this project is to give a 5-star rating on
+[Google](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin) or
+star this project on GitHub.
+
+Other Web Extensions I have created and published:
+
+- [Link Extractor](https://github.com/cssnr/link-extractor)
+- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
+- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
+- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
+- [ASN Plus](https://github.com/cssnr/asn-plus)
+- [Aviation Tools](https://github.com/cssnr/aviation-tools)
+- [Text Formatter](https://github.com/cssnr/text-formatter)
+
+For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)

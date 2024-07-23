@@ -36,7 +36,7 @@ export const searchLinks = {
  * @function openOptionsFor
  * @param {String} category - registration, flight, airport
  * @param {String} searchTerm
- * @return {String}
+ * @return {Promise<*|String>}
  */
 export async function openOptionsFor(category, searchTerm) {
     console.debug('openOptionsFor:', category, searchTerm)

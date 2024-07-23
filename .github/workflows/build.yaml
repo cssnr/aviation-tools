@@ -32,7 +32,7 @@ jobs:
 
       - name: "Update Manifest Version"
         if: ${{ github.event_name == 'release' }}
-        uses: cssnr/update-json-value-action@master
+        uses: cssnr/update-json-value-action@v1
 
       #- name: "Parse Manifest"
       #  id: manifest
