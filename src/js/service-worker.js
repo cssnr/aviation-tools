@@ -45,15 +45,13 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/aviation-tools'
-    const options = await Promise.resolve(
-        setDefaultOptions({
-            searchType: 'registration',
-            radioBackground: 'bgPicture',
-            pictureURL: 'https://images.cssnr.com/aviation',
-            contextMenu: true,
-            showUpdate: false,
-        })
-    )
+    const options = await setDefaultOptions({
+        searchType: 'registration',
+        radioBackground: 'bgPicture',
+        pictureURL: 'https://images.cssnr.com/aviation',
+        contextMenu: true,
+        showUpdate: false,
+    })
     console.log('options:', options)
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     console.log('bookmarks:', bookmarks)
@@ -356,7 +354,7 @@ export function createContextMenus(options, bookmarks) {
  * Set Default Options
  * @function setDefaultOptions
  * @param {Object} defaultOptions
- * @return {Object}
+ * @return {Promise<*|Object>}
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions', defaultOptions)
