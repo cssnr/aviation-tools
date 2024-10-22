@@ -1,6 +1,7 @@
 // JS Background Service Worker
 
 import {
+    githubURL,
     searchLinks,
     clipboardWrite,
     openAllBookmarks,
@@ -34,6 +35,7 @@ async function onStartup() {
         if (options.contextMenu) {
             createContextMenus(options, bookmarks)
         }
+        await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
     }
 }
 
@@ -44,7 +46,6 @@ async function onStartup() {
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const githubURL = 'https://github.com/cssnr/aviation-tools'
     const options = await setDefaultOptions({
         searchType: 'registration',
         radioBackground: 'bgPicture',
@@ -72,10 +73,10 @@ async function onInstalled(details) {
             }
         }
     }
-    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
     chrome.omnibox.setDefaultSuggestion({
         description: omniboxDefault,
     })
+    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**

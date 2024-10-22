@@ -42,21 +42,22 @@ bookmarksInput.addEventListener('change', inputBookmarks)
  */
 async function initOptions() {
     console.log('initOptions')
+    // noinspection ES6MissingAwait
     checkInstall()
+    // noinspection ES6MissingAwait
     updateManifest()
-    await setShortcuts()
+    // noinspection ES6MissingAwait
+    setShortcuts()
 
-    const { options, bookmarks } = await chrome.storage.sync.get([
-        'options',
-        'bookmarks',
-    ])
-    // console.debug('options, bookmarks:', options, bookmarks)
-    updateOptions(options)
-    setBackground(options)
-    updateBookmarks(bookmarks)
+    chrome.storage.sync.get(['options', 'bookmarks']).then((items) => {
+        // console.debug('options:', items.options)
+        updateOptions(items.options)
+        setBackground(items.options)
+        updateBookmarks(items.bookmarks)
+    })
 }
 
-function checkInstall() {
+async function checkInstall() {
     // const searchParams = new URLSearchParams(window.location.search)
     // const install = searchParams.get('install')
     // if (install) {
@@ -88,7 +89,7 @@ function updateBookmarks(bookmarks) {
         .getElementById('bookmarks-table')
         .querySelector('tbody')
     tbody.innerHTML = ''
-    const trashCan = document.querySelector('.fa-regular.fa-trash-can')
+    const trashCan = document.querySelector('#clones > .fa-trash-can')
     bookmarks.forEach((value) => {
         const row = tbody.insertRow()
         const delBtn = document.createElement('a')

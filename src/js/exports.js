@@ -1,5 +1,7 @@
 // JS Exported Functions
 
+export const githubURL = 'https://github.com/cssnr/aviation-tools'
+
 export const searchLinks = {
     registration: {
         flightaware: 'https://flightaware.com/resources/registration/',
@@ -102,7 +104,7 @@ export async function openAllBookmarks() {
 /**
  * Save Options Callback
  * @function saveOptions
- * @param {InputEvent} event
+ * @param {UIEvent} event
  */
 export async function saveOptions(event) {
     console.debug('saveOptions:', event)
@@ -123,23 +125,23 @@ export async function saveOptions(event) {
         value = 'https://images.cssnr.com/aviation'
     } else if (event.target.type === 'checkbox') {
         value = event.target.checked
-    } else if (event.target.type === 'number') {
-        value = event.target.value.toString()
+        // } else if (event.target.type === 'number') {
+        //     value = event.target.value.toString()
     } else {
-        value = event.target.value?.trim()
+        value = event.target.value
     }
-    if (value === undefined) {
-        return console.warn('No Value for key:', key)
-    }
+
     // Handle Object Subkeys
     if (key.includes('-')) {
         const subkey = key.split('-')[1]
         key = key.split('-')[0]
-        console.info(`Set: ${key}: ${subkey}:`, value)
+        console.log(`%cSet: ${key}.${subkey}:`, 'color: DeepSkyBlue', value)
         options[key][subkey] = value
-    } else {
-        console.info(`Set: ${key}:`, value)
+    } else if (value !== undefined) {
+        console.log(`Set %c${key}:`, 'color: Khaki', value)
         options[key] = value
+    } else {
+        console.warn('No Value for key:', key)
     }
     await chrome.storage.sync.set({ options })
 }
@@ -208,14 +210,17 @@ function hideShowElement(selector, show, speed = 'fast') {
  * Update DOM with Manifest Details
  * @function updateManifest
  */
-export function updateManifest() {
+export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
-    document
-        .querySelectorAll('.version')
-        .forEach((el) => (el.textContent = manifest.version))
-    document
-        .querySelectorAll('[href="homepage_url"]')
-        .forEach((el) => (el.href = manifest.homepage_url))
+    document.querySelectorAll('.version').forEach((el) => {
+        el.textContent = manifest.version
+    })
+    document.querySelectorAll('[href="homepage_url"]').forEach((el) => {
+        el.href = manifest.homepage_url
+    })
+    document.querySelectorAll('[href="version_url"]').forEach((el) => {
+        el.href = `${githubURL}/releases/tag/${manifest.version}`
+    })
 }
 
 /**
@@ -262,19 +267,5 @@ export async function clipboardWrite(value) {
             target: 'offscreen-doc',
             data: value,
         })
-    }
-}
-
-/**
- * DeBounce Function
- * @function debounce
- * @param {Function} fn
- * @param {Number} timeout
- */
-export function debounce(fn, timeout = 250) {
-    let timeoutID
-    return (...args) => {
-        clearTimeout(timeoutID)
-        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }
