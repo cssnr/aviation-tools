@@ -1,5 +1,16 @@
 /* CSS for global */
 
+:root,
+[data-bs-theme='light'] {
+  --bs-emphasis-bg: var(--bs-white);
+  --bs-emphasis-bg-rgb: var(--bs-white-rgb);
+}
+
+[data-bs-theme='dark'] {
+  --bs-emphasis-bg: var(--bs-black);
+  --bs-emphasis-bg-rgb: var(--bs-black-rgb);
+}
+
 svg {
   height: 1em;
   width: 1em;
