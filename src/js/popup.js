@@ -17,7 +17,7 @@ document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', (e) => linkClick(e, true)))
 document
-    .querySelectorAll('#options-form input,select')
+    .querySelectorAll('form.options input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .getElementsByName('searchType')

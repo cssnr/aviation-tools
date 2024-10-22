@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aviation Tools</title>
+    <title>Aviation Tools - Options</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
@@ -37,9 +37,13 @@
         </table>
     </div>
 
-    <hr>
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0">
+        <span class="text-nowrap mx-2">Keyboard Shortcuts</span>
+        <hr class="w-100 my-0">
+    </div>
 
-    <form class="options-form">
+    <form class="options">
         <div class="row mb-3">
             <div class="col-md-4 col-sm-6 col-12">
                 <h5>Registration Defaults</h5>
@@ -110,7 +114,11 @@
             </div>
         </div>
 
-        <hr>
+        <div class="d-flex flex-row align-items-center justify-content-center my-2">
+            <hr class="w-100 my-0">
+            <span class="text-nowrap mx-2">Tools</span>
+            <hr class="w-100 my-0">
+        </div>
 
         <div class="row mb-3">
             <h5>Tools</h5>
@@ -151,37 +159,20 @@
                 </div>
             </div>
         </div>
-
-        <hr>
-
-        <div class="form-check form-switch">
-            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
-                Show Release Notes on Update
-                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
     </form>
 
-    <hr>
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0">
+        <span class="text-nowrap mx-2">Bookmarks</span>
+        <hr class="w-100 my-0">
+    </div>
 
     <form id="bookmarks-form">
         <label class="form-label" for="add-bookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
         <div class="input-group mb-1">
             <input id="add-bookmark" type="text" class="form-control" placeholder="Bookmark URL" aria-label="Filter" aria-describedby="add-bookmark-btn" autocomplete="url" required>
-            <button class="btn btn-success" type="submit" id="add-bookmark-btn">
-                Add <i class="fa-solid fa-plus ms-1"></i>
+            <button class="btn btn-outline-success" type="submit" id="add-bookmark-btn">
+                Add <i class="fa-solid fa-circle-plus ms-1"></i>
             </button>
         </div>
     </form>
@@ -208,25 +199,37 @@
         </table>
     </div>
 
-    <form class="options-form">
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0">
+        <span class="text-nowrap mx-2">Extension Options</span>
+        <hr class="w-100 my-0">
+    </div>
+
+    <form class="options">
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update."></i>
+        </div>
+
         <h5 class="mt-3">
             Options Page Background
-            <span class="small" data-bs-toggle="tooltip" data-bs-title="Disabled, Random/Custom Picture or Video Looping.">
-                <i class="fa-solid fa-circle-info ms-1"></i>
-            </span>
+            <i class="fa-solid fa-circle-info ms-1 fa-sm" data-bs-toggle="tooltip"
+               data-bs-title="Disabled, Random/Custom Picture or Video Looping."></i>
         </h5>
         <div class=" ms-1 ms-sm-3">
             <div class="form-check form-check-inline mb-2 mb-sm-0">
                 <input class="form-check-input" type="radio" name="radioBackground" id="bgNone" value="none">
-                <label class="form-check-label" for="bgNone">
-                    <i class="fa-regular fa-square"></i> None
-                </label>
+                <label class="form-check-label" for="bgNone"><i class="fa-regular fa-square"></i> None</label>
             </div>
             <div class="form-check form-check-inline mb-2">
                 <input class="form-check-input" type="radio" name="radioBackground" id="bgPicture" value="picture">
-                <label class="form-check-label" for="bgPicture">
-                    <i class="fa-regular fa-image"></i> Picture
-                </label>
+                <label class="form-check-label" for="bgPicture"><i class="fa-regular fa-image"></i> Picture</label>
             </div>
             <a id="reset-background" class="float-end align-bottom small" role="button">Reset</a>
         </div>
