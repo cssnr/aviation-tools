@@ -207,6 +207,37 @@ function hideShowElement(selector, show, speed = 'fast') {
 }
 
 /**
+ * Link Click Callback
+ * Note: Firefox popup requires a call to window.close()
+ * @function linkClick
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function linkClick(event, close = false) {
+    console.debug('linkClick:', close, event)
+    event.preventDefault()
+    const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
+    console.debug('href:', href)
+    let url
+    if (href.startsWith('#')) {
+        console.debug('return on anchor link')
+        return
+    } else if (href.endsWith('html/options.html')) {
+        chrome.runtime.openOptionsPage()
+        if (close) window.close()
+        return
+    } else if (href.startsWith('http')) {
+        url = href
+    } else {
+        url = chrome.runtime.getURL(href)
+    }
+    console.debug('url:', url)
+    // await activateOrOpen(url)
+    await chrome.tabs.create({ active: true, url })
+    if (close) window.close()
+}
+
+/**
  * Update DOM with Manifest Details
  * @function updateManifest
  */

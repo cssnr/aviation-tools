@@ -3,6 +3,7 @@
 import {
     searchLinks,
     getLinkUrl,
+    linkClick,
     openAllBookmarks,
     openOptionsFor,
     saveOptions,
@@ -11,9 +12,10 @@ import {
 } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('a[href]')
-    .forEach((el) => el.addEventListener('click', popupLinks))
+    .forEach((el) => el.addEventListener('click', (e) => linkClick(e, true)))
 document
     .querySelectorAll('#options-form input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -38,19 +40,41 @@ const searchTerm = document.getElementById('searchTerm')
  */
 async function initPopup() {
     console.debug('initPopup')
+    searchTerm.focus()
+    // noinspection ES6MissingAwait
     updateManifest()
 
-    const { options, bookmarks } = await chrome.storage.sync.get([
-        'options',
-        'bookmarks',
-    ])
-    console.debug('options, bookmarks:', options, bookmarks)
-    updateOptions(options)
+    chrome.storage.sync.get(['options']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        searchTerm.placeholder = items.options.searchType
+        document.querySelector(
+            `input[name="searchType"][value="${items.options.searchType}"]`
+        ).checked = true
+    })
 
-    searchTerm.placeholder = options.searchType
-    document.querySelector(
-        `input[name="searchType"][value="${options.searchType}"]`
-    ).checked = true
+    chrome.storage.sync.get(['bookmarks']).then((items) => {
+        console.debug('bookmarks:', items.bookmarks)
+        if (items.bookmarks?.length) {
+            document.getElementById('no-bookmarks').remove()
+            const ul = document.getElementById('bookmarks')
+            items.bookmarks.forEach(function (value) {
+                createBookmarkLink(ul, value)
+            })
+        }
+    })
+
+    // const { options, bookmarks } = await chrome.storage.sync.get([
+    //     'options',
+    //     'bookmarks',
+    // ])
+    // console.debug('options, bookmarks:', options, bookmarks)
+    // updateOptions(options)
+    //
+    // searchTerm.placeholder = options.searchType
+    // document.querySelector(
+    //     `input[name="searchType"][value="${options.searchType}"]`
+    // ).checked = true
 
     console.debug('searchLinks:', searchLinks)
     for (const [key, value] of Object.entries(searchLinks)) {
@@ -66,15 +90,13 @@ async function initPopup() {
         }
     }
 
-    if (bookmarks?.length) {
-        document.getElementById('no-bookmarks').remove()
-        const ul = document.getElementById('bookmarks')
-        bookmarks.forEach(function (value) {
-            createBookmarkLink(ul, value)
-        })
-    }
-
-    searchTerm.focus()
+    // if (bookmarks?.length) {
+    //     document.getElementById('no-bookmarks').remove()
+    //     const ul = document.getElementById('bookmarks')
+    //     bookmarks.forEach(function (value) {
+    //         createBookmarkLink(ul, value)
+    //     })
+    // }
 }
 
 /**
@@ -111,35 +133,35 @@ function createBookmarkLink(ul, url) {
     a.href = url
     a.title = url
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', popupLinks)
+    a.addEventListener('click', linkClick)
     li.appendChild(a)
 }
 
-/**
- * Popup Links Click Callback
- * Firefox requires a call to window.close()
- * @function popupLinks
- * @param {MouseEvent} event
- */
-async function popupLinks(event) {
-    console.debug('popupLinks:', event)
-    event.preventDefault()
-    const anchor = event.target.closest('a')
-    const href = anchor.getAttribute('href').replace(/^\.+/g, '')
-    console.debug('href:', href)
-    let url
-    if (href.endsWith('html/options.html')) {
-        chrome.runtime.openOptionsPage()
-        return window.close()
-    } else if (href.startsWith('http')) {
-        url = href
-    } else {
-        url = chrome.runtime.getURL(href)
-    }
-    console.log('url:', url)
-    await chrome.tabs.create({ active: true, url })
-    window.close()
-}
+// /**
+//  * Popup Links Click Callback
+//  * Firefox requires a call to window.close()
+//  * @function popupLinks
+//  * @param {MouseEvent} event
+//  */
+// async function popupLinks(event) {
+//     console.debug('popupLinks:', event)
+//     event.preventDefault()
+//     const anchor = event.target.closest('a')
+//     const href = anchor.getAttribute('href').replace(/^\.+/g, '')
+//     console.debug('href:', href)
+//     let url
+//     if (href.endsWith('html/options.html')) {
+//         chrome.runtime.openOptionsPage()
+//         return window.close()
+//     } else if (href.startsWith('http')) {
+//         url = href
+//     } else {
+//         url = chrome.runtime.getURL(href)
+//     }
+//     console.log('url:', url)
+//     await chrome.tabs.create({ active: true, url })
+//     window.close()
+// }
 
 /**
  * Save Search Type Radio on Change Callback
