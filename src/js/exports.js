@@ -255,6 +255,21 @@ export async function updateManifest() {
 }
 
 /**
+ * @function updateBrowser
+ * @return {Promise<void>}
+ */
+export async function updateBrowser() {
+    let selector = '.chrome'
+    // noinspection JSUnresolvedReference
+    if (typeof browser !== 'undefined') {
+        selector = '.firefox'
+    }
+    document
+        .querySelectorAll(selector)
+        .forEach((el) => el.classList.remove('d-none'))
+}
+
+/**
  * Show Bootstrap Toast
  * @function showToast
  * @param {String} message

@@ -25,6 +25,7 @@ const omniboxDefault = 'Aviation Tools - airport, flight, registration'
  */
 async function onStartup() {
     console.log('onStartup')
+    // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
         console.log('Firefox CTX Menu Workaround')
         const { bookmarks, options } = await chrome.storage.sync.get([
@@ -91,6 +92,8 @@ async function onClicked(ctx, tab) {
     if (ctx.menuItemId === 'options') {
         console.debug('options')
         chrome.runtime.openOptionsPage()
+    } else if (ctx.menuItemId === 'openPopup') {
+        await chrome.action.openPopup()
     } else if (ctx.menuItemId.startsWith('tools')) {
         if (ctx.menuItemId === 'tools') {
             return chrome.runtime.openOptionsPage()
@@ -259,11 +262,13 @@ async function onInputEntered(text) {
     let [type, search] = await parseInput(text)
     console.debug('type:', type)
     console.debug('search:', search)
+    // noinspection ES6MissingAwait
     openOptionsFor(type, search)
 }
 
 /**
  * Create Context Menus
+ * Note: A newer version of createContextMenus exists that sets nested.
  * @function createContextMenus
  * @param {Object} options
  * @param {Array} bookmarks
@@ -279,6 +284,7 @@ export function createContextMenus(options, bookmarks) {
         [['all'], 'tools', 'normal', 'Tools'],
         [['all'], 'bookmarks', 'normal', 'Bookmarks'],
         [['all'], 'sep-3', 'separator', 'separator'],
+        [['all'], 'openPopup', 'normal', 'Open Popup'],
         [['all'], 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {
@@ -353,6 +359,7 @@ export function createContextMenus(options, bookmarks) {
 
 /**
  * Set Default Options
+ * Note: A newer version of setDefaultOptions exists that sets nested.
  * @function setDefaultOptions
  * @param {Object} defaultOptions
  * @return {Promise<*|Object>}
@@ -364,8 +371,8 @@ async function setDefaultOptions(defaultOptions) {
         'options',
     ])
     if (!bookmarks) {
-        bookmarks = []
-        await chrome.storage.sync.set({ bookmarks })
+        console.log('Initialize empty bookmarks sync storage array.')
+        await chrome.storage.sync.set({ bookmarks: [] })
     }
     options = options || {}
     console.debug('options', options)
@@ -375,22 +382,21 @@ async function setDefaultOptions(defaultOptions) {
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set ${key}:`, value)
+            console.log(`Set %c${key}:`, 'color: Khaki', value)
         }
     }
     const linksChanges = setNestedDefaults(options, searchLinks)
     changed = changed || linksChanges
-    console.debug('changed', changed)
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.log('changed:', options)
+        console.log('changed options:', options)
     }
     return options
 }
 
 /**
  * Sets all Nested Keys to true
- * TODO: Make a function and combine with above function
+ * Note: A newer version of setDefaultOptions exists that sets nested.
  * @function setNestedDefaults
  * @param {Object} options
  * @param {Object} defaults

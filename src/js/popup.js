@@ -64,24 +64,12 @@ async function initPopup() {
         }
     })
 
-    // const { options, bookmarks } = await chrome.storage.sync.get([
-    //     'options',
-    //     'bookmarks',
-    // ])
-    // console.debug('options, bookmarks:', options, bookmarks)
-    // updateOptions(options)
-    //
-    // searchTerm.placeholder = options.searchType
-    // document.querySelector(
-    //     `input[name="searchType"][value="${options.searchType}"]`
-    // ).checked = true
-
     console.debug('searchLinks:', searchLinks)
     for (const [key, value] of Object.entries(searchLinks)) {
         // console.debug(`${key}: ${value}`)
         const ul = document.getElementById(key)
         if (!ul) {
-            console.debug('skipping:', key)
+            console.debug('skipping key:', key)
             continue
         }
         for (const [name, url] of Object.entries(value)) {
@@ -89,14 +77,6 @@ async function initPopup() {
             createSearchLink(ul, url, name)
         }
     }
-
-    // if (bookmarks?.length) {
-    //     document.getElementById('no-bookmarks').remove()
-    //     const ul = document.getElementById('bookmarks')
-    //     bookmarks.forEach(function (value) {
-    //         createBookmarkLink(ul, value)
-    //     })
-    // }
 }
 
 /**
@@ -107,6 +87,7 @@ async function initPopup() {
  * @param {String} name
  */
 function createSearchLink(ul, url, name = null) {
+    // console.debug('createSearchLink:', url, name)
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
@@ -197,6 +178,7 @@ async function searchFormSubmit(event) {
         url.searchParams.append('metar', value)
         await chrome.tabs.create({ active: true, url: url.href })
     } else if (event.target.classList.contains('dropdown-item')) {
+        // noinspection JSUnresolvedReference
         let category = event.target.parentNode.parentNode.id
         let key = event.target.textContent
         const url = getLinkUrl(category, key, value)

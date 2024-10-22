@@ -3,6 +3,7 @@
 import {
     showToast,
     saveOptions,
+    updateBrowser,
     updateManifest,
     updateOptions,
 } from './exports.js'
@@ -10,7 +11,6 @@ import {
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
-document.getElementById('pin-notice').addEventListener('click', pinClick)
 document
     .getElementById('reset-background')
     .addEventListener('click', resetBackground)
@@ -43,6 +43,8 @@ bookmarksInput.addEventListener('change', inputBookmarks)
 async function initOptions() {
     console.log('initOptions')
     // noinspection ES6MissingAwait
+    updateBrowser()
+    // noinspection ES6MissingAwait
     checkInstall()
     // noinspection ES6MissingAwait
     updateManifest()
@@ -64,6 +66,8 @@ async function checkInstall() {
     if (window.location.search.includes('?install=new')) {
         history.pushState(null, '', location.href.split('?')[0])
         const pin = document.getElementById('pin-notice')
+        pin.addEventListener('click', pinClick)
+        setTimeout(pinClick, 10000)
         pin.classList.remove('d-none')
         if (navigator.userAgent.includes('Firefox/')) {
             console.log('Firefox')
@@ -75,6 +79,22 @@ async function checkInstall() {
             console.log('Chromium/Other')
             pin.querySelector('.chromium').classList.remove('d-none')
         }
+    }
+}
+
+/**
+ * Set Background
+ * @function setBackground
+ * @param {Object} options
+ */
+function setBackground(options) {
+    console.debug('setBackground:', options.radioBackground, options.pictureURL)
+    if (options.radioBackground === 'bgPicture') {
+        const url = options.pictureURL || 'https://images.cssnr.com/aviation'
+        document.body.style.background = `url('${url}') no-repeat center fixed`
+        document.body.style.backgroundSize = 'cover'
+    } else {
+        document.body.style.cssText = ''
     }
 }
 
@@ -132,22 +152,6 @@ function updateBookmarks(bookmarks) {
 }
 
 /**
- * Set Background
- * @function setBackground
- * @param {Object} options
- */
-function setBackground(options) {
-    console.debug('setBackground:', options.radioBackground, options.pictureURL)
-    if (options.radioBackground === 'bgPicture') {
-        const url = options.pictureURL || 'https://images.cssnr.com/aviation'
-        document.body.style.background = `url('${url}') no-repeat center fixed`
-        document.body.style.backgroundSize = 'cover'
-    } else {
-        document.body.style.cssText = ''
-    }
-}
-
-/**
  * Add Bookmark Submit Callback
  * @function addBookmark
  * @param {SubmitEvent} event
@@ -155,8 +159,8 @@ function setBackground(options) {
 async function addBookmark(event) {
     console.debug('addBookmark:', event)
     event.preventDefault()
-    const input = document.getElementById('add-bookmark')
-    const value = event.target[0].value
+    const input = document.getElementById('newBookmark')
+    const value = event.target.elements.newBookmark.value.trim()
     console.log('value:', value)
     let url
     try {
@@ -173,9 +177,9 @@ async function addBookmark(event) {
         console.debug('bookmarks:', bookmarks)
         await chrome.storage.sync.set({ bookmarks })
         updateBookmarks(bookmarks)
-        showToast(`Added Bookmark.`, 'success')
+        showToast('Added Bookmark.', 'success')
     } else {
-        showToast(`Bookmark Already Added.`, 'warning')
+        showToast('Bookmark Already Added.', 'warning')
     }
     input.value = ''
     input.focus()
@@ -297,6 +301,7 @@ function onChanged(changes, namespace) {
                 if (oldValue.radioBackground !== newValue.radioBackground) {
                     setBackground(newValue)
                 }
+                // noinspection JSUnresolvedReference
                 if (
                     oldValue.pictureURL !== newValue.pictureURL ||
                     oldValue.videoURL !== newValue.videoURL
@@ -357,9 +362,8 @@ async function resetBackground(event) {
  * @param {MouseEvent} event
  */
 function pinClick(event) {
-    const div = event.target.closest('div')
-    console.log('div:', div)
-    div.classList.add('d-none')
+    console.debug('pinClick:', event)
+    document.getElementById('pin-notice').classList.add('d-none')
 }
 
 /**
