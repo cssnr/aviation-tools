@@ -309,8 +309,8 @@ export async function clipboardWrite(value) {
             justification: 'Write text to the clipboard.',
         })
         await chrome.runtime.sendMessage({
-            type: 'copy-data-to-clipboard',
-            target: 'offscreen-doc',
+            type: 'clipboard',
+            target: 'offscreen',
             data: value,
         })
     }
