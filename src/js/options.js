@@ -12,6 +12,9 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
+    .querySelectorAll('[data-controls]')
+    .forEach((el) => el.addEventListener('click', hideShowAll))
+document
     .querySelectorAll('[data-section]')
     .forEach((el) => el.addEventListener('click', hideShowSection))
 document
@@ -81,13 +84,45 @@ async function hideSections() {
     }
 }
 
+function hideShowAll(event) {
+    console.debug('hideShowAll:', event)
+    const action = event.currentTarget.dataset.controls
+    console.debug('action:', action)
+    const sections = document.querySelectorAll('section')
+    const storage = []
+    for (const section of sections) {
+        console.debug('section:', section)
+        if (action === 'expand') {
+            console.debug('%c SHOW Section', 'color: Lime')
+            // section.style.display = ''
+            $(section).show('fast')
+            document.querySelector(
+                `[data-section="${section.id}"]`
+            ).textContent = 'hide'
+        } else {
+            console.debug('%c HIDE Section', 'color: OrangeRed')
+            // section.style.display = 'none'
+            $(section).hide('fast')
+            storage.push(section.id)
+            document.querySelector(
+                `[data-section="${section.id}"]`
+            ).textContent = 'show'
+        }
+    }
+    if (action === 'expand') {
+        console.debug('storage:', '[]')
+        localStorage.setItem('sections', '[]')
+    } else {
+        console.debug('storage:', storage)
+        localStorage.setItem('sections', JSON.stringify(storage))
+    }
+}
+
 function hideShowSection(event) {
     console.debug('hideShowSection:', event)
     const section = event.currentTarget.dataset.section
     console.debug('section:', section)
-    const element = document.getElementById(section)
-    // console.debug('element:', element)
-    const el = $(element)
+    const el = document.getElementById(section)
     // console.debug('el:', el)
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
     console.debug('sections:', sections)
@@ -96,14 +131,14 @@ function hideShowSection(event) {
     if (shown) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
         // el.classList.add('d-none')
-        el.hide('fast')
+        $(el).hide('fast')
         sections.push(section)
         document.querySelector(`[data-section="${section}"]`).textContent =
             'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
         // el.classList.remove('d-none')
-        el.show('fast')
+        $(el).show('fast')
         const idx = sections.indexOf(section)
         sections.splice(idx, 1)
         document.querySelector(`[data-section="${section}"]`).textContent =
