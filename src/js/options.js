@@ -199,6 +199,7 @@ function updateBookmarks(bookmarks) {
         .querySelector('tbody')
     tbody.innerHTML = ''
     const trashCan = document.querySelector('#clones > .fa-trash-can')
+    const faCopy = document.querySelector('#clones > .fa-copy')
     bookmarks.forEach((value) => {
         const row = tbody.insertRow()
         const delBtn = document.createElement('a')
@@ -216,27 +217,34 @@ function updateBookmarks(bookmarks) {
 
         const link = document.createElement('a')
         // link.dataset.idx = idx
-        link.textContent = value
-            .replace(/(^\w+:|^)\/\//, '')
-            .replace(/\/$/, '')
-            .substring(0, 50)
-        // link.textContent = text
+        link.textContent = value.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+        // .substring(0, 100) // TODO: Add text-ellipsis
         link.title = value
         link.classList.add(
             'link-body-emphasis',
             'link-underline',
-            'link-underline-opacity-0'
+            'link-underline-opacity-0',
+            'text-break'
         )
         link.target = '_blank'
         link.href = value
         link.setAttribute('role', 'button')
-
         const cell2 = row.insertCell()
         // cell2.id = `td-${i}`
         // cell2.dataset.idx = i.toString()
-        cell2.classList.add('text-break')
+        // cell2.classList.add('text-break')
         // cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
+
+        const copyLink = document.createElement('a')
+        copyLink.appendChild(faCopy.cloneNode(true))
+        copyLink.title = 'Copy'
+        copyLink.dataset.clipboardText = value
+        copyLink.classList.add('link-info')
+        copyLink.setAttribute('role', 'button')
+        const cell3 = row.insertCell()
+        cell3.classList.add('text-center')
+        cell3.appendChild(copyLink)
     })
 }
 

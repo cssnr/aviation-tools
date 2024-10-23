@@ -225,7 +225,7 @@
             Export <i class="fa-solid fa-file-arrow-down ms-1"></i></a>
     </div>
     <div class="glass-bg rounded mt-2 p-2">
-        <table id="bookmarks-table" class="table table-sm table-hover mb-0">
+        <table id="bookmarks-table" class="table table-sm table-hover mb-0" style="table-layout: fixed;">
             <caption>
                 Bookmarks <i class="fa-solid fa-bookmark"></i>
             </caption>
@@ -234,6 +234,9 @@
                     <i class="fa-solid fa-trash-can"></i>
                 </th>
                 <th scope="col">Bookmark URL</th>
+                <th scope="col" class="text-center" style="width: 22px;">
+                    <i class="fa-solid fa-copy"></i>
+                </th>
             </tr></thead>
             <tbody></tbody>
         </table>
@@ -336,15 +339,17 @@
 </div> <!-- toast -->
 
 <div id="clones" class="d-none">
-    <i class="fa-regular fa-trash-can"></i>
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
+    <i class="fa-regular fa-trash-can"></i>
+    <i class="fa-regular fa-copy"></i>
 </div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="module" src="../js/main.js"></script>
 <script type="module" src="../js/options.js"></script>
 
 </body>
