@@ -56,12 +56,16 @@
     </section> <!-- keyboard-section -->
 
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
-        <hr class="w-100 my-0">
-        <span class="text-nowrap mx-2">Search Defaults</span>
-        <hr class="w-100 my-0">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Search Defaults</span>
+        <div class="ms-2" style="width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="search-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
     </div>
 
     <form class="options">
+        <section id="search-section">
         <div class="row mb-3">
             <div class="col-md-4 col-sm-6 col-12">
                 <h5>Registration Defaults</h5>
@@ -131,13 +135,18 @@
                 </div>
             </div>
         </div>
+        </section> <!-- search-section -->
 
         <div class="d-flex flex-row align-items-center justify-content-center my-2">
-            <hr class="w-100 my-0">
-            <span class="text-nowrap mx-2">Tools</span>
-            <hr class="w-100 my-0">
+            <hr class="w-100 my-0 me-2">
+            <span class="text-nowrap">Tools</span>
+            <div class="ms-2" style="width: 30px;">
+                <a class="text-decoration-none text-center small" role="button" data-section="tools-section">hide</a>
+            </div>
+            <hr class="w-100 my-0 ms-2">
         </div>
 
+        <section id="tools-section">
         <div class="row mb-3">
             <h5>Tools</h5>
             <div class="col-md-4 col-sm-6 col-12">
@@ -177,14 +186,19 @@
                 </div>
             </div>
         </div>
+        </section> <!-- search-section -->
     </form>
 
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
-        <hr class="w-100 my-0">
-        <span class="text-nowrap mx-2">Bookmarks</span>
-        <hr class="w-100 my-0">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Bookmarks</span>
+        <div class="ms-2" style="width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="bookmarks-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
     </div>
 
+    <section id="bookmarks-section">
     <form id="bookmarks-form">
         <label class="form-label" for="newBookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
         <div class="input-group mb-1">
@@ -216,13 +230,18 @@
             <tbody></tbody>
         </table>
     </div>
+    </section> <!-- bookmarks-section -->
 
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
-        <hr class="w-100 my-0">
-        <span class="text-nowrap mx-2">Extension Options</span>
-        <hr class="w-100 my-0">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Extension Options</span>
+        <div class="ms-2" style="width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="extension-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
     </div>
 
+    <section id="extension-section">
     <form class="options">
         <div class="form-check form-switch">
             <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
@@ -260,6 +279,7 @@
             </div>
         </div>
     </form>
+    </section> <!-- extension-section -->
 
     <p class="fst-italic small mt-3">
         <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.

@@ -74,8 +74,10 @@ async function hideSections() {
         console.debug('section:', section)
         const el = document.getElementById(section)
         // console.debug('el:', el)
-        el.classList.add('d-none')
-        el.previousElementSibling.querySelector('a').textContent = 'show'
+        // el.classList.add('d-none')
+        el.style.display = 'none'
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'show'
     }
 }
 
@@ -83,29 +85,29 @@ function hideShowSection(event) {
     console.debug('hideShowSection:', event)
     const section = event.currentTarget.dataset.section
     console.debug('section:', section)
-    const el = document.getElementById(section)
+    const element = document.getElementById(section)
+    // console.debug('element:', element)
+    const el = $(element)
     // console.debug('el:', el)
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
     console.debug('sections:', sections)
-    // const shown = el.dataset.shown === 'true'
     const shown = !sections.includes(section)
     // console.debug('shown:', shown)
     if (shown) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
-        // el.dataset.shown = 'false'
-        el.classList.add('d-none')
-        // if (!sections.includes(section)) {
-        //     sections.push(section)
-        // }
+        // el.classList.add('d-none')
+        el.hide('fast')
         sections.push(section)
-        el.previousElementSibling.querySelector('a').textContent = 'show'
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
-        // el.dataset.shown = 'true'
-        el.classList.remove('d-none')
+        // el.classList.remove('d-none')
+        el.show('fast')
         const idx = sections.indexOf(section)
         sections.splice(idx, 1)
-        el.previousElementSibling.querySelector('a').textContent = 'hide'
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'hide'
     }
     console.debug('sections:', sections)
     localStorage.setItem('sections', JSON.stringify(sections))
