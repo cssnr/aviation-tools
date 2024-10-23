@@ -108,7 +108,9 @@ function createSearchLink(ul, url, name = null) {
  */
 function createBookmarkLink(ul, url) {
     const li = document.createElement('li')
+    // li.classList.add('text-ellipsis')
     ul.appendChild(li)
+    // ul.classList.add('text-ellipsis')
     const a = document.createElement('a')
     a.textContent = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
     a.href = url

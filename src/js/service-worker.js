@@ -106,6 +106,13 @@ async function onClicked(ctx, tab) {
     } else if (ctx.menuItemId.startsWith('bookmark')) {
         console.debug('bookmark')
         const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+        if (ctx.menuItemId === 'bookmark-add') {
+            if (!bookmarks.includes(ctx.pageUrl)) {
+                bookmarks.push(ctx.pageUrl)
+                await chrome.storage.sync.set({ bookmarks })
+            }
+            return
+        }
         if (!bookmarks.length) {
             chrome.runtime.openOptionsPage()
         } else if (ctx.menuItemId === 'bookmark-all') {
@@ -328,6 +335,12 @@ export function createContextMenus(options, bookmarks) {
             })
         }
     }
+    chrome.contextMenus.create({
+        contexts: ['all'],
+        id: `bookmark-add`,
+        parentId: 'bookmarks',
+        title: 'Bookmark Current URL',
+    })
     if (bookmarks.length) {
         chrome.contextMenus.create({
             contexts: ['all'],
