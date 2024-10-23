@@ -24,11 +24,15 @@
     <p class="text-center lead">v<span class="version"></span></p>
 
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
-        <hr class="w-100 my-0">
-        <span class="text-nowrap mx-2">Keyboard Shortcuts</span>
-        <hr class="w-100 my-0">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Keyboard Shortcuts</span>
+        <div class="ms-2" style="width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="keyboard-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
     </div>
 
+    <section id="keyboard-section">
     <div id="table-wrapper" class="glass-bg rounded rounded-3 py-1 px-2 mb-2">
         <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover mb-1">
             <caption class="visually-hidden">Keyboard Shortcuts</caption>
@@ -49,6 +53,7 @@
             https://mzl.la/3Qwp5QQ <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
         <a id="chrome-shortcuts" class="d-inline-block d-none chrome" role="button">chrome://extensions/shortcuts</a>
     </div>
+    </section> <!-- keyboard-section -->
 
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
         <hr class="w-100 my-0">

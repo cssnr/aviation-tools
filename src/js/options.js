@@ -12,6 +12,9 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
+    .querySelectorAll('[data-section]')
+    .forEach((el) => el.addEventListener('click', hideShowSection))
+document
     .getElementById('reset-background')
     .addEventListener('click', resetBackground)
 document
@@ -43,6 +46,8 @@ bookmarksInput.addEventListener('change', inputBookmarks)
 async function initOptions() {
     console.log('initOptions')
     // noinspection ES6MissingAwait
+    hideSections()
+    // noinspection ES6MissingAwait
     updateBrowser()
     // noinspection ES6MissingAwait
     checkInstall()
@@ -57,6 +62,53 @@ async function initOptions() {
         setBackground(items.options)
         updateBookmarks(items.bookmarks)
     })
+}
+
+async function hideSections() {
+    console.debug('hideSections')
+    // const storage = localStorage.getItem('sections') || '[]'
+    // console.debug('storage:', storage)
+    const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    console.debug('sections:', sections)
+    for (const section of sections) {
+        console.debug('section:', section)
+        const el = document.getElementById(section)
+        // console.debug('el:', el)
+        el.classList.add('d-none')
+        el.previousElementSibling.querySelector('a').textContent = 'show'
+    }
+}
+
+function hideShowSection(event) {
+    console.debug('hideShowSection:', event)
+    const section = event.currentTarget.dataset.section
+    console.debug('section:', section)
+    const el = document.getElementById(section)
+    // console.debug('el:', el)
+    const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    console.debug('sections:', sections)
+    // const shown = el.dataset.shown === 'true'
+    const shown = !sections.includes(section)
+    // console.debug('shown:', shown)
+    if (shown) {
+        console.debug('%c HIDE Section', 'color: OrangeRed')
+        // el.dataset.shown = 'false'
+        el.classList.add('d-none')
+        // if (!sections.includes(section)) {
+        //     sections.push(section)
+        // }
+        sections.push(section)
+        el.previousElementSibling.querySelector('a').textContent = 'show'
+    } else {
+        console.debug('%c SHOW Section', 'color: Lime')
+        // el.dataset.shown = 'true'
+        el.classList.remove('d-none')
+        const idx = sections.indexOf(section)
+        sections.splice(idx, 1)
+        el.previousElementSibling.querySelector('a').textContent = 'hide'
+    }
+    console.debug('sections:', sections)
+    localStorage.setItem('sections', JSON.stringify(sections))
 }
 
 async function checkInstall() {
