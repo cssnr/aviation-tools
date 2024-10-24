@@ -65,7 +65,10 @@ async function initPopup() {
         console.debug('bookmarks:', items.bookmarks)
         updateBookmarks(items.bookmarks)
         if (items.bookmarks.includes(tab.url)) {
-            bookmarkCurrent.classList.replace('btn-secondary', 'btn-warning')
+            bookmarkCurrent.classList.replace(
+                'btn-outline-secondary',
+                'btn-outline-warning'
+            )
             bookmarkCurrent.textContent = 'Remove'
         }
     })
@@ -241,11 +244,17 @@ async function bookmarkToggle(event) {
     console.debug('tab.url:', tab.url)
     if (!bookmarks.includes(tab.url)) {
         bookmarks.push(tab.url)
-        bookmarkCurrent.classList.replace('btn-secondary', 'btn-warning')
+        bookmarkCurrent.classList.replace(
+            'btn-outline-secondary',
+            'btn-outline-warning'
+        )
         bookmarkCurrent.textContent = 'Remove'
     } else {
         bookmarks.splice(bookmarks.indexOf(tab.url), 1)
-        bookmarkCurrent.classList.replace('btn-warning', 'btn-secondary')
+        bookmarkCurrent.classList.replace(
+            'btn-outline-warning',
+            'btn-outline-secondary'
+        )
         bookmarkCurrent.textContent = 'Add'
     }
     updateBookmarks(bookmarks)
