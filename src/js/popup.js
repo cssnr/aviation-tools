@@ -140,16 +140,13 @@ function createBookmarkLink(ul, url) {
     const li = document.createElement('li')
     // li.classList.add('text-ellipsis')
     ul.appendChild(li)
-    // ul.classList.add('text-ellipsis')
     const a = document.createElement('a')
-    a.textContent = url
-        .replace(/(^\w+:|^)\/\//, '')
-        .replace(/\/$/, '')
-        .substring(0, 60)
+    a.textContent = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+    // .substring(0, 60)
     a.href = url
     a.title = url
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', linkClick)
+    a.addEventListener('click', (e) => linkClick(e, true))
     li.appendChild(a)
 }
 
