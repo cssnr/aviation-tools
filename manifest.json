@@ -22,7 +22,7 @@
   "omnibox": {
     "keyword": "av"
   },
-  "permissions": ["clipboardWrite", "contextMenus", "storage"],
+  "permissions": ["activeTab", "clipboardWrite", "contextMenus", "storage"],
   "background": {
     "type": "module"
   },

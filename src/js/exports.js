@@ -95,8 +95,12 @@ export async function openAllBookmarks() {
         chrome.runtime.openOptionsPage()
     }
     for (const url of bookmarks) {
-        console.debug(`url: ${url}`)
-        chrome.tabs.create({ active: true, url }).then()
+        try {
+            console.debug(`url: ${url}`)
+            chrome.tabs.create({ active: true, url }).then()
+        } catch (e) {
+            console.error(e)
+        }
     }
     window.close()
 }

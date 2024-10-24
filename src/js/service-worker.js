@@ -325,7 +325,7 @@ export function createContextMenus(options, bookmarks) {
         })
     })
     for (const key of Object.keys(searchLinks.tools)) {
-        console.log('key:', key)
+        // console.log('key:', key)
         if (options.tools[key]) {
             chrome.contextMenus.create({
                 contexts: ['all'],

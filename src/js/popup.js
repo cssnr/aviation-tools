@@ -26,6 +26,9 @@ document
     .getElementById('search-form')
     .addEventListener('submit', searchFormSubmit)
 document
+    .getElementById('bookmark-current')
+    .addEventListener('click', bookmarkToggle)
+document
     .getElementById('all-bookmarks')
     .addEventListener('click', openAllBookmarks)
 document
@@ -33,6 +36,7 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const searchTerm = document.getElementById('searchTerm')
+const bookmarkCurrent = document.getElementById('bookmark-current')
 
 /**
  * Initialize Popup
@@ -43,6 +47,10 @@ async function initPopup() {
     searchTerm.focus()
     // noinspection ES6MissingAwait
     updateManifest()
+
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.debug(`tab: ${tab.id}`, tab)
+    console.debug('tab.url:', tab.url)
 
     chrome.storage.sync.get(['options']).then((items) => {
         console.debug('options:', items.options)
@@ -61,6 +69,10 @@ async function initPopup() {
             items.bookmarks.forEach(function (value) {
                 createBookmarkLink(ul, value)
             })
+        }
+        if (items.bookmarks.includes(tab.url)) {
+            bookmarkCurrent.classList.replace('btn-secondary', 'btn-warning')
+            bookmarkCurrent.textContent = 'Remove'
         }
     })
 
@@ -195,4 +207,29 @@ async function searchFormSubmit(event) {
         await openOptionsFor(category, value)
     }
     window.close()
+}
+
+/**
+ * Toggle Current Site Bookmark Callback
+ * @function bookmarkToggle
+ * @param {UIEvent} event
+ */
+async function bookmarkToggle(event) {
+    console.debug('bookmarkToggle:', event)
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    console.debug('bookmarks:', bookmarks)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.debug(`tab: ${tab.id}`, tab)
+    console.debug('tab.url:', tab.url)
+    if (!bookmarks.includes(tab.url)) {
+        bookmarks.push(tab.url)
+        bookmarkCurrent.classList.replace('btn-secondary', 'btn-warning')
+        bookmarkCurrent.textContent = 'Remove'
+    } else {
+        bookmarks.splice(bookmarks.indexOf(tab.url), 1)
+        bookmarkCurrent.classList.replace('btn-warning', 'btn-secondary')
+        bookmarkCurrent.textContent = 'Add'
+    }
+    console.debug('bookmarks:', bookmarks)
+    await chrome.storage.sync.set({ bookmarks })
 }
