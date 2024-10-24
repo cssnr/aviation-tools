@@ -63,13 +63,7 @@ async function initPopup() {
 
     chrome.storage.sync.get(['bookmarks']).then((items) => {
         console.debug('bookmarks:', items.bookmarks)
-        if (items.bookmarks?.length) {
-            document.getElementById('no-bookmarks').remove()
-            const ul = document.getElementById('bookmarks')
-            items.bookmarks.forEach(function (value) {
-                createBookmarkLink(ul, value)
-            })
-        }
+        updateBookmarks(items.bookmarks)
         if (items.bookmarks.includes(tab.url)) {
             bookmarkCurrent.classList.replace('btn-secondary', 'btn-warning')
             bookmarkCurrent.textContent = 'Remove'
@@ -88,6 +82,27 @@ async function initPopup() {
             // console.debug(`${name}: ${url}`)
             createSearchLink(ul, url, name)
         }
+    }
+}
+
+function updateBookmarks(bookmarks) {
+    console.debug('updateBookmarks:', bookmarks)
+    const ul = document.getElementById('bookmarks')
+    ul.innerHTML = ''
+    if (bookmarks?.length) {
+        bookmarks.forEach((value) => {
+            createBookmarkLink(ul, value)
+        })
+    } else {
+        const li = document.createElement('li')
+        li.id = 'no-bookmarks'
+        const a = document.createElement('a')
+        a.classList.add('dropdown-item')
+        a.href = '/html/options.html'
+        a.textContent = 'No Saved Bookmarks'
+        a.addEventListener('click', (e) => linkClick(e, true))
+        li.appendChild(a)
+        ul.appendChild(li)
     }
 }
 
@@ -124,7 +139,10 @@ function createBookmarkLink(ul, url) {
     ul.appendChild(li)
     // ul.classList.add('text-ellipsis')
     const a = document.createElement('a')
-    a.textContent = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+    a.textContent = url
+        .replace(/(^\w+:|^)\/\//, '')
+        .replace(/\/$/, '')
+        .substring(0, 60)
     a.href = url
     a.title = url
     a.classList.add('dropdown-item', 'small')
@@ -230,6 +248,7 @@ async function bookmarkToggle(event) {
         bookmarkCurrent.classList.replace('btn-warning', 'btn-secondary')
         bookmarkCurrent.textContent = 'Add'
     }
-    console.debug('bookmarks:', bookmarks)
+    updateBookmarks(bookmarks)
     await chrome.storage.sync.set({ bookmarks })
+    // initPopup()
 }
