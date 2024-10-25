@@ -19,7 +19,7 @@ document
     .forEach((el) => el.addEventListener('click', hideShowAll))
 document
     .querySelectorAll('[data-section]')
-    .forEach((el) => el.addEventListener('click', hideShowSection))
+    .forEach((el) => el.addEventListener('click', hideShowCallback))
 document
     .getElementById('reset-background')
     .addEventListener('click', resetBackground)
@@ -126,17 +126,46 @@ function hideShowAll(event) {
     }
 }
 
-function hideShowSection(event) {
-    console.debug('hideShowSection:', event)
+function hideShowCallback(event) {
+    console.debug('hideShowCallback:', event)
     const section = event.currentTarget.dataset.section
     console.debug('section:', section)
+    const show =
+        document.querySelector(`[data-section="${section}"]`).textContent ===
+        'show'
+    console.debug('show:', show)
+    hideShowSection(section, show)
+    // const el = document.getElementById(section)
+    // // console.debug('el:', el)
+    // const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    // // console.debug('sections:', sections)
+    // const shown = !sections.includes(section)
+    // // console.debug('shown:', shown)
+    // if (shown) {
+    //     console.debug('%c HIDE Section', 'color: OrangeRed')
+    //     $(el).hide('fast')
+    //     sections.push(section)
+    //     document.querySelector(`[data-section="${section}"]`).textContent =
+    //         'show'
+    // } else {
+    //     console.debug('%c SHOW Section', 'color: Lime')
+    //     $(el).show('fast')
+    //     const idx = sections.indexOf(section)
+    //     sections.splice(idx, 1)
+    //     document.querySelector(`[data-section="${section}"]`).textContent =
+    //         'hide'
+    // }
+    // // console.debug('sections:', sections)
+    // localStorage.setItem('sections', JSON.stringify(sections))
+}
+
+function hideShowSection(section, show = false) {
+    console.debug(`hideShowSection: ${section}:`, show)
     const el = document.getElementById(section)
-    // console.debug('el:', el)
+    console.debug('el:', el)
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
     // console.debug('sections:', sections)
-    const shown = !sections.includes(section)
-    // console.debug('shown:', shown)
-    if (shown) {
+    if (!show) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
         $(el).hide('fast')
         sections.push(section)
