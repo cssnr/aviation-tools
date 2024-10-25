@@ -66,8 +66,8 @@ async function initPopup() {
         updateBookmarks(items.bookmarks)
         if (items.bookmarks.includes(tab.url)) {
             bookmarkCurrent.classList.replace(
-                'btn-outline-secondary',
-                'btn-outline-warning'
+                bookmarkCurrent.dataset.disabled,
+                bookmarkCurrent.dataset.enabled
             )
             bookmarkCurrent.textContent = 'Remove'
         }
@@ -242,15 +242,15 @@ async function bookmarkToggle(event) {
     if (!bookmarks.includes(tab.url)) {
         bookmarks.push(tab.url)
         bookmarkCurrent.classList.replace(
-            'btn-outline-secondary',
-            'btn-outline-warning'
+            event.target.dataset.disabled,
+            event.target.dataset.enabled
         )
         bookmarkCurrent.textContent = 'Remove'
     } else {
         bookmarks.splice(bookmarks.indexOf(tab.url), 1)
         bookmarkCurrent.classList.replace(
-            'btn-outline-warning',
-            'btn-outline-secondary'
+            event.target.dataset.enabled,
+            event.target.dataset.disabled
         )
         bookmarkCurrent.textContent = 'Add'
     }

@@ -160,24 +160,21 @@ async function onChanged(changes, namespace) {
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         // console.log(`key: ${key}:`, oldValue, newValue)
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
-            if (oldValue?.contextMenu !== newValue?.contextMenu) {
-                if (newValue?.contextMenu) {
-                    console.log('%c Enabled contextMenu...', 'color: Lime')
-                    // chrome.storage.sync.get(['bookmarks']).then((items) => {
-                    //     createContextMenus(newValue, items.bookmarks)
-                    // })
-                    const { bookmarks } = await chrome.storage.sync.get([
-                        'bookmarks',
-                    ])
-                    createContextMenus(newValue, bookmarks)
-                } else {
-                    console.log(
-                        '%c Disabled contextMenu...',
-                        'color: BlueViolet'
-                    )
-                    chrome.contextMenus.removeAll()
-                }
+            // if (oldValue?.contextMenu !== newValue?.contextMenu) {
+            if (newValue?.contextMenu) {
+                console.log('%c Enabled contextMenu...', 'color: Lime')
+                // chrome.storage.sync.get(['bookmarks']).then((items) => {
+                //     createContextMenus(newValue, items.bookmarks)
+                // })
+                const { bookmarks } = await chrome.storage.sync.get([
+                    'bookmarks',
+                ])
+                createContextMenus(newValue, bookmarks)
+            } else {
+                console.log('%c Disabled contextMenu...', 'color: BlueViolet')
+                chrome.contextMenus.removeAll()
             }
+            // }
         } else if (namespace === 'sync' && key === 'bookmarks') {
             // chrome.storage.sync.get(['options']).then((items) => {
             //     createContextMenus(items.options, newValue)
