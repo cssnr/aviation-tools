@@ -12,6 +12,9 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
+    .querySelectorAll('#jump-list > a')
+    .forEach((el) => el.addEventListener('click', jumpClick))
+document
     .querySelectorAll('[data-controls]')
     .forEach((el) => el.addEventListener('click', hideShowAll))
 document
@@ -79,6 +82,16 @@ async function hideSections() {
         document.querySelector(`[data-section="${section}"]`).textContent =
             'show'
     }
+}
+
+function jumpClick(event) {
+    console.debug('jumpClick:', event)
+    const hash = event.currentTarget.hash
+    console.debug('hash:', hash)
+    $(hash).show('fast')
+    document.querySelector(
+        `[data-section="${hash.substring(1)}"]`
+    ).textContent = 'hide'
 }
 
 function hideShowAll(event) {
