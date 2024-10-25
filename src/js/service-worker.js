@@ -6,7 +6,6 @@ import {
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
-    updateOptions,
 } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
@@ -159,13 +158,14 @@ async function onCommand(command) {
 async function onChanged(changes, namespace) {
     // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        // console.log(`key: ${key}:`, oldValue, newValue)
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
                 if (newValue?.contextMenu) {
                     console.log('%c Enabled contextMenu...', 'color: Lime')
-                    chrome.storage.sync.get(['bookmarks']).then((items) => {
-                        createContextMenus(newValue, items.bookmarks)
-                    })
+                    // chrome.storage.sync.get(['bookmarks']).then((items) => {
+                    //     createContextMenus(newValue, items.bookmarks)
+                    // })
                     const { bookmarks } = await chrome.storage.sync.get([
                         'bookmarks',
                     ])
@@ -179,12 +179,12 @@ async function onChanged(changes, namespace) {
                 }
             }
         } else if (namespace === 'sync' && key === 'bookmarks') {
-            chrome.storage.sync.get(['options']).then((items) => {
-                createContextMenus(items.options, newValue)
-            })
+            // chrome.storage.sync.get(['options']).then((items) => {
+            //     createContextMenus(items.options, newValue)
+            // })
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating CTX Menu Bookmarks...', 'color: Aqua')
+                console.log(`Updating CTX Menu: ${key}`, 'color: Aqua')
                 createContextMenus(options, newValue)
             }
         }
@@ -407,7 +407,7 @@ async function setDefaultOptions(defaultOptions) {
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set %c${key}:`, 'color: Khaki', value)
+            console.log(`Set %c${key}:`, 'color: LightSalmon', value)
         }
     }
     const linksChanges = setNestedDefaults(options, searchLinks)
@@ -437,8 +437,9 @@ function setNestedDefaults(options, defaults) {
         }
         for (const [subkey] of Object.entries(value)) {
             if (typeof options[key][subkey] === 'undefined') {
-                options[key][subkey] = true
                 changed = true
+                options[key][subkey] = true
+                console.log(`Set %c${key}:`, 'color: LightSalmon', value)
             }
         }
     }
