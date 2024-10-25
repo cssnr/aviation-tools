@@ -21,7 +21,7 @@ if (typeof ClipboardJS !== 'undefined') {
         }
     })
     clipboard.on('error', function (event) {
-        console.debug('clipboard.error:', event)
+        console.warn('clipboard.error:', event)
         showToast('Clipboard Copy Failed', 'warning')
     })
 }

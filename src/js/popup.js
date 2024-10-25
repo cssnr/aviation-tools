@@ -49,7 +49,7 @@ async function initPopup() {
     updateManifest()
 
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    console.debug(`tab: ${tab.id}`, tab)
+    // console.debug(`tab: ${tab.id}`, tab)
     console.debug('tab.url:', tab.url)
 
     chrome.storage.sync.get(['options']).then((items) => {
@@ -78,7 +78,7 @@ async function initPopup() {
         // console.debug(`${key}: ${value}`)
         const ul = document.getElementById(key)
         if (!ul) {
-            console.debug('skipping key:', key)
+            // console.debug('skipping key:', key)
             continue
         }
         for (const [name, url] of Object.entries(value)) {
@@ -237,7 +237,7 @@ async function bookmarkToggle(event) {
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     console.debug('bookmarks:', bookmarks)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    console.debug(`tab: ${tab.id}`, tab)
+    // console.debug(`tab: ${tab.id}`, tab)
     console.debug('tab.url:', tab.url)
     if (!bookmarks.includes(tab.url)) {
         bookmarks.push(tab.url)
@@ -254,6 +254,7 @@ async function bookmarkToggle(event) {
         )
         bookmarkCurrent.textContent = 'Add'
     }
+    // console.debug('bookmarks:', bookmarks)
     updateBookmarks(bookmarks)
     await chrome.storage.sync.set({ bookmarks })
     // initPopup()

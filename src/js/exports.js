@@ -77,7 +77,7 @@ export function getLinkUrl(subkey, key, value) {
     // if (subkey === 'flight') {
     //     value = value.toLowerCase().replace(/[\s-]+/g, '')
     // }
-    console.log(`${subkey}: ${key}: ${value}`)
+    console.log(`getLinkUrl: ${subkey}: ${key}: ${value}`)
     const link = searchLinks[subkey][key] + value.trim()
     console.log(`link: ${link}`)
     return link
@@ -88,16 +88,17 @@ export function getLinkUrl(subkey, key, value) {
  * @function openAllBookmarks
  */
 export async function openAllBookmarks() {
-    console.debug('openAllBookmarks')
+    // console.debug('openAllBookmarks')
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
-    console.debug(bookmarks)
+    // console.debug(bookmarks)
     if (!bookmarks?.length) {
         chrome.runtime.openOptionsPage()
     }
     for (const url of bookmarks) {
         try {
-            console.debug(`url: ${url}`)
-            chrome.tabs.create({ active: true, url }).then()
+            console.debug(`tabs.create: url: ${url}`)
+            // noinspection ES6MissingAwait
+            chrome.tabs.create({ active: true, url })
         } catch (e) {
             console.error(e)
         }
@@ -139,7 +140,7 @@ export async function saveOptions(event) {
     if (key.includes('-')) {
         const subkey = key.split('-')[1]
         key = key.split('-')[0]
-        console.log(`%cSet: ${key}.${subkey}:`, 'color: DeepSkyBlue', value)
+        console.log(`%c Set: ${key}.${subkey}:`, 'color: Khaki', value)
         options[key][subkey] = value
     } else if (value !== undefined) {
         console.log(`Set %c${key}:`, 'color: Khaki', value)
@@ -166,7 +167,7 @@ export function updateOptions(options) {
             key = value // NOSONAR
             value = true // NOSONAR
         }
-        console.debug(`${key}:`, value)
+        // console.debug(`key: ${key}:`, value)
         const el = document.getElementById(key)
         // Handle Object Subkeys
         if (typeof value === 'object') {
@@ -180,7 +181,7 @@ export function updateOptions(options) {
             continue
         }
         if (!el) {
-            console.debug('element not found for key:', key)
+            // console.debug('element not found for key:', key)
             continue
         }
         if (!['INPUT', 'SELECT'].includes(el.tagName)) {

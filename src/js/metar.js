@@ -49,10 +49,10 @@ function processMetar(event) {
     }
     console.log('metar:', metar)
     if (!metar || typeof metar !== 'object') {
-        return console.info('no metar')
+        return console.log('%c No metar', 'color: Yellow')
     }
     for (const [key, value] of Object.entries(metar)) {
-        console.debug(`${key}:`, value)
+        console.debug(`key: ${key}:`, value)
         if (key === 'clouds') {
             processClouds(value)
         } else if (typeof value === 'object') {

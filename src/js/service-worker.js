@@ -6,6 +6,7 @@ import {
     clipboardWrite,
     openAllBookmarks,
     openOptionsFor,
+    updateOptions,
 } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
@@ -62,8 +63,8 @@ async function onInstalled(details) {
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         // chrome.runtime.openOptionsPage()
-        let url = chrome.runtime.getURL('/html/options.html') + '?install=new'
-        console.log(`url: ${url}`)
+        const url = chrome.runtime.getURL('/html/options.html') + '?install=new'
+        console.log(`INSTALL url: ${url}`)
         await chrome.tabs.create({ active: true, url })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
@@ -88,7 +89,7 @@ async function onInstalled(details) {
  */
 async function onClicked(ctx, tab) {
     console.debug('onClicked:', ctx, tab)
-    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+    console.log(`ctx.menuItemId: %c${ctx.menuItemId}`, 'color: HotPink')
     if (ctx.menuItemId === 'options') {
         console.debug('options')
         chrome.runtime.openOptionsPage()
@@ -130,7 +131,6 @@ async function onClicked(ctx, tab) {
         url.searchParams.append('metar', ctx.selectionText)
         await chrome.tabs.create({ active: true, url: url.href })
     } else {
-        console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         await clipboardWrite(term)
     }
@@ -160,20 +160,31 @@ async function onChanged(changes, namespace) {
     // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
-            if (newValue?.contextMenu) {
-                console.info('Enabled contextMenu...')
-                const { bookmarks } = await chrome.storage.sync.get([
-                    'bookmarks',
-                ])
-                createContextMenus(newValue, bookmarks)
-            } else {
-                console.info('Disabled contextMenu...')
-                chrome.contextMenus.removeAll()
+            if (oldValue?.contextMenu !== newValue?.contextMenu) {
+                if (newValue?.contextMenu) {
+                    console.log('%c Enabled contextMenu...', 'color: Lime')
+                    chrome.storage.sync.get(['bookmarks']).then((items) => {
+                        createContextMenus(newValue, items.bookmarks)
+                    })
+                    const { bookmarks } = await chrome.storage.sync.get([
+                        'bookmarks',
+                    ])
+                    createContextMenus(newValue, bookmarks)
+                } else {
+                    console.log(
+                        '%c Disabled contextMenu...',
+                        'color: BlueViolet'
+                    )
+                    chrome.contextMenus.removeAll()
+                }
             }
         } else if (namespace === 'sync' && key === 'bookmarks') {
+            chrome.storage.sync.get(['options']).then((items) => {
+                createContextMenus(items.options, newValue)
+            })
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating Context Menu Bookmarks...')
+                console.log('Updating CTX Menu Bookmarks...', 'color: Aqua')
                 createContextMenus(options, newValue)
             }
         }
@@ -211,8 +222,9 @@ async function parseInput(text) {
  * @param {String} text
  * @param {Function} suggest
  */
+// noinspection JSUnusedLocalSymbols
 async function onInputChanged(text, suggest) {
-    console.debug('onInputChanged:', text, suggest)
+    console.debug('onInputChanged:', text)
     text = text.trim()
     const split = text.split(' ')
     // console.debug('split:', split)
@@ -388,7 +400,7 @@ async function setDefaultOptions(defaultOptions) {
         await chrome.storage.sync.set({ bookmarks: [] })
     }
     options = options || {}
-    console.debug('options', options)
+    console.debug('options:', options)
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
@@ -419,7 +431,7 @@ function setNestedDefaults(options, defaults) {
     console.log('setNestedDefaults:', options, defaults)
     let changed = false
     for (const [key, value] of Object.entries(defaults)) {
-        console.log(`Nested: ${key}`, value)
+        console.log(`Nested: %c${key}`, 'color: Khaki', value)
         if (!options[key]) {
             options[key] = {}
         }

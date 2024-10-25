@@ -47,7 +47,7 @@ bookmarksInput.addEventListener('change', inputBookmarks)
  * @function initOptions
  */
 async function initOptions() {
-    console.log('initOptions')
+    console.debug('initOptions')
     // noinspection ES6MissingAwait
     hideSections()
     // noinspection ES6MissingAwait
@@ -68,16 +68,13 @@ async function initOptions() {
 }
 
 async function hideSections() {
-    console.debug('hideSections')
-    // const storage = localStorage.getItem('sections') || '[]'
-    // console.debug('storage:', storage)
+    // console.debug('hideSections')
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
-    console.debug('sections:', sections)
+    // console.debug('sections:', sections)
     for (const section of sections) {
-        console.debug('section:', section)
+        // console.debug('section:', section)
         const el = document.getElementById(section)
         // console.debug('el:', el)
-        // el.classList.add('d-none')
         el.style.display = 'none'
         document.querySelector(`[data-section="${section}"]`).textContent =
             'show'
@@ -91,17 +88,15 @@ function hideShowAll(event) {
     const sections = document.querySelectorAll('section')
     const storage = []
     for (const section of sections) {
-        console.debug('section:', section)
+        // console.debug('section:', section)
         if (action === 'expand') {
-            console.debug('%c SHOW Section', 'color: Lime')
-            // section.style.display = ''
+            // console.debug('%c SHOW Section', 'color: Lime')
             $(section).show('fast')
             document.querySelector(
                 `[data-section="${section.id}"]`
             ).textContent = 'hide'
         } else {
-            console.debug('%c HIDE Section', 'color: OrangeRed')
-            // section.style.display = 'none'
+            // console.debug('%c HIDE Section', 'color: OrangeRed')
             $(section).hide('fast')
             storage.push(section.id)
             document.querySelector(
@@ -110,10 +105,10 @@ function hideShowAll(event) {
         }
     }
     if (action === 'expand') {
-        console.debug('storage:', '[]')
+        // console.debug('storage:', '[]')
         localStorage.setItem('sections', '[]')
     } else {
-        console.debug('storage:', storage)
+        // console.debug('storage:', storage)
         localStorage.setItem('sections', JSON.stringify(storage))
     }
 }
@@ -125,26 +120,24 @@ function hideShowSection(event) {
     const el = document.getElementById(section)
     // console.debug('el:', el)
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
-    console.debug('sections:', sections)
+    // console.debug('sections:', sections)
     const shown = !sections.includes(section)
     // console.debug('shown:', shown)
     if (shown) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
-        // el.classList.add('d-none')
         $(el).hide('fast')
         sections.push(section)
         document.querySelector(`[data-section="${section}"]`).textContent =
             'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
-        // el.classList.remove('d-none')
         $(el).show('fast')
         const idx = sections.indexOf(section)
         sections.splice(idx, 1)
         document.querySelector(`[data-section="${section}"]`).textContent =
             'hide'
     }
-    console.debug('sections:', sections)
+    // console.debug('sections:', sections)
     localStorage.setItem('sections', JSON.stringify(sections))
 }
 
@@ -156,7 +149,7 @@ async function checkInstall() {
         history.pushState(null, '', location.href.split('?')[0])
         const userSettings = await chrome.action.getUserSettings()
         if (userSettings.isOnToolbar) {
-            return console.log('%cToolbar Icon Already Pinned!', 'color: Aqua')
+            return console.log('%c Toolbar Icon Already Pinned!', 'color: Aqua')
         }
         const pin = document.getElementById('pin-notice')
         pin.addEventListener('click', pinClick)
@@ -267,10 +260,9 @@ async function addBookmark(event) {
     try {
         url = new URL(value)
     } catch (e) {
-        console.debug(e)
-        showToast('You must provide a valid URL.', 'danger')
-        input.focus()
-        return
+        console.log(e)
+        showToast(`Error: ${e.message}`, 'danger')
+        return input.focus()
     }
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     if (!bookmarks.includes(url.href)) {
