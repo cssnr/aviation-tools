@@ -163,8 +163,8 @@ export function updateOptions(options) {
             continue
         }
         if (key.startsWith('radio')) {
-            key = value
-            value = true
+            key = value // NOSONAR
+            value = true // NOSONAR
         }
         console.debug(`${key}:`, value)
         const el = document.getElementById(key)

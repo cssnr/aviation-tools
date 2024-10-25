@@ -154,6 +154,10 @@ async function checkInstall() {
     // if (install) {
     if (window.location.search.includes('?install=new')) {
         history.pushState(null, '', location.href.split('?')[0])
+        const userSettings = await chrome.action.getUserSettings()
+        if (userSettings.isOnToolbar) {
+            return console.log('%cToolbar Icon Already Pinned!', 'color: Aqua')
+        }
         const pin = document.getElementById('pin-notice')
         pin.addEventListener('click', pinClick)
         setTimeout(pinClick, 10000)
@@ -416,8 +420,9 @@ function onChanged(changes, namespace) {
  * Set Keyboard Shortcuts
  * @function setShortcuts
  * @param {String} selector
+ * @param {Boolean} action
  */
-async function setShortcuts(selector = '#keyboard-shortcuts') {
+async function setShortcuts(selector = '#keyboard-shortcuts', action = true) {
     const table = document.querySelector(selector)
     const tbody = table.querySelector('tbody')
     const source = table.querySelector('tfoot > tr').cloneNode(true)
@@ -433,6 +438,22 @@ async function setShortcuts(selector = '#keyboard-shortcuts') {
         row.querySelector('.description').textContent = description
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
+    }
+
+    if (action) {
+        try {
+            const userSettings = await chrome.action.getUserSettings()
+            const row = source.cloneNode(true)
+            row.querySelector('i').className = 'fa-solid fa-puzzle-piece me-1'
+            row.querySelector('.description').textContent =
+                'Toolbar Icon Pinned'
+            row.querySelector('kbd').textContent = userSettings.isOnToolbar
+                ? 'Yes'
+                : 'No'
+            tbody.appendChild(row)
+        } catch (e) {
+            console.log('Error adding pinned setting:', e)
+        }
     }
 }
 
@@ -473,10 +494,12 @@ async function copySupport(event) {
     event.preventDefault()
     const manifest = chrome.runtime.getManifest()
     const { options } = await chrome.storage.sync.get(['options'])
+    const userSettings = await chrome.action.getUserSettings()
     const result = [
         `${manifest.name} - ${manifest.version}`,
         navigator.userAgent,
         `options: ${JSON.stringify(options)}`,
+        `pinned: ${userSettings.isOnToolbar ? 'yes' : 'no'}`,
     ]
     await navigator.clipboard.writeText(result.join('\n'))
     showToast('Support Information Copied.')
