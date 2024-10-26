@@ -9,6 +9,13 @@ body {
   max-width: 800px;
 }
 
+.dropdown-menu {
+  max-width: 86vw;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .blur {
   backdrop-filter: blur(6px);
 }
