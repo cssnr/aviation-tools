@@ -502,14 +502,8 @@ async function resetBackground(event) {
     const pictureURL = document.getElementById('pictureURL')
     pictureURL.value = 'https://images.cssnr.com/aviation'
     pictureURL.focus()
-    // const form = document.getElementById('options-form')
-    // form.submit()
-
-    // await saveOptions(event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    options.pictureURL = pictureURL.value
-    await chrome.storage.sync.set({ options })
-    showToast('Background Image URL Reset.')
+    const changeEvent = new Event('change')
+    pictureURL.dispatchEvent(changeEvent)
 }
 
 /**
