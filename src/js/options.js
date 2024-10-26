@@ -109,8 +109,8 @@ function jumpClick(event) {
     // document.querySelector(
     //     `[data-section="${hash.substring(1)}"]`
     // ).textContent = 'hide'
-    // hover.style.outline = '#00c800 solid 2px'
-    jq.css('#00c800 solid 2px')
+    jq.css('outline', '#00c800 dashed 2px')
+    setTimeout(() => jq.css('outline', ''), 1500)
 }
 
 function hideShowAll(event) {
