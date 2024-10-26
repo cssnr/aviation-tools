@@ -504,7 +504,11 @@ async function resetBackground(event) {
     pictureURL.focus()
     // const form = document.getElementById('options-form')
     // form.submit()
-    await saveOptions(event)
+
+    // await saveOptions(event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    options.pictureURL = pictureURL.value
+    await chrome.storage.sync.set({ options })
     showToast('Background Image URL Reset.')
 }
 

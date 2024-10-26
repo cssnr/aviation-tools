@@ -114,10 +114,12 @@ export async function openAllBookmarks() {
 export async function saveOptions(event) {
     console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target.id
+    const target = event.currentTarget || event.target
+    console.debug('target:', target)
+    let key = target.id
     let value
-    if (event.target.type === 'radio') {
-        key = event.target.name
+    if (target.type === 'radio') {
+        key = target.name
         const radios = document.getElementsByName(key)
         for (const input of radios) {
             if (input.checked) {
@@ -125,15 +127,15 @@ export async function saveOptions(event) {
                 break
             }
         }
-    } else if (key === 'reset-background') {
-        key = 'pictureURL'
-        value = 'https://images.cssnr.com/aviation'
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
-        // } else if (event.target.type === 'number') {
-        //     value = event.target.value.toString()
+        // } else if (key === 'reset-background') {
+        //     key = 'pictureURL'
+        //     value = 'https://images.cssnr.com/aviation'
+    } else if (target.type === 'checkbox') {
+        value = target.checked
+        // } else if (target.type === 'number') {
+        //     value = target.value.toString()
     } else {
-        value = event.target.value
+        value = target.value
     }
 
     // Handle Object Subkeys
