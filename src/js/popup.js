@@ -145,7 +145,7 @@ function createBookmarkLink(ul, url) {
     // .substring(0, 60)
     a.href = url
     a.title = url
-    a.classList.add('dropdown-item', 'small')
+    a.classList.add('dropdown-item', 'small', 'text-ellipsis')
     a.addEventListener('click', (e) => linkClick(e, true))
     li.appendChild(a)
 }
