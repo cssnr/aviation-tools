@@ -10,7 +10,7 @@ body {
 }
 
 .dropdown-menu {
-  max-width: 86vw;
+  max-width: 90vw;
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;

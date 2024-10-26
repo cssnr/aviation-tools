@@ -110,7 +110,7 @@ function jumpClick(event) {
     //     `[data-section="${hash.substring(1)}"]`
     // ).textContent = 'hide'
     jq.css('outline', '#00c800 dashed 2px')
-    setTimeout(() => jq.css('outline', ''), 1500)
+    setTimeout(() => jq.css('outline', ''), 1400)
 }
 
 function hideShowAll(event) {

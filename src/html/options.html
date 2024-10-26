@@ -17,17 +17,14 @@
 <div class="m-auto pb-4 w-100">
 <div id="options-wrapper" class="glass-outline blur rounded rounded-3 p-2 p-sm-3 m-auto w-100">
 
-    <div class="d-flex flex-row justify-content-center mb-2">
-        <div>
-            <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
-                <span class="display-6">
-                    <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
-                    Aviation Tools
-                </span></a>
-            <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
-                v<span class="version">0.0.0</span></a>
-        </div>
-    </div>
+    <div class="text-center mb-2">
+        <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+            <span class="display-6">
+                <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
+                Aviation Tools</span></a>
+        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+            v<span class="version">0.0.0</span></a>
+    </div> <!-- header -->
 
     <div class="d-flex flex-column flex-sm-row small">
         <div id="jump-list">
@@ -40,16 +37,17 @@
             <a href="#bookmarks-section" class="text-decoration-none">Bookmarks</a>
             &bull;
             <a href="#extension-section" class="text-decoration-none">Extension</a>
-        </div>
+        </div> <!-- jump-list -->
         <div class="ms-sm-auto">
             <a class="text-decoration-none" data-controls="collapse" role="button">
                 <i class="fa-solid fa-arrow-up-short-wide"></i> Collapse</a>
             &bull;
             <a class="text-decoration-none" data-controls="expand" role="button">
                 <i class="fa-solid fa-arrow-down-short-wide"></i> Expand</a>
-        </div>
-    </div>
+        </div> <!-- data-controls -->
+    </div> <!-- navigation -->
 
+    <!-- ++ keyboard-section -->
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
         <hr class="w-100 my-0 me-2">
         <span class="text-nowrap">Keyboard Shortcuts</span>
@@ -58,7 +56,6 @@
         </div>
         <hr class="w-100 my-0 ms-2">
     </div>
-
     <section id="keyboard-section">
     <div id="table-wrapper" class="glass-bg rounded rounded-3 py-1 px-2 mb-2">
         <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover mb-1">
@@ -72,8 +69,7 @@
             </tr>
             </tfoot>
         </table>
-    </div>
-
+    </div> <!-- table-wrapper -->
     <div class="mb-2">
         Manage Keyboard Shortcuts:
         <a class="text-decoration-none d-inline-block d-none firefox" href="https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox" target="_blank" rel="noopener">
@@ -82,6 +78,7 @@
     </div>
     </section> <!-- keyboard-section -->
 
+    <!-- ++ search-section -->
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
         <hr class="w-100 my-0 me-2">
         <span class="text-nowrap">Search Defaults</span>
@@ -90,7 +87,6 @@
         </div>
         <hr class="w-100 my-0 ms-2">
     </div>
-
     <form class="options">
         <section id="search-section">
         <div class="row mb-3">
@@ -164,6 +160,7 @@
         </div>
         </section> <!-- search-section -->
 
+        <!-- ++ tools-section -->
         <div class="d-flex flex-row align-items-center justify-content-center my-2">
             <hr class="w-100 my-0 me-2">
             <span class="text-nowrap">Tools</span>
@@ -172,7 +169,6 @@
             </div>
             <hr class="w-100 my-0 ms-2">
         </div>
-
         <section id="tools-section">
         <div class="row mb-3">
             <h5>Tools</h5>
@@ -213,9 +209,10 @@
                 </div>
             </div>
         </div>
-        </section> <!-- search-section -->
+        </section> <!-- tools-section -->
     </form>
 
+    <!-- ++ bookmarks-section -->
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
         <hr class="w-100 my-0 me-2">
         <span class="text-nowrap">Bookmarks</span>
@@ -224,7 +221,6 @@
         </div>
         <hr class="w-100 my-0 ms-2">
     </div>
-
     <section id="bookmarks-section">
     <form id="bookmarks-form">
         <label class="form-label" for="newBookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
@@ -262,6 +258,7 @@
     </div>
     </section> <!-- bookmarks-section -->
 
+    <!-- ++ extension-section -->
     <div class="d-flex flex-row align-items-center justify-content-center my-2">
         <hr class="w-100 my-0 me-2">
         <span class="text-nowrap">Extension Options</span>
@@ -270,7 +267,6 @@
         </div>
         <hr class="w-100 my-0 ms-2">
     </div>
-
     <section id="extension-section">
     <form class="options">
         <div class="form-check form-switch">
@@ -314,13 +310,13 @@
                     <li><a class="dropdown-item text-ellipsis" role="button"
                            data-reset-input="pictureURL" data-value="https://picsum.photos/1920/1280">
                         https://picsum.photos/1920/1280</a></li>
-<!--                    <li><a class="dropdown-item text-ellipsis" role="button"-->
-<!--                           data-reset-input="pictureURL" data-value=" https://random-image-pepebigotes.vercel.app/api/random-image">-->
-<!--                        https://random-image-pepebigotes.vercel.app/api/random-image</a></li>-->
+                    <li><a class="dropdown-item text-ellipsis" role="button"
+                           data-reset-input="pictureURL" data-value=" https://random-image-pepebigotes.vercel.app/api/random-image">
+                        https://random-image-pepebigotes.vercel.app/api/random-image</a></li>
                 </ul>
             </div>
         </div>
-    </form>
+    </form> <!-- options -->
     </section> <!-- extension-section -->
 
     <p class="fst-italic small mt-3">
@@ -338,19 +334,16 @@
         <span class="mx-2">&bull;</span>
         <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://github.com/cssnr/aviation-tools/issues">Open Issue</a>
-    </div>
+    </div> <!-- footer -->
 
 </div> <!-- options-wrapper -->
 </div> <!-- m-auto -->
 </div> <!-- d-flex -->
 
 <div id="pin-notice" class="text-center bounce p-2 d-none">
-    <i class="fa-solid fa-hand-point-up"></i>
-    <br>
-    To Add to Toolbar
-    <br>
-    Click the <i class="fa-solid fa-puzzle-piece mx-1"></i> Icon then
-    <br>
+    <i class="fa-solid fa-hand-point-up"></i><br>
+    To Add to Toolbar<br>
+    Click the <i class="fa-solid fa-puzzle-piece mx-1"></i> Icon then<br>
     <span>
         Find the
         <img src="../images/logo16.png" class="mx-1 mb-1" alt="ASN Plus" title="ASN Plus" style="height: 1.1em;">
