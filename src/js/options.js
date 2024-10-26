@@ -21,8 +21,8 @@ document
     .querySelectorAll('[data-section]')
     .forEach((el) => el.addEventListener('click', hideShowCallback))
 document
-    .getElementById('reset-background')
-    .addEventListener('click', resetBackground)
+    .querySelectorAll('[data-reset-input]')
+    .forEach((el) => el.addEventListener('click', resetInput))
 document
     .querySelectorAll('form.options input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -492,18 +492,26 @@ async function setShortcuts(selector = '#keyboard-shortcuts', action = true) {
 }
 
 /**
- * Reset Background Option Callback
- * @function resetBackground
+ * Reset Title Input Callback
+ * @function resetInput
  * @param {InputEvent} event
  */
-async function resetBackground(event) {
-    console.log('resetBackground:', event)
+async function resetInput(event) {
+    console.debug('resetInput:', event)
+    const target = event.currentTarget
+    console.debug('target:', target)
     event.preventDefault()
-    const pictureURL = document.getElementById('pictureURL')
-    pictureURL.value = 'https://images.cssnr.com/aviation'
-    pictureURL.focus()
+    const id = target.dataset.resetInput
+    console.debug('id:', id)
+    const value = target.dataset.value
+    console.debug('value:', value)
+    const input = document.getElementById(id)
+    console.debug('input:', input)
+    input.value = value
+    input.classList.remove('is-invalid')
+    input.focus()
     const changeEvent = new Event('change')
-    pictureURL.dispatchEvent(changeEvent)
+    input.dispatchEvent(changeEvent)
 }
 
 /**

@@ -127,9 +127,6 @@ export async function saveOptions(event) {
                 break
             }
         }
-        // } else if (key === 'reset-background') {
-        //     key = 'pictureURL'
-        //     value = 'https://images.cssnr.com/aviation'
     } else if (target.type === 'checkbox') {
         value = target.checked
         // } else if (target.type === 'number') {

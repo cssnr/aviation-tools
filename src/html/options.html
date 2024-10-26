@@ -17,15 +17,17 @@
 <div class="m-auto pb-4 w-100">
 <div id="options-wrapper" class="glass-outline blur rounded rounded-4 p-3 m-auto w-100">
 
-    <div class="d-flex justify-content-center align-items-center">
-        <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
-        <h1 class="">Aviation Tools</h1>
+    <div class="d-flex flex-row justify-content-center mb-2">
+        <div>
+            <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+                <span class="display-6">
+                    <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
+                    Aviation Tools
+                </span></a>
+            <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+                v<span class="version"></span></a>
+        </div>
     </div>
-    <p class="text-center lead">
-
-        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url">
-            v<span class="version"></span></a>
-    </p>
 
     <div class="d-flex flex-column flex-sm-row small">
         <div id="jump-list">
@@ -40,11 +42,11 @@
             <a href="#extension-section" class="text-decoration-none">Extension</a>
         </div>
         <div class="ms-sm-auto">
-            <a class="text-decoration-none" data-controls="expand" role="button">
-                <i class="fa-solid fa-arrow-down-short-wide"></i> Expand</a>
-            &bull;
             <a class="text-decoration-none" data-controls="collapse" role="button">
                 <i class="fa-solid fa-arrow-up-short-wide"></i> Collapse</a>
+            &bull;
+            <a class="text-decoration-none" data-controls="expand" role="button">
+                <i class="fa-solid fa-arrow-down-short-wide"></i> Expand</a>
         </div>
     </div>
 
@@ -302,11 +304,11 @@
             <div id="bgPictureInput" class="input-group">
                     <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image or empty for default.">
                         <i class="fa-solid fa-circle-info"></i></span>
-                <input type="text" class="form-control" placeholder="Background Picture URL" aria-label="Background Picture URL"
-                       id="pictureURL" name="pictureURL" aria-describedby="picture-addon">
-                <span id="reset-background" class="input-group-text text-warning-emphasis" role="button"
-                      data-target="flags" data-value="ig" data-reset-input="flags"
-                      data-bs-title="Reset Regex Flags to Default Value." data-bs-toggle="tooltip">
+                <input id="pictureURL" name="pictureURL" aria-describedby="picture-addon" type="text" class="form-control"
+                       placeholder="Background Picture URL" aria-label="Background Picture URL">
+                <span class="input-group-text text-warning-emphasis" role="button"
+                      data-bs-title="Reset Regex Flags to Default Value." data-bs-toggle="tooltip"
+                      data-reset-input="pictureURL" data-value="https://images.cssnr.com/aviation">
                     <i class="fa-solid fa-rotate-left"></i>
                 </span>
             </div>
