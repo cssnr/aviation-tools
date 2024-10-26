@@ -220,6 +220,7 @@ async function parseInput(text) {
  * @param {Function} suggest
  */
 // noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line no-unused-vars
 async function onInputChanged(text, suggest) {
     console.debug('onInputChanged:', text)
     text = text.trim()
