@@ -99,18 +99,18 @@ function jumpClick(event) {
     const hash = event.currentTarget.hash
     console.debug('hash:', hash)
     // $(hash).show('fast')
-    $(hash).show('fast', function () {
-        $('html, body').animate(
-            {
-                scrollTop: $(hash).offset().top - 50,
-            },
-            'fast'
-        )
+    hideShowSection(hash.substring(1), true)
+    const jq = $(hash)
+    jq.show('fast', () => {
+        const top = jq.offset().top - 30
+        console.debug('top:', top)
+        $('html, body').animate({ scrollTop: top }, 'fast')
     })
     // document.querySelector(
     //     `[data-section="${hash.substring(1)}"]`
     // ).textContent = 'hide'
-    hideShowSection(hash.substring(1), true)
+    // hover.style.outline = '#00c800 solid 2px'
+    jq.css('#00c800 solid 2px')
 }
 
 function hideShowAll(event) {
