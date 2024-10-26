@@ -301,15 +301,20 @@
         </div>
         <div class="ms-0 ms-sm-3">
             <div id="bgPictureInput" class="input-group">
-                    <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image or empty for default.">
+                    <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image.">
                         <i class="fa-solid fa-circle-info"></i></span>
                 <input id="pictureURL" name="pictureURL" aria-describedby="picture-addon" type="text" class="form-control"
                        placeholder="Background Picture URL" aria-label="Background Picture URL">
-                <span class="input-group-text text-warning-emphasis" role="button"
-                      data-bs-title="Reset Background Picture URL to Default." data-bs-toggle="tooltip"
-                      data-reset-input="pictureURL" data-value="https://images.cssnr.com/aviation">
-                    <i class="fa-solid fa-rotate-left"></i>
-                </span>
+
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Presets</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" role="button"
+                           data-reset-input="pictureURL" data-value="https://images.cssnr.com/aviation">
+                        https://images.cssnr.com/aviation</a></li>
+                    <li><a class="dropdown-item" role="button"
+                           data-reset-input="pictureURL" data-value="https://picsum.photos/1920/1280">
+                        https://picsum.photos/1920/1280</a></li>
+                </ul>
             </div>
         </div>
     </form>
