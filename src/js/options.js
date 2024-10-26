@@ -45,6 +45,15 @@ document
 const bookmarksInput = document.getElementById('bookmarks-input')
 bookmarksInput.addEventListener('change', inputBookmarks)
 
+window.addEventListener('hashchange', (event) => {
+    // Keep Options URL Clean as to not break runtime.openOptionsPage()
+    console.log('hashchange:', event)
+    event.preventDefault()
+    const url = window.location.origin + window.location.pathname
+    console.log('url:', url)
+    history.pushState(null, '', url)
+})
+
 /**
  * Options Page Init
  * @function initOptions
@@ -73,7 +82,7 @@ async function initOptions() {
 async function hideSections() {
     // console.debug('hideSections')
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
-    // console.debug('sections:', sections)
+    console.debug('sections:', sections)
     for (const section of sections) {
         // console.debug('section:', section)
         const el = document.getElementById(section)
@@ -86,12 +95,22 @@ async function hideSections() {
 
 function jumpClick(event) {
     console.debug('jumpClick:', event)
+    event.preventDefault()
     const hash = event.currentTarget.hash
     console.debug('hash:', hash)
-    $(hash).show('fast')
-    document.querySelector(
-        `[data-section="${hash.substring(1)}"]`
-    ).textContent = 'hide'
+    // $(hash).show('fast')
+    $(hash).show('fast', function () {
+        $('html, body').animate(
+            {
+                scrollTop: $(hash).offset().top - 50,
+            },
+            'fast'
+        )
+    })
+    // document.querySelector(
+    //     `[data-section="${hash.substring(1)}"]`
+    // ).textContent = 'hide'
+    hideShowSection(hash.substring(1), true)
 }
 
 function hideShowAll(event) {
@@ -118,10 +137,10 @@ function hideShowAll(event) {
         }
     }
     if (action === 'expand') {
-        // console.debug('storage:', '[]')
+        console.debug('storage:', '[]')
         localStorage.setItem('sections', '[]')
     } else {
-        // console.debug('storage:', storage)
+        console.debug('storage:', storage)
         localStorage.setItem('sections', JSON.stringify(storage))
     }
 }
@@ -168,18 +187,22 @@ function hideShowSection(section, show = false) {
     if (!show) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
         $(el).hide('fast')
-        sections.push(section)
+        if (!sections.includes(section)) {
+            sections.push(section)
+        }
         document.querySelector(`[data-section="${section}"]`).textContent =
             'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
         $(el).show('fast')
         const idx = sections.indexOf(section)
-        sections.splice(idx, 1)
+        if (idx !== -1) {
+            sections.splice(idx, 1)
+        }
         document.querySelector(`[data-section="${section}"]`).textContent =
             'hide'
     }
-    // console.debug('sections:', sections)
+    console.debug('sections:', sections)
     localStorage.setItem('sections', JSON.stringify(sections))
 }
 
@@ -188,6 +211,7 @@ async function checkInstall() {
     // const install = searchParams.get('install')
     // if (install) {
     if (window.location.search.includes('?install=new')) {
+        console.log('%c New Install Detected...', 'color: Lime')
         history.pushState(null, '', location.href.split('?')[0])
         const userSettings = await chrome.action.getUserSettings()
         if (userSettings.isOnToolbar) {
