@@ -9,6 +9,10 @@ body {
   max-width: 800px;
 }
 
+section {
+  outline-offset: 5px;
+}
+
 .dropdown-menu {
   max-width: 90vw;
   white-space: normal;
