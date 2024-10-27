@@ -81,6 +81,7 @@ async function initOptions() {
 
 async function hideSections() {
     // console.debug('hideSections')
+    /** @type {String[]} sections **/
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
     console.debug('sections:', sections)
     for (const section of sections) {
@@ -101,16 +102,11 @@ function jumpClick(event) {
     // $(hash).show('fast')
     hideShowSection(hash.substring(1), true)
     const jq = $(hash)
-    jq.show('fast', () => {
-        const top = jq.offset().top - 30
-        console.debug('top:', top)
-        $('html, body').animate({ scrollTop: top }, 'fast')
+    const top = jq.offset().top - 30
+    $('html, body').animate({ scrollTop: top }, 'fast', 'swing', () => {
+        jq.css('outline', '#00c800 dashed 2px')
+        setTimeout(() => jq.css('outline', ''), 1400)
     })
-    // document.querySelector(
-    //     `[data-section="${hash.substring(1)}"]`
-    // ).textContent = 'hide'
-    jq.css('outline', '#00c800 dashed 2px')
-    setTimeout(() => jq.css('outline', ''), 1400)
 }
 
 function hideShowAll(event) {
@@ -180,13 +176,13 @@ function hideShowCallback(event) {
 
 function hideShowSection(section, show = false) {
     console.debug(`hideShowSection: ${section}:`, show)
-    const el = document.getElementById(section)
-    console.debug('el:', el)
+    const jq = $(`#${section}`)
+    console.debug('jq:', jq)
     const sections = JSON.parse(localStorage.getItem('sections') || '[]')
     // console.debug('sections:', sections)
     if (!show) {
         console.debug('%c HIDE Section', 'color: OrangeRed')
-        $(el).hide('fast')
+        jq.hide('fast')
         if (!sections.includes(section)) {
             sections.push(section)
         }
@@ -194,7 +190,7 @@ function hideShowSection(section, show = false) {
             'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
-        $(el).show('fast')
+        jq.show('fast')
         const idx = sections.indexOf(section)
         if (idx !== -1) {
             sections.splice(idx, 1)
