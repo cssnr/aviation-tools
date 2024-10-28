@@ -3,6 +3,7 @@
 import {
     searchLinks,
     getLinkUrl,
+    linkClick,
     openAllBookmarks,
     openOptionsFor,
     saveOptions,
@@ -11,11 +12,12 @@ import {
 } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('a[href]')
-    .forEach((el) => el.addEventListener('click', popupLinks))
+    .forEach((el) => el.addEventListener('click', (e) => linkClick(e, true)))
 document
-    .querySelectorAll('#options-form input,select')
+    .querySelectorAll('form.options input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .getElementsByName('searchType')
@@ -24,6 +26,9 @@ document
     .getElementById('search-form')
     .addEventListener('submit', searchFormSubmit)
 document
+    .getElementById('bookmark-current')
+    .addEventListener('click', bookmarkToggle)
+document
     .getElementById('all-bookmarks')
     .addEventListener('click', openAllBookmarks)
 document
@@ -31,6 +36,7 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const searchTerm = document.getElementById('searchTerm')
+const bookmarkCurrent = document.getElementById('bookmark-current')
 
 /**
  * Initialize Popup
@@ -38,26 +44,41 @@ const searchTerm = document.getElementById('searchTerm')
  */
 async function initPopup() {
     console.debug('initPopup')
+    searchTerm.focus()
+    // noinspection ES6MissingAwait
     updateManifest()
 
-    const { options, bookmarks } = await chrome.storage.sync.get([
-        'options',
-        'bookmarks',
-    ])
-    console.debug('options, bookmarks:', options, bookmarks)
-    updateOptions(options)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    // console.debug(`tab: ${tab.id}`, tab)
+    console.debug('tab.url:', tab.url)
 
-    searchTerm.placeholder = options.searchType
-    document.querySelector(
-        `input[name="searchType"][value="${options.searchType}"]`
-    ).checked = true
+    chrome.storage.sync.get(['options']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        searchTerm.placeholder = items.options.searchType
+        document.querySelector(
+            `input[name="searchType"][value="${items.options.searchType}"]`
+        ).checked = true
+    })
+
+    chrome.storage.sync.get(['bookmarks']).then((items) => {
+        console.debug('bookmarks:', items.bookmarks)
+        updateBookmarks(items.bookmarks)
+        if (items.bookmarks.includes(tab.url)) {
+            bookmarkCurrent.classList.replace(
+                bookmarkCurrent.dataset.disabled,
+                bookmarkCurrent.dataset.enabled
+            )
+            bookmarkCurrent.textContent = 'Remove'
+        }
+    })
 
     console.debug('searchLinks:', searchLinks)
     for (const [key, value] of Object.entries(searchLinks)) {
         // console.debug(`${key}: ${value}`)
         const ul = document.getElementById(key)
         if (!ul) {
-            console.debug('skipping:', key)
+            // console.debug('skipping key:', key)
             continue
         }
         for (const [name, url] of Object.entries(value)) {
@@ -65,16 +86,27 @@ async function initPopup() {
             createSearchLink(ul, url, name)
         }
     }
+}
 
+function updateBookmarks(bookmarks) {
+    console.debug('updateBookmarks:', bookmarks)
+    const ul = document.getElementById('bookmarks')
+    ul.innerHTML = ''
     if (bookmarks?.length) {
-        document.getElementById('no-bookmarks').remove()
-        const ul = document.getElementById('bookmarks')
-        bookmarks.forEach(function (value) {
+        bookmarks.forEach((value) => {
             createBookmarkLink(ul, value)
         })
+    } else {
+        const li = document.createElement('li')
+        li.id = 'no-bookmarks'
+        const a = document.createElement('a')
+        a.classList.add('dropdown-item')
+        a.href = '/html/options.html'
+        a.textContent = 'No Saved Bookmarks'
+        a.addEventListener('click', (e) => linkClick(e, true))
+        li.appendChild(a)
+        ul.appendChild(li)
     }
-
-    searchTerm.focus()
 }
 
 /**
@@ -85,6 +117,7 @@ async function initPopup() {
  * @param {String} name
  */
 function createSearchLink(ul, url, name = null) {
+    // console.debug('createSearchLink:', url, name)
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
@@ -105,41 +138,43 @@ function createSearchLink(ul, url, name = null) {
  */
 function createBookmarkLink(ul, url) {
     const li = document.createElement('li')
+    // li.classList.add('text-ellipsis')
     ul.appendChild(li)
     const a = document.createElement('a')
     a.textContent = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+    // .substring(0, 60)
     a.href = url
     a.title = url
-    a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', popupLinks)
+    a.classList.add('dropdown-item', 'small', 'text-ellipsis')
+    a.addEventListener('click', (e) => linkClick(e, true))
     li.appendChild(a)
 }
 
-/**
- * Popup Links Click Callback
- * Firefox requires a call to window.close()
- * @function popupLinks
- * @param {MouseEvent} event
- */
-async function popupLinks(event) {
-    console.debug('popupLinks:', event)
-    event.preventDefault()
-    const anchor = event.target.closest('a')
-    const href = anchor.getAttribute('href').replace(/^\.+/g, '')
-    console.debug('href:', href)
-    let url
-    if (href.endsWith('html/options.html')) {
-        chrome.runtime.openOptionsPage()
-        return window.close()
-    } else if (href.startsWith('http')) {
-        url = href
-    } else {
-        url = chrome.runtime.getURL(href)
-    }
-    console.log('url:', url)
-    await chrome.tabs.create({ active: true, url })
-    window.close()
-}
+// /**
+//  * Popup Links Click Callback
+//  * Firefox requires a call to window.close()
+//  * @function popupLinks
+//  * @param {MouseEvent} event
+//  */
+// async function popupLinks(event) {
+//     console.debug('popupLinks:', event)
+//     event.preventDefault()
+//     const anchor = event.target.closest('a')
+//     const href = anchor.getAttribute('href').replace(/^\.+/g, '')
+//     console.debug('href:', href)
+//     let url
+//     if (href.endsWith('html/options.html')) {
+//         chrome.runtime.openOptionsPage()
+//         return window.close()
+//     } else if (href.startsWith('http')) {
+//         url = href
+//     } else {
+//         url = chrome.runtime.getURL(href)
+//     }
+//     console.log('url:', url)
+//     await chrome.tabs.create({ active: true, url })
+//     window.close()
+// }
 
 /**
  * Save Search Type Radio on Change Callback
@@ -175,6 +210,7 @@ async function searchFormSubmit(event) {
         url.searchParams.append('metar', value)
         await chrome.tabs.create({ active: true, url: url.href })
     } else if (event.target.classList.contains('dropdown-item')) {
+        // noinspection JSUnresolvedReference
         let category = event.target.parentNode.parentNode.id
         let key = event.target.textContent
         const url = getLinkUrl(category, key, value)
@@ -189,4 +225,37 @@ async function searchFormSubmit(event) {
         await openOptionsFor(category, value)
     }
     window.close()
+}
+
+/**
+ * Toggle Current Site Bookmark Callback
+ * @function bookmarkToggle
+ * @param {UIEvent} event
+ */
+async function bookmarkToggle(event) {
+    console.debug('bookmarkToggle:', event)
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    console.debug('bookmarks:', bookmarks)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    // console.debug(`tab: ${tab.id}`, tab)
+    console.debug('tab.url:', tab.url)
+    if (!bookmarks.includes(tab.url)) {
+        bookmarks.push(tab.url)
+        bookmarkCurrent.classList.replace(
+            event.target.dataset.disabled,
+            event.target.dataset.enabled
+        )
+        bookmarkCurrent.textContent = 'Remove'
+    } else {
+        bookmarks.splice(bookmarks.indexOf(tab.url), 1)
+        bookmarkCurrent.classList.replace(
+            event.target.dataset.enabled,
+            event.target.dataset.disabled
+        )
+        bookmarkCurrent.textContent = 'Add'
+    }
+    // console.debug('bookmarks:', bookmarks)
+    updateBookmarks(bookmarks)
+    await chrome.storage.sync.set({ bookmarks })
+    // initPopup()
 }

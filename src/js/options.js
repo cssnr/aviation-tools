@@ -3,6 +3,7 @@
 import {
     showToast,
     saveOptions,
+    updateBrowser,
     updateManifest,
     updateOptions,
 } from './exports.js'
@@ -10,15 +11,23 @@ import {
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('copy-support').addEventListener('click', copySupport)
-document.getElementById('pin-notice').addEventListener('click', pinClick)
 document
-    .getElementById('reset-background')
-    .addEventListener('click', resetBackground)
+    .querySelectorAll('#jump-list > a')
+    .forEach((el) => el.addEventListener('click', jumpClick))
 document
-    .querySelectorAll('.options-form input,select')
+    .querySelectorAll('[data-controls]')
+    .forEach((el) => el.addEventListener('click', hideShowAll))
+document
+    .querySelectorAll('[data-section]')
+    .forEach((el) => el.addEventListener('click', hideShowCallback))
+document
+    .querySelectorAll('[data-reset-input]')
+    .forEach((el) => el.addEventListener('click', resetInput))
+document
+    .querySelectorAll('form.options input,select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
-    .querySelectorAll('.options-form')
+    .querySelectorAll('form.options')
     .forEach((el) => el.addEventListener('submit', (e) => e.preventDefault()))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -33,36 +42,185 @@ document
     .getElementById('import-bookmarks')
     .addEventListener('click', importBookmarks)
 
+document.getElementById('chrome-shortcuts').addEventListener('click', () => {
+    // noinspection JSIgnoredPromiseFromCall
+    chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
+})
+
 const bookmarksInput = document.getElementById('bookmarks-input')
 bookmarksInput.addEventListener('change', inputBookmarks)
+
+window.addEventListener('hashchange', (event) => {
+    // Keep Options URL Clean as to not break runtime.openOptionsPage()
+    console.log('hashchange:', event)
+    event.preventDefault()
+    const url = window.location.origin + window.location.pathname
+    console.log('url:', url)
+    history.pushState(null, '', url)
+})
 
 /**
  * Options Page Init
  * @function initOptions
  */
 async function initOptions() {
-    console.log('initOptions')
+    console.debug('initOptions')
+    // noinspection ES6MissingAwait
+    hideSections()
+    // noinspection ES6MissingAwait
+    updateBrowser()
+    // noinspection ES6MissingAwait
     checkInstall()
+    // noinspection ES6MissingAwait
     updateManifest()
-    await setShortcuts()
+    // noinspection ES6MissingAwait
+    setShortcuts()
 
-    const { options, bookmarks } = await chrome.storage.sync.get([
-        'options',
-        'bookmarks',
-    ])
-    // console.debug('options, bookmarks:', options, bookmarks)
-    updateOptions(options)
-    setBackground(options)
-    updateBookmarks(bookmarks)
+    chrome.storage.sync.get(['options', 'bookmarks']).then((items) => {
+        // console.debug('options:', items.options)
+        updateOptions(items.options)
+        setBackground(items.options)
+        updateBookmarks(items.bookmarks)
+    })
 }
 
-function checkInstall() {
+async function hideSections() {
+    // console.debug('hideSections')
+    /** @type {String[]} sections **/
+    const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    console.debug('sections:', sections)
+    for (const section of sections) {
+        // console.debug('section:', section)
+        const el = document.getElementById(section)
+        // console.debug('el:', el)
+        el.style.display = 'none'
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'show'
+    }
+}
+
+function jumpClick(event) {
+    console.debug('jumpClick:', event)
+    event.preventDefault()
+    const hash = event.currentTarget.hash
+    console.debug('hash:', hash)
+    // $(hash).show('fast')
+    hideShowSection(hash.substring(1), true)
+    const jq = $(hash)
+    const top = jq.offset().top - 30
+    $('html, body').animate({ scrollTop: top }, 'fast', 'swing', () => {
+        jq.css('outline', '#00c800 dashed 2px')
+        setTimeout(() => jq.css('outline', ''), 1800)
+    })
+}
+
+function hideShowAll(event) {
+    console.debug('hideShowAll:', event)
+    const action = event.currentTarget.dataset.controls
+    console.debug('action:', action)
+    const sections = document.querySelectorAll('section')
+    const storage = []
+    for (const section of sections) {
+        // console.debug('section:', section)
+        if (action === 'expand') {
+            // console.debug('%c SHOW Section', 'color: Lime')
+            $(section).show('fast')
+            document.querySelector(
+                `[data-section="${section.id}"]`
+            ).textContent = 'hide'
+        } else {
+            // console.debug('%c HIDE Section', 'color: OrangeRed')
+            $(section).hide('fast')
+            storage.push(section.id)
+            document.querySelector(
+                `[data-section="${section.id}"]`
+            ).textContent = 'show'
+        }
+    }
+    if (action === 'expand') {
+        console.debug('storage:', '[]')
+        localStorage.setItem('sections', '[]')
+    } else {
+        console.debug('storage:', storage)
+        localStorage.setItem('sections', JSON.stringify(storage))
+    }
+}
+
+function hideShowCallback(event) {
+    console.debug('hideShowCallback:', event)
+    const section = event.currentTarget.dataset.section
+    console.debug('section:', section)
+    const show =
+        document.querySelector(`[data-section="${section}"]`).textContent ===
+        'show'
+    console.debug('show:', show)
+    hideShowSection(section, show)
+    // const el = document.getElementById(section)
+    // // console.debug('el:', el)
+    // const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    // // console.debug('sections:', sections)
+    // const shown = !sections.includes(section)
+    // // console.debug('shown:', shown)
+    // if (shown) {
+    //     console.debug('%c HIDE Section', 'color: OrangeRed')
+    //     $(el).hide('fast')
+    //     sections.push(section)
+    //     document.querySelector(`[data-section="${section}"]`).textContent =
+    //         'show'
+    // } else {
+    //     console.debug('%c SHOW Section', 'color: Lime')
+    //     $(el).show('fast')
+    //     const idx = sections.indexOf(section)
+    //     sections.splice(idx, 1)
+    //     document.querySelector(`[data-section="${section}"]`).textContent =
+    //         'hide'
+    // }
+    // // console.debug('sections:', sections)
+    // localStorage.setItem('sections', JSON.stringify(sections))
+}
+
+function hideShowSection(section, show = false) {
+    console.debug(`hideShowSection: ${section}:`, show)
+    const jq = $(`#${section}`)
+    console.debug('jq:', jq)
+    const sections = JSON.parse(localStorage.getItem('sections') || '[]')
+    // console.debug('sections:', sections)
+    if (!show) {
+        console.debug('%c HIDE Section', 'color: OrangeRed')
+        jq.hide('fast')
+        if (!sections.includes(section)) {
+            sections.push(section)
+        }
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'show'
+    } else {
+        console.debug('%c SHOW Section', 'color: Lime')
+        jq.show('fast')
+        const idx = sections.indexOf(section)
+        if (idx !== -1) {
+            sections.splice(idx, 1)
+        }
+        document.querySelector(`[data-section="${section}"]`).textContent =
+            'hide'
+    }
+    console.debug('sections:', sections)
+    localStorage.setItem('sections', JSON.stringify(sections))
+}
+
+async function checkInstall() {
     // const searchParams = new URLSearchParams(window.location.search)
     // const install = searchParams.get('install')
     // if (install) {
     if (window.location.search.includes('?install=new')) {
+        console.log('%c New Install Detected...', 'color: Lime')
         history.pushState(null, '', location.href.split('?')[0])
+        const userSettings = await chrome.action.getUserSettings()
+        if (userSettings.isOnToolbar) {
+            return console.log('%c Toolbar Icon Already Pinned!', 'color: Aqua')
+        }
         const pin = document.getElementById('pin-notice')
+        pin.addEventListener('click', pinClick)
+        setTimeout(pinClick, 10000)
         pin.classList.remove('d-none')
         if (navigator.userAgent.includes('Firefox/')) {
             console.log('Firefox')
@@ -75,59 +233,6 @@ function checkInstall() {
             pin.querySelector('.chromium').classList.remove('d-none')
         }
     }
-}
-
-/**
- * Update Filters Table
- * @function updateBookmarks
- * @param {String[]} bookmarks
- */
-function updateBookmarks(bookmarks) {
-    console.debug('updateBookmarks:', bookmarks)
-    const tbody = document
-        .getElementById('bookmarks-table')
-        .querySelector('tbody')
-    tbody.innerHTML = ''
-    const trashCan = document.querySelector('.fa-regular.fa-trash-can')
-    bookmarks.forEach((value) => {
-        const row = tbody.insertRow()
-        const delBtn = document.createElement('a')
-        const svg = trashCan.cloneNode(true)
-        delBtn.appendChild(svg)
-        delBtn.title = 'Delete'
-        delBtn.dataset.value = value
-        delBtn.classList.add('link-danger')
-        delBtn.setAttribute('role', 'button')
-        delBtn.addEventListener('click', deleteBookmark)
-        const cell1 = row.insertCell()
-        cell1.classList.add('text-center', 'align-middle')
-        // cell1.dataset.idx = i.toString()
-        cell1.appendChild(delBtn)
-
-        const link = document.createElement('a')
-        // link.dataset.idx = idx
-        link.textContent = value
-            .replace(/(^\w+:|^)\/\//, '')
-            .replace(/\/$/, '')
-            .substring(0, 50)
-        // link.textContent = text
-        link.title = value
-        link.classList.add(
-            'link-body-emphasis',
-            'link-underline',
-            'link-underline-opacity-0'
-        )
-        link.target = '_blank'
-        link.href = value
-        link.setAttribute('role', 'button')
-
-        const cell2 = row.insertCell()
-        // cell2.id = `td-${i}`
-        // cell2.dataset.idx = i.toString()
-        cell2.classList.add('text-break')
-        // cell2.setAttribute('role', 'button')
-        cell2.appendChild(link)
-    })
 }
 
 /**
@@ -147,6 +252,67 @@ function setBackground(options) {
 }
 
 /**
+ * Update Filters Table
+ * @function updateBookmarks
+ * @param {String[]} bookmarks
+ */
+function updateBookmarks(bookmarks) {
+    console.debug('updateBookmarks:', bookmarks)
+    const tbody = document
+        .getElementById('bookmarks-table')
+        .querySelector('tbody')
+    tbody.innerHTML = ''
+    const trashCan = document.querySelector('#clones > .fa-trash-can')
+    const faCopy = document.querySelector('#clones > .fa-copy')
+    bookmarks.forEach((value) => {
+        const row = tbody.insertRow()
+        const delBtn = document.createElement('a')
+        const svg = trashCan.cloneNode(true)
+        delBtn.appendChild(svg)
+        delBtn.title = 'Delete'
+        delBtn.dataset.value = value
+        delBtn.classList.add('link-danger')
+        delBtn.setAttribute('role', 'button')
+        delBtn.addEventListener('click', deleteBookmark)
+        const cell1 = row.insertCell()
+        cell1.classList.add('text-center', 'align-middle')
+        // cell1.dataset.idx = i.toString()
+        cell1.appendChild(delBtn)
+
+        const link = document.createElement('a')
+        // link.dataset.idx = idx
+        link.textContent = value.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
+        // .substring(0, 100) // TODO: Add text-ellipsis
+        link.title = value
+        link.classList.add(
+            'link-body-emphasis',
+            'link-underline',
+            'link-underline-opacity-0',
+            'text-break'
+        )
+        link.target = '_blank'
+        link.href = value
+        link.setAttribute('role', 'button')
+        const cell2 = row.insertCell()
+        // cell2.id = `td-${i}`
+        // cell2.dataset.idx = i.toString()
+        // cell2.classList.add('text-break')
+        // cell2.setAttribute('role', 'button')
+        cell2.appendChild(link)
+
+        const copyLink = document.createElement('a')
+        copyLink.appendChild(faCopy.cloneNode(true))
+        copyLink.title = 'Copy'
+        copyLink.dataset.clipboardText = value
+        copyLink.classList.add('link-info')
+        copyLink.setAttribute('role', 'button')
+        const cell3 = row.insertCell()
+        cell3.classList.add('text-center')
+        cell3.appendChild(copyLink)
+    })
+}
+
+/**
  * Add Bookmark Submit Callback
  * @function addBookmark
  * @param {SubmitEvent} event
@@ -154,17 +320,16 @@ function setBackground(options) {
 async function addBookmark(event) {
     console.debug('addBookmark:', event)
     event.preventDefault()
-    const input = document.getElementById('add-bookmark')
-    const value = event.target[0].value
+    const input = document.getElementById('newBookmark')
+    const value = event.target.elements.newBookmark.value.trim()
     console.log('value:', value)
     let url
     try {
         url = new URL(value)
     } catch (e) {
-        console.debug(e)
-        showToast('You must provide a valid URL.', 'danger')
-        input.focus()
-        return
+        console.log(e)
+        showToast(`Error: ${e.message}`, 'danger')
+        return input.focus()
     }
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
     if (!bookmarks.includes(url.href)) {
@@ -172,9 +337,9 @@ async function addBookmark(event) {
         console.debug('bookmarks:', bookmarks)
         await chrome.storage.sync.set({ bookmarks })
         updateBookmarks(bookmarks)
-        showToast(`Added Bookmark.`, 'success')
+        showToast('Added Bookmark.', 'success')
     } else {
-        showToast(`Bookmark Already Added.`, 'warning')
+        showToast('Bookmark Already Added.', 'warning')
     }
     input.value = ''
     input.focus()
@@ -296,6 +461,7 @@ function onChanged(changes, namespace) {
                 if (oldValue.radioBackground !== newValue.radioBackground) {
                     setBackground(newValue)
                 }
+                // noinspection JSUnresolvedReference
                 if (
                     oldValue.pictureURL !== newValue.pictureURL ||
                     oldValue.videoURL !== newValue.videoURL
@@ -313,8 +479,9 @@ function onChanged(changes, namespace) {
  * Set Keyboard Shortcuts
  * @function setShortcuts
  * @param {String} selector
+ * @param {Boolean} action
  */
-async function setShortcuts(selector = '#keyboard-shortcuts') {
+async function setShortcuts(selector = '#keyboard-shortcuts', action = true) {
     const table = document.querySelector(selector)
     const tbody = table.querySelector('tbody')
     const source = table.querySelector('tfoot > tr').cloneNode(true)
@@ -331,23 +498,41 @@ async function setShortcuts(selector = '#keyboard-shortcuts') {
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
     }
+
+    if (action) {
+        try {
+            const userSettings = await chrome.action.getUserSettings()
+            const row = source.cloneNode(true)
+            row.querySelector('i').className = 'fa-solid fa-puzzle-piece me-1'
+            row.querySelector('.description').textContent =
+                'Toolbar Icon Pinned'
+            row.querySelector('kbd').textContent = userSettings.isOnToolbar
+                ? 'Yes'
+                : 'No'
+            tbody.appendChild(row)
+        } catch (e) {
+            console.log('Error adding pinned setting:', e)
+        }
+    }
 }
 
 /**
- * Reset Background Option Callback
- * @function resetBackground
+ * Reset Title Input Callback
+ * @function resetInput
  * @param {InputEvent} event
  */
-async function resetBackground(event) {
-    console.log('resetBackground:', event)
+async function resetInput(event) {
+    console.debug('resetInput:', event)
+    const target = event.currentTarget
+    console.debug('target:', target)
     event.preventDefault()
-    const pictureURL = document.getElementById('pictureURL')
-    pictureURL.value = 'https://images.cssnr.com/aviation'
-    pictureURL.focus()
-    // const form = document.getElementById('options-form')
-    // form.submit()
-    await saveOptions(event)
-    showToast('Background Image URL Reset.')
+    const input = document.getElementById(target.dataset.resetInput)
+    console.debug('input:', input)
+    input.value = target.dataset.value
+    input.classList.remove('is-invalid')
+    input.focus()
+    const changeEvent = new Event('change')
+    input.dispatchEvent(changeEvent)
 }
 
 /**
@@ -356,9 +541,8 @@ async function resetBackground(event) {
  * @param {MouseEvent} event
  */
 function pinClick(event) {
-    const div = event.target.closest('div')
-    console.log('div:', div)
-    div.classList.add('d-none')
+    console.debug('pinClick:', event)
+    document.getElementById('pin-notice').classList.add('d-none')
 }
 
 /**
@@ -371,10 +555,12 @@ async function copySupport(event) {
     event.preventDefault()
     const manifest = chrome.runtime.getManifest()
     const { options } = await chrome.storage.sync.get(['options'])
+    const userSettings = await chrome.action.getUserSettings()
     const result = [
         `${manifest.name} - ${manifest.version}`,
         navigator.userAgent,
         `options: ${JSON.stringify(options)}`,
+        `pinned: ${userSettings.isOnToolbar ? 'yes' : 'no'}`,
     ]
     await navigator.clipboard.writeText(result.join('\n'))
     showToast('Support Information Copied.')

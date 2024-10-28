@@ -1,19 +1,27 @@
-// JS for pages
+// JS for links.html and options.html
 
-import { debounce, showToast } from './exports.js'
+import { showToast } from './exports.js'
 
+// noinspection TypeScriptUMDGlobal
 if (typeof ClipboardJS !== 'undefined') {
-    const clipboard = new ClipboardJS('.clip')
+    // noinspection TypeScriptUMDGlobal
+    const clipboard = new ClipboardJS(
+        '[data-clipboard-text],[data-clipboard-target]'
+    )
     clipboard.on('success', function (event) {
+        // console.debug('clipboard.success:', event)
         const text = event.text.trim()
         console.debug(`text: "${text}"`)
+        // noinspection JSUnresolvedReference
         if (event.trigger.dataset.toast) {
+            // noinspection JSUnresolvedReference
             showToast(event.trigger.dataset.toast)
         } else {
             showToast('Copied to Clipboard')
         }
     })
-    clipboard.on('error', function () {
+    clipboard.on('error', function (event) {
+        console.warn('clipboard.error:', event)
         showToast('Clipboard Copy Failed', 'warning')
     })
 }
@@ -39,5 +47,19 @@ function onScroll() {
         backToTop.style.display = 'block'
     } else {
         backToTop.style.display = 'none'
+    }
+}
+
+/**
+ * DeBounce Function
+ * @function debounce
+ * @param {Function} fn
+ * @param {Number} timeout
+ */
+function debounce(fn, timeout = 250) {
+    let timeoutID
+    return (...args) => {
+        clearTimeout(timeoutID)
+        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }

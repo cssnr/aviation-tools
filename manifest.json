@@ -3,7 +3,7 @@
   "description": "Aviation Quick Search and Lookup Tools.",
   "homepage_url": "https://github.com/cssnr/aviation-tools",
   "author": "Shane",
-  "version": "0.1.6",
+  "version": "0.0.1",
   "manifest_version": 3,
   "commands": {
     "_execute_action": {
@@ -22,7 +22,7 @@
   "omnibox": {
     "keyword": "av"
   },
-  "permissions": ["clipboardWrite", "contextMenus", "storage"],
+  "permissions": ["activeTab", "clipboardWrite", "contextMenus", "storage"],
   "background": {
     "type": "module"
   },

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aviation Tools</title>
+    <title>Aviation Tools - Options</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
@@ -13,17 +13,51 @@
 </head>
 <body class="h-100">
 
-<div class="d-flex align-items-center justify-content-center pt-3 px-1 px-sm-3 h-100 w-100">
+<div class="d-flex align-items-center justify-content-center p-1 p-sm-3 h-100 w-100">
 <div class="m-auto pb-4 w-100">
-<div id="options-wrapper" class="glass-outline blur rounded rounded-4 p-3 m-auto w-100">
+<div id="options-wrapper" class="glass-outline blur rounded rounded-3 p-2 p-sm-3 m-auto w-100">
 
-    <div class="d-flex justify-content-center align-items-center">
-        <img src="../images/logo48.png" class="me-3" alt="Link Extractor" height="48" width="48">
-        <h1 class="">Aviation Tools</h1>
+    <div class="text-center mb-2">
+        <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+            <span class="display-6">
+                <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
+                Aviation Tools</span></a>
+        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+            v<span class="version">0.0.0</span></a>
+    </div> <!-- header -->
+
+    <div class="d-flex flex-column flex-sm-row small">
+        <div id="jump-list">
+            <a href="#keyboard-section" class="text-decoration-none">Keyboard</a>
+            &bull;
+            <a href="#search-section" class="text-decoration-none">Search</a>
+            &bull;
+            <a href="#tools-section" class="text-decoration-none">Tools</a>
+            &bull;
+            <a href="#bookmarks-section" class="text-decoration-none">Bookmarks</a>
+            &bull;
+            <a href="#extension-section" class="text-decoration-none">Extension</a>
+        </div> <!-- jump-list -->
+        <div class="ms-sm-auto">
+            <a class="text-decoration-none" data-controls="collapse" role="button">
+                <i class="fa-solid fa-arrow-up-short-wide"></i> Collapse</a>
+            &bull;
+            <a class="text-decoration-none" data-controls="expand" role="button">
+                <i class="fa-solid fa-arrow-down-short-wide"></i> Expand</a>
+        </div> <!-- data-controls -->
+    </div> <!-- navigation -->
+
+    <!-- ++ keyboard-section -->
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Keyboard Shortcuts</span>
+        <div class="ms-2" style="min-width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="keyboard-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
     </div>
-    <p class="text-center lead">v<span class="version"></span></p>
-
-    <div id="table-wrapper" class="glass-bg rounded rounded-3 py-1 px-2">
+    <section id="keyboard-section">
+    <div id="table-wrapper" class="glass-bg rounded rounded-3 py-1 px-2 mb-2">
         <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover mb-1">
             <caption class="visually-hidden">Keyboard Shortcuts</caption>
             <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
@@ -35,11 +69,26 @@
             </tr>
             </tfoot>
         </table>
+    </div> <!-- table-wrapper -->
+    <div class="mb-2">
+        Manage Keyboard Shortcuts:
+        <a class="text-decoration-none d-inline-block d-none firefox" href="https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox" target="_blank" rel="noopener">
+            https://mzl.la/3Qwp5QQ <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+        <a id="chrome-shortcuts" class="d-inline-block d-none chrome" role="button">chrome://extensions/shortcuts</a>
     </div>
+    </section> <!-- keyboard-section -->
 
-    <hr>
-
-    <form class="options-form">
+    <!-- ++ search-section -->
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Search Defaults</span>
+        <div class="ms-2" style="min-width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="search-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
+    </div>
+    <form class="options">
+        <section id="search-section">
         <div class="row mb-3">
             <div class="col-md-4 col-sm-6 col-12">
                 <h5>Registration Defaults</h5>
@@ -109,9 +158,18 @@
                 </div>
             </div>
         </div>
+        </section> <!-- search-section -->
 
-        <hr>
-
+        <!-- ++ tools-section -->
+        <div class="d-flex flex-row align-items-center justify-content-center my-2">
+            <hr class="w-100 my-0 me-2">
+            <span class="text-nowrap">Tools</span>
+            <div class="ms-2" style="min-width: 30px;">
+                <a class="text-decoration-none text-center small" role="button" data-section="tools-section">hide</a>
+            </div>
+            <hr class="w-100 my-0 ms-2">
+        </div>
+        <section id="tools-section">
         <div class="row mb-3">
             <h5>Tools</h5>
             <div class="col-md-4 col-sm-6 col-12">
@@ -151,37 +209,25 @@
                 </div>
             </div>
         </div>
-
-        <hr>
-
-        <div class="form-check form-switch">
-            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
-                Show Release Notes on Update
-                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
+        </section> <!-- tools-section -->
     </form>
 
-    <hr>
-
+    <!-- ++ bookmarks-section -->
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Bookmarks</span>
+        <div class="ms-2" style="min-width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="bookmarks-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
+    </div>
+    <section id="bookmarks-section">
     <form id="bookmarks-form">
-        <label class="form-label" for="add-bookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
+        <label class="form-label" for="newBookmark"><i class="fa-solid fa-book-bookmark me-2"></i> Add Bookmark</label>
         <div class="input-group mb-1">
-            <input id="add-bookmark" type="text" class="form-control" placeholder="Bookmark URL" aria-label="Filter" aria-describedby="add-bookmark-btn" autocomplete="url" required>
-            <button class="btn btn-success" type="submit" id="add-bookmark-btn">
-                Add <i class="fa-solid fa-plus ms-1"></i>
+            <input id="newBookmark" type="text" class="form-control" placeholder="Bookmark URL" aria-label="Filter" aria-describedby="newBookmark-btn" autocomplete="url" required>
+            <button class="btn btn-outline-success" type="submit">
+                Add <i class="fa-solid fa-circle-plus ms-1"></i>
             </button>
         </div>
     </form>
@@ -194,7 +240,7 @@
             Export <i class="fa-solid fa-file-arrow-down ms-1"></i></a>
     </div>
     <div class="glass-bg rounded mt-2 p-2">
-        <table id="bookmarks-table" class="table table-sm table-hover mb-0">
+        <table id="bookmarks-table" class="table table-sm table-hover mb-0" style="table-layout: fixed;">
             <caption>
                 Bookmarks <i class="fa-solid fa-bookmark"></i>
             </caption>
@@ -203,45 +249,78 @@
                     <i class="fa-solid fa-trash-can"></i>
                 </th>
                 <th scope="col">Bookmark URL</th>
+                <th scope="col" class="text-center" style="width: 22px;">
+                    <i class="fa-solid fa-copy"></i>
+                </th>
             </tr></thead>
             <tbody></tbody>
         </table>
     </div>
+    </section> <!-- bookmarks-section -->
 
-    <form class="options-form">
+    <!-- ++ extension-section -->
+    <div class="d-flex flex-row align-items-center justify-content-center my-2">
+        <hr class="w-100 my-0 me-2">
+        <span class="text-nowrap">Extension Options</span>
+        <div class="ms-2" style="min-width: 30px;">
+            <a class="text-decoration-none text-center small" role="button" data-section="extension-section">hide</a>
+        </div>
+        <hr class="w-100 my-0 ms-2">
+    </div>
+    <section id="extension-section">
+    <form class="options">
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update."></i>
+        </div>
+
         <h5 class="mt-3">
             Options Page Background
-            <span class="small" data-bs-toggle="tooltip" data-bs-title="Disabled, Random/Custom Picture or Video Looping.">
-                <i class="fa-solid fa-circle-info ms-1"></i>
-            </span>
+            <i class="fa-solid fa-circle-info ms-1 fa-sm" data-bs-toggle="tooltip"
+               data-bs-title="Disabled, Random/Custom Picture or Video Looping."></i>
         </h5>
         <div class=" ms-1 ms-sm-3">
             <div class="form-check form-check-inline mb-2 mb-sm-0">
                 <input class="form-check-input" type="radio" name="radioBackground" id="bgNone" value="none">
-                <label class="form-check-label" for="bgNone">
-                    <i class="fa-regular fa-square"></i> None
-                </label>
+                <label class="form-check-label" for="bgNone"><i class="fa-regular fa-square"></i> None</label>
             </div>
             <div class="form-check form-check-inline mb-2">
                 <input class="form-check-input" type="radio" name="radioBackground" id="bgPicture" value="picture">
-                <label class="form-check-label" for="bgPicture">
-                    <i class="fa-regular fa-image"></i> Picture
-                </label>
+                <label class="form-check-label" for="bgPicture"><i class="fa-regular fa-image"></i> Picture</label>
             </div>
-            <a id="reset-background" class="float-end align-bottom small" role="button">Reset</a>
         </div>
         <div class="ms-0 ms-sm-3">
             <div id="bgPictureInput" class="input-group">
-                    <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image or empty for default.">
+                    <span class="input-group-text" id="picture-addon" data-bs-toggle="tooltip" data-bs-title="URL to a Web Image.">
                         <i class="fa-solid fa-circle-info"></i></span>
-                <input type="text" class="form-control" placeholder="Background Picture URL" aria-label="Background Picture URL"
-                       id="pictureURL" name="pictureURL" aria-describedby="picture-addon">
+                <input id="pictureURL" name="pictureURL" aria-describedby="picture-addon" type="text" class="form-control"
+                       placeholder="Background Picture URL" aria-label="Background Picture URL">
+
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Presets</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item text-ellipsis" role="button"
+                           data-reset-input="pictureURL" data-value="https://images.cssnr.com/aviation">
+                        https://images.cssnr.com/aviation</a></li>
+                    <li><a class="dropdown-item text-ellipsis" role="button"
+                           data-reset-input="pictureURL" data-value="https://picsum.photos/1920/1280">
+                        https://picsum.photos/1920/1280</a></li>
+                    <li><a class="dropdown-item text-ellipsis" role="button"
+                           data-reset-input="pictureURL" data-value=" https://random-image-pepebigotes.vercel.app/api/random-image">
+                        https://random-image-pepebigotes.vercel.app/api/random-image</a></li>
+                </ul>
             </div>
         </div>
-    </form>
+    </form> <!-- options -->
+    </section> <!-- extension-section -->
 
     <p class="fst-italic small mt-3">
-        <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.
+        <a id="copy-support" class="text-decoration-none" href="#0">Copy Support Information</a> for issue reporting.
     </p>
 
     <hr class="mt-0">
@@ -255,19 +334,16 @@
         <span class="mx-2">&bull;</span>
         <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://github.com/cssnr/aviation-tools/issues">Open Issue</a>
-    </div>
+    </div> <!-- footer -->
 
 </div> <!-- options-wrapper -->
 </div> <!-- m-auto -->
 </div> <!-- d-flex -->
 
 <div id="pin-notice" class="text-center bounce p-2 d-none">
-    <i class="fa-solid fa-hand-point-up"></i>
-    <br>
-    To Add to Toolbar
-    <br>
-    Click the <i class="fa-solid fa-puzzle-piece mx-1"></i> Icon then
-    <br>
+    <i class="fa-solid fa-hand-point-up"></i><br>
+    To Add to Toolbar<br>
+    Click the <i class="fa-solid fa-puzzle-piece mx-1"></i> Icon then<br>
     <span>
         Find the
         <img src="../images/logo16.png" class="mx-1 mb-1" alt="ASN Plus" title="ASN Plus" style="height: 1.1em;">
@@ -278,20 +354,26 @@
     </span>
 </div> <!-- pin-notice -->
 
+<button type="button" class="btn btn-outline-primary" id="back-to-top">
+    <i class="fa-regular fa-square-caret-up"></i>
+</button> <!-- back-to-top -->
+
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div> <!-- toast -->
 
-<div class="d-none">
-    <i class="fa-regular fa-trash-can"></i>
+<div id="clones" class="d-none">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
-</div> <!-- d-none -->
+    <i class="fa-regular fa-trash-can"></i>
+    <i class="fa-regular fa-copy"></i>
+</div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="module" src="../js/main.js"></script>
 <script type="module" src="../js/options.js"></script>
 
 </body>

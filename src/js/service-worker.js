@@ -1,6 +1,7 @@
 // JS Background Service Worker
 
 import {
+    githubURL,
     searchLinks,
     clipboardWrite,
     openAllBookmarks,
@@ -24,6 +25,7 @@ const omniboxDefault = 'Aviation Tools - airport, flight, registration'
  */
 async function onStartup() {
     console.log('onStartup')
+    // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
         console.log('Firefox CTX Menu Workaround')
         const { bookmarks, options } = await chrome.storage.sync.get([
@@ -34,6 +36,7 @@ async function onStartup() {
         if (options.contextMenu) {
             createContextMenus(options, bookmarks)
         }
+        await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
     }
 }
 
@@ -44,7 +47,6 @@ async function onStartup() {
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const githubURL = 'https://github.com/cssnr/aviation-tools'
     const options = await setDefaultOptions({
         searchType: 'registration',
         radioBackground: 'bgPicture',
@@ -60,8 +62,8 @@ async function onInstalled(details) {
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         // chrome.runtime.openOptionsPage()
-        let url = chrome.runtime.getURL('/html/options.html') + '?install=new'
-        console.log(`url: ${url}`)
+        const url = chrome.runtime.getURL('/html/options.html') + '?install=new'
+        console.log(`INSTALL url: ${url}`)
         await chrome.tabs.create({ active: true, url })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
@@ -72,10 +74,10 @@ async function onInstalled(details) {
             }
         }
     }
-    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
     chrome.omnibox.setDefaultSuggestion({
         description: omniboxDefault,
     })
+    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**
@@ -86,10 +88,12 @@ async function onInstalled(details) {
  */
 async function onClicked(ctx, tab) {
     console.debug('onClicked:', ctx, tab)
-    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+    console.log(`ctx.menuItemId: %c${ctx.menuItemId}`, 'color: HotPink')
     if (ctx.menuItemId === 'options') {
         console.debug('options')
         chrome.runtime.openOptionsPage()
+    } else if (ctx.menuItemId === 'openPopup') {
+        await chrome.action.openPopup()
     } else if (ctx.menuItemId.startsWith('tools')) {
         if (ctx.menuItemId === 'tools') {
             return chrome.runtime.openOptionsPage()
@@ -102,6 +106,13 @@ async function onClicked(ctx, tab) {
     } else if (ctx.menuItemId.startsWith('bookmark')) {
         console.debug('bookmark')
         const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+        if (ctx.menuItemId === 'bookmark-add') {
+            if (!bookmarks.includes(ctx.pageUrl)) {
+                bookmarks.push(ctx.pageUrl)
+                await chrome.storage.sync.set({ bookmarks })
+            }
+            return
+        }
         if (!bookmarks.length) {
             chrome.runtime.openOptionsPage()
         } else if (ctx.menuItemId === 'bookmark-all') {
@@ -119,7 +130,6 @@ async function onClicked(ctx, tab) {
         url.searchParams.append('metar', ctx.selectionText)
         await chrome.tabs.create({ active: true, url: url.href })
     } else {
-        console.debug('openOptionsFor')
         const term = await openOptionsFor(ctx.menuItemId, ctx.selectionText)
         await clipboardWrite(term)
     }
@@ -148,21 +158,30 @@ async function onCommand(command) {
 async function onChanged(changes, namespace) {
     // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        // console.log(`key: ${key}:`, oldValue, newValue)
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
+            // if (oldValue?.contextMenu !== newValue?.contextMenu) {
             if (newValue?.contextMenu) {
-                console.info('Enabled contextMenu...')
+                console.log('%c Enabled contextMenu...', 'color: Lime')
+                // chrome.storage.sync.get(['bookmarks']).then((items) => {
+                //     createContextMenus(newValue, items.bookmarks)
+                // })
                 const { bookmarks } = await chrome.storage.sync.get([
                     'bookmarks',
                 ])
                 createContextMenus(newValue, bookmarks)
             } else {
-                console.info('Disabled contextMenu...')
+                console.log('%c Disabled contextMenu...', 'color: BlueViolet')
                 chrome.contextMenus.removeAll()
             }
+            // }
         } else if (namespace === 'sync' && key === 'bookmarks') {
+            // chrome.storage.sync.get(['options']).then((items) => {
+            //     createContextMenus(items.options, newValue)
+            // })
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating Context Menu Bookmarks...')
+                console.log(`Updating CTX Menu: ${key}`, 'color: Aqua')
                 createContextMenus(options, newValue)
             }
         }
@@ -200,8 +219,10 @@ async function parseInput(text) {
  * @param {String} text
  * @param {Function} suggest
  */
+// noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line no-unused-vars
 async function onInputChanged(text, suggest) {
-    console.debug('onInputChanged:', text, suggest)
+    console.debug('onInputChanged:', text)
     text = text.trim()
     const split = text.split(' ')
     // console.debug('split:', split)
@@ -258,11 +279,13 @@ async function onInputEntered(text) {
     let [type, search] = await parseInput(text)
     console.debug('type:', type)
     console.debug('search:', search)
+    // noinspection ES6MissingAwait
     openOptionsFor(type, search)
 }
 
 /**
  * Create Context Menus
+ * Note: A newer version of createContextMenus exists that sets nested.
  * @function createContextMenus
  * @param {Object} options
  * @param {Array} bookmarks
@@ -278,6 +301,7 @@ export function createContextMenus(options, bookmarks) {
         [['all'], 'tools', 'normal', 'Tools'],
         [['all'], 'bookmarks', 'normal', 'Bookmarks'],
         [['all'], 'sep-3', 'separator', 'separator'],
+        [['all'], 'openPopup', 'normal', 'Open Popup'],
         [['all'], 'options', 'normal', 'Open Options'],
     ]
     contexts.forEach((context) => {
@@ -311,7 +335,7 @@ export function createContextMenus(options, bookmarks) {
         })
     })
     for (const key of Object.keys(searchLinks.tools)) {
-        console.log('key:', key)
+        // console.log('key:', key)
         if (options.tools[key]) {
             chrome.contextMenus.create({
                 contexts: ['all'],
@@ -321,6 +345,12 @@ export function createContextMenus(options, bookmarks) {
             })
         }
     }
+    chrome.contextMenus.create({
+        contexts: ['all'],
+        id: `bookmark-add`,
+        parentId: 'bookmarks',
+        title: 'Bookmark Current URL',
+    })
     if (bookmarks.length) {
         chrome.contextMenus.create({
             contexts: ['all'],
@@ -352,6 +382,7 @@ export function createContextMenus(options, bookmarks) {
 
 /**
  * Set Default Options
+ * Note: A newer version of setDefaultOptions exists that sets nested.
  * @function setDefaultOptions
  * @param {Object} defaultOptions
  * @return {Promise<*|Object>}
@@ -363,33 +394,32 @@ async function setDefaultOptions(defaultOptions) {
         'options',
     ])
     if (!bookmarks) {
-        bookmarks = []
-        await chrome.storage.sync.set({ bookmarks })
+        console.log('Initialize empty bookmarks sync storage array.')
+        await chrome.storage.sync.set({ bookmarks: [] })
     }
     options = options || {}
-    console.debug('options', options)
+    console.debug('options:', options)
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set ${key}:`, value)
+            console.log(`Set %c${key}:`, 'color: LightSalmon', value)
         }
     }
     const linksChanges = setNestedDefaults(options, searchLinks)
     changed = changed || linksChanges
-    console.debug('changed', changed)
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.log('changed:', options)
+        console.log('changed options:', options)
     }
     return options
 }
 
 /**
  * Sets all Nested Keys to true
- * TODO: Make a function and combine with above function
+ * Note: A newer version of setDefaultOptions exists that sets nested.
  * @function setNestedDefaults
  * @param {Object} options
  * @param {Object} defaults
@@ -399,14 +429,15 @@ function setNestedDefaults(options, defaults) {
     console.log('setNestedDefaults:', options, defaults)
     let changed = false
     for (const [key, value] of Object.entries(defaults)) {
-        console.log(`Nested: ${key}`, value)
+        console.log(`Nested: %c${key}`, 'color: Khaki', value)
         if (!options[key]) {
             options[key] = {}
         }
         for (const [subkey] of Object.entries(value)) {
             if (typeof options[key][subkey] === 'undefined') {
-                options[key][subkey] = true
                 changed = true
+                options[key][subkey] = true
+                console.log(`Set %c${key}:`, 'color: LightSalmon', value)
             }
         }
     }

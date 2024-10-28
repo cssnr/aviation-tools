@@ -7,23 +7,58 @@
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css"  href="../css/main.css">
     <link rel="stylesheet" type="text/css"  href="../css/popup.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
 <body>
 
+<div class="container-fluid p-2">
+    <div class="d-flex flex-row align-items-center">
+        <div class="dropdown">
+            <a class="link-body-emphasis text-decoration-none" id="bs-theme-dropdown" title="Theme Switcher" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                <i id="theme-icon" class="fa-solid fa-circle-half-stroke fa-lg" style="min-width: 20px;"></i> <i class="fa-solid fa-caret-down fa-xs mx-1"></i></a>
+            <ul class="dropdown-menu auto dropdown-menu-end" aria-labelledby="bs-theme-dropdown">
+                <li><button class="dropdown-item" data-bs-theme-value="dark" aria-pressed="false">
+                    <i class="fa-regular fa-moon" style="min-width: 16px;"></i> <span class="ms-3">Dark</span></button></li>
+                <li><button class="dropdown-item" data-bs-theme-value="light" aria-pressed="false">
+                    <i class="fa-solid fa-sun" style="min-width: 16px;"></i> <span class="ms-3">Light</span></button></li>
+                <li><button class="dropdown-item" data-bs-theme-value="auto" aria-pressed="false">
+                    <i class="fa-solid fa-circle-half-stroke" style="min-width: 16px;"></i> <span class="ms-3">Auto</span></button></li>
+            </ul>
+        </div>
+
+        <div class="flex-fill text-center">
+            <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url">
+                <img src="../images/logo32.png" alt="Logo" class="mb-1" style="height: 1.1em;">
+                Aviation Tools</a>
+            <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url">
+                v<span class="version"></span></a>
+        </div>
+
+        <div class="">
+            <a class="btn btn-sm btn-outline-info" role="button" href="../html/options.html" title="Options">
+                <i class="fa-solid fa-gears"></i></a>
+        </div>
+    </div> <!-- d-flex -->
+</div> <!-- container-fluid -->
+
+<hr class="my-0">
+
 <div class="container-fluid p-3">
 
     <div class="btn-group w-100 mb-2" role="group" aria-label="Search Dropdown">
+        <button id="bookmark-current" class="btn btn-outline-success px-1" type="button" style="min-width: 80px; z-index: 3;"
+            data-disabled="btn-outline-success" data-enabled="btn-outline-secondary">Add</button>
         <button id="all-bookmarks" class="btn btn-success" type="button">
-            <i class="fa-solid fa-up-right-from-square me-2"></i> Open All Bookmarks</button>
+            Open All Bookmarks <i class="fa-solid fa-up-right-from-square"></i></button>
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</button>
             <ul id="bookmarks" class="dropdown-menu">
-                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>
+<!--                <li id="no-bookmarks"><a class="dropdown-item" href="../html/options.html">No Saved Bookmarks</a></li>-->
             </ul>
         </div>
-    </div>
+    </div> <!-- btn-group -->
 
     <button type="submit" form="search-form" class="visually-hidden"></button>
 
@@ -43,19 +78,17 @@
             <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul id="airport" class="dropdown-menu"></ul>
         </div>
-    </div>
+    </div> <!-- btn-group -->
 
     <form id="search-form">
-
         <div class="row mb-2">
             <div class="col">
                 <label for="searchTerm" class="visually-hidden"></label>
-                <input id="searchTerm" class="form-control" type="text" placeholder="" required>
+                <input id="searchTerm" class="form-control form-control-lg" type="text" placeholder="" required>
             </div>
         </div>
-
         <div class="row mb-2">
-            <div class="col text-center">
+            <div class="col text-center fs-5">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="searchType" id="searchRegistration" value="registration">
                     <label class="form-check-label small" for="searchRegistration">Registration</label>
@@ -70,40 +103,25 @@
                 </div>
             </div>
         </div>
-
-    </form>
+    </form> <!-- search-form -->
 
     <hr class="my-2">
 
-    <form id="options-form" class="mb-2">
+    <form class="options mb-2">
         <div class="form-check form-switch">
             <input class="form-check-input" id="contextMenu" type="checkbox" role="switch">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
-                <i class="fa-solid fa-circle-info ms-1"></i>
-            </span>
-            </label>
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" id="showUpdate" type="checkbox" role="switch">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
-                Show Release Notes on Update
-                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
-                <i class="fa-solid fa-circle-info ms-1"></i>
-            </span>
-            </label>
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update."></i>
         </div>
-    </form>
+    </form> <!-- options -->
 
-    <a class="btn btn-primary w-100 mb-2" role="button" href="../html/options.html">
-        <i class="fa-solid fa-sliders me-2"></i> Open Options</a>
-
-    <div class="d-flex justify-content-center align-items-center text-center small">
-        <img src="../images/logo16.png" width="16" height="16" alt="ASN Plus" title="ASN Plus">
-        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
-           href="homepage_url">Aviation Tools</a> v<span class="version"></span>
-    </div>
+    <a class="btn btn-lg btn-outline-info w-100" role="button" href="../html/options.html">
+        <i class="fa-solid fa-sliders me-2"></i> More Options</a>
 
 </div> <!-- container -->
 
@@ -111,13 +129,13 @@
     <div id="toast-container" class="toast-container bottom-0 end-0 p-3"></div>
 </div> <!-- toast -->
 
-<div class="d-none">
+<div id="clones" class="d-none">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="d-flex">
             <div class="toast-body text-break small"></div>
         </div>
     </div>
-</div> <!-- d-none -->
+</div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

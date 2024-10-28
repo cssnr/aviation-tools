@@ -5,19 +5,21 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/aviation-tools?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/aviation-tools/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/aviation-tools?logo=htmx&logoColor=white)](https://github.com/cssnr/aviation-tools)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
+
 # Aviation Tools
 
 Upcoming Web Extension with various Aviation Tools...
 
-*   [Download](#download)
-*   [Features](#features)
-*   [Configuration](#configuration)
-*   [Support](#support)
-*   [Development](#development)
-    -   [Chrome Setup](#chrome-setup)
-    -   [Firefox Setup](#firefox-setup)
-*   [Contributing](#Contributing)
+- [Download](#download)
+- [Features](#features)
+- [Configuration](#configuration)
+- [Support](#support)
+- [Development](#development)
+  - [Chrome Setup](#chrome-setup)
+  - [Firefox Setup](#firefox-setup)
+- [Contributing](#Contributing)
 
 ## Download
 
@@ -31,26 +33,26 @@ Upcoming Web Extension with various Aviation Tools...
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin).
 
-*   Download a [Chrome Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-chrome.crx) from GitHub
-*   Download a [Firefox Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi) from GitHub
+- Download a [Chrome Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-chrome.crx) from GitHub
+- Download a [Firefox Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi) from GitHub
 
 > [!IMPORTANT]  
 > Firefox is currently only available from a [GitHub Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi).
 
 ## Features
 
-*   Quick Search Registration, Flight Numbers, and Airports
-*   Search by Highlighting Text or Opening Popup Action
-*   Add Saved Bookmarks and Open All Bookmarks
+- Quick Search Registration, Flight Numbers, and Airports
+- Search by Highlighting Text or Opening Popup Action
+- Add Saved Bookmarks and Open All Bookmarks
 
-Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.   
+Please submit a [Feature Request](https://github.com/cssnr/aviation-tools/discussions/new?category=feature-requests) for new features.  
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/aviation-tools/issues/new).
 
 ## Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Aviation Tools (A) icon, then;  
 **Chrome**, click the `Pin` icon.  
-**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
+**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
@@ -79,17 +81,20 @@ To support this project, see the [Contributing](#Contributing) section at the bo
 First, clone (or download) this repository and change into the directory.
 
 Second, install the dependencies:
+
 ```shell
 npm install
 ```
 
 Finally, to run Chrome or Firefox with web-ext, run one of the following:
+
 ```shell
 npm run chrome
 npm run firefox
 ```
 
 Additionally, to Load Unpacked/Temporary Add-on make a `manifest.json` and run from the [src](src) folder, run one of the following:
+
 ```shell
 npm run manifest:chrome
 npm run manifest:firefox
@@ -106,11 +111,13 @@ Example: `npm run chrome -- --chromium-binary=...`
 
 Install the requirements and copy libraries into the `src/dist` directory by running `npm install`.
 See [gulpfile.js](gulpfile.js) for more information on `postinstall`.
+
 ```shell
 npm install
 ```
 
 To create a `.zip` archive of the [src](src) directory for the desired browser run one of the following:
+
 ```shell
 npm run build
 npm run build:chrome
@@ -152,6 +159,8 @@ Other Web Extensions I have created and published:
 
 - [Link Extractor](https://github.com/cssnr/link-extractor)
 - [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+- [Auto Auth](https://github.com/cssnr/auto-auth)
+- [Cache Cleaner](https://github.com/cssnr/cache-cleaner)
 - [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
 - [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
 - [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)

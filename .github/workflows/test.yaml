@@ -1,17 +1,17 @@
 name: "Test"
 
 on:
-  push:
-    branches: ["master"]
-    paths:
-      - "src/**"
-      - "tests/**"
-  pull_request:
-    branches: ["master"]
-    paths:
-      - "src/**"
-      - "tests/**"
   workflow_dispatch:
+  push:
+#    branches: ["master"]
+#    paths:
+#      - "src/**"
+#      - "tests/**"
+#  pull_request:
+#    branches: ["master"]
+#    paths:
+#      - "src/**"
+#      - "tests/**"
 
 jobs:
   test:
@@ -31,8 +31,13 @@ jobs:
 
       - name: "Install"
         run: |
-          npm install
+          npm ci
 
       - name: "Lint"
         run: |
           npm run lint
+
+#      - name: "Test"
+#        run: |
+#          npm run test
+

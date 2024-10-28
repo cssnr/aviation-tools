@@ -1,5 +1,7 @@
 // JS Exported Functions
 
+export const githubURL = 'https://github.com/cssnr/aviation-tools'
+
 export const searchLinks = {
     registration: {
         flightaware: 'https://flightaware.com/resources/registration/',
@@ -75,7 +77,7 @@ export function getLinkUrl(subkey, key, value) {
     // if (subkey === 'flight') {
     //     value = value.toLowerCase().replace(/[\s-]+/g, '')
     // }
-    console.log(`${subkey}: ${key}: ${value}`)
+    console.log(`getLinkUrl: ${subkey}: ${key}: ${value}`)
     const link = searchLinks[subkey][key] + value.trim()
     console.log(`link: ${link}`)
     return link
@@ -86,15 +88,20 @@ export function getLinkUrl(subkey, key, value) {
  * @function openAllBookmarks
  */
 export async function openAllBookmarks() {
-    console.debug('openAllBookmarks')
+    // console.debug('openAllBookmarks')
     const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
-    console.debug(bookmarks)
+    // console.debug(bookmarks)
     if (!bookmarks?.length) {
         chrome.runtime.openOptionsPage()
     }
     for (const url of bookmarks) {
-        console.debug(`url: ${url}`)
-        chrome.tabs.create({ active: true, url }).then()
+        try {
+            console.debug(`tabs.create: url: ${url}`)
+            // noinspection ES6MissingAwait
+            chrome.tabs.create({ active: true, url })
+        } catch (e) {
+            console.error(e)
+        }
     }
     window.close()
 }
@@ -102,15 +109,17 @@ export async function openAllBookmarks() {
 /**
  * Save Options Callback
  * @function saveOptions
- * @param {InputEvent} event
+ * @param {UIEvent} event
  */
 export async function saveOptions(event) {
     console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target.id
+    const target = event.currentTarget || event.target
+    console.debug('target:', target)
+    let key = target.id
     let value
-    if (event.target.type === 'radio') {
-        key = event.target.name
+    if (target.type === 'radio') {
+        key = target.name
         const radios = document.getElementsByName(key)
         for (const input of radios) {
             if (input.checked) {
@@ -118,28 +127,25 @@ export async function saveOptions(event) {
                 break
             }
         }
-    } else if (key === 'reset-background') {
-        key = 'pictureURL'
-        value = 'https://images.cssnr.com/aviation'
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
-    } else if (event.target.type === 'number') {
-        value = event.target.value.toString()
+    } else if (target.type === 'checkbox') {
+        value = target.checked
+        // } else if (target.type === 'number') {
+        //     value = target.value.toString()
     } else {
-        value = event.target.value?.trim()
+        value = target.value
     }
-    if (value === undefined) {
-        return console.warn('No Value for key:', key)
-    }
+
     // Handle Object Subkeys
     if (key.includes('-')) {
         const subkey = key.split('-')[1]
         key = key.split('-')[0]
-        console.info(`Set: ${key}: ${subkey}:`, value)
+        console.log(`%c Set: ${key}.${subkey}:`, 'color: Khaki', value)
         options[key][subkey] = value
-    } else {
-        console.info(`Set: ${key}:`, value)
+    } else if (value !== undefined) {
+        console.log(`Set %c${key}:`, 'color: Khaki', value)
         options[key] = value
+    } else {
+        console.warn('No Value for key:', key)
     }
     await chrome.storage.sync.set({ options })
 }
@@ -157,10 +163,10 @@ export function updateOptions(options) {
             continue
         }
         if (key.startsWith('radio')) {
-            key = value
-            value = true
+            key = value // NOSONAR
+            value = true // NOSONAR
         }
-        console.debug(`${key}:`, value)
+        // console.debug(`key: ${key}:`, value)
         const el = document.getElementById(key)
         // Handle Object Subkeys
         if (typeof value === 'object') {
@@ -174,7 +180,7 @@ export function updateOptions(options) {
             continue
         }
         if (!el) {
-            console.debug('element not found for key:', key)
+            // console.debug('element not found for key:', key)
             continue
         }
         if (!['INPUT', 'SELECT'].includes(el.tagName)) {
@@ -205,17 +211,66 @@ function hideShowElement(selector, show, speed = 'fast') {
 }
 
 /**
+ * Link Click Callback
+ * Note: Firefox popup requires a call to window.close()
+ * @function linkClick
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function linkClick(event, close = false) {
+    console.debug('linkClick:', close, event)
+    event.preventDefault()
+    const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
+    console.debug('href:', href)
+    let url
+    if (href.startsWith('#')) {
+        console.debug('return on anchor link')
+        return
+    } else if (href.endsWith('html/options.html')) {
+        chrome.runtime.openOptionsPage()
+        if (close) window.close()
+        return
+    } else if (href.startsWith('http')) {
+        url = href
+    } else {
+        url = chrome.runtime.getURL(href)
+    }
+    console.debug('url:', url)
+    // await activateOrOpen(url)
+    await chrome.tabs.create({ active: true, url })
+    if (close) window.close()
+}
+
+/**
  * Update DOM with Manifest Details
  * @function updateManifest
  */
-export function updateManifest() {
+export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
+    document.querySelectorAll('.version').forEach((el) => {
+        el.textContent = manifest.version
+    })
+    document.querySelectorAll('[href="homepage_url"]').forEach((el) => {
+        el.href = manifest.homepage_url
+    })
+    document.querySelectorAll('[href="version_url"]').forEach((el) => {
+        el.href = `${githubURL}/releases/tag/${manifest.version}`
+    })
+}
+
+/**
+ * @function updateBrowser
+ * @return {Promise<void>}
+ */
+export async function updateBrowser() {
+    let selector = '.chrome'
+    // noinspection JSUnresolvedReference
+    if (typeof browser !== 'undefined') {
+        selector = '.firefox'
+    }
     document
-        .querySelectorAll('.version')
-        .forEach((el) => (el.textContent = manifest.version))
-    document
-        .querySelectorAll('[href="homepage_url"]')
-        .forEach((el) => (el.href = manifest.homepage_url))
+        .querySelectorAll(selector)
+        .forEach((el) => el.classList.remove('d-none'))
 }
 
 /**
@@ -258,23 +313,9 @@ export async function clipboardWrite(value) {
             justification: 'Write text to the clipboard.',
         })
         await chrome.runtime.sendMessage({
-            type: 'copy-data-to-clipboard',
-            target: 'offscreen-doc',
+            type: 'clipboard',
+            target: 'offscreen',
             data: value,
         })
-    }
-}
-
-/**
- * DeBounce Function
- * @function debounce
- * @param {Function} fn
- * @param {Number} timeout
- */
-export function debounce(fn, timeout = 250) {
-    let timeoutID
-    return (...args) => {
-        clearTimeout(timeoutID)
-        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }
