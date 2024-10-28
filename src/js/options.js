@@ -321,6 +321,7 @@ async function addBookmark(event) {
     console.debug('addBookmark:', event)
     event.preventDefault()
     const input = document.getElementById('newBookmark')
+    // noinspection JSUnresolvedReference
     const value = event.target.elements.newBookmark.value.trim()
     console.log('value:', value)
     let url
@@ -410,7 +411,7 @@ async function inputBookmarks(event) {
     event.preventDefault()
     const fileReader = new FileReader()
     fileReader.onload = async function doImport() {
-        const result = JSON.parse(fileReader.result.toString())
+        const result = JSON.parse(fileReader.result.toString()) // NOSONAR
         console.debug('result:', result)
         const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
         let count = 0

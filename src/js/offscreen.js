@@ -37,6 +37,7 @@ function handleClipboardWrite(data) {
     document.body.appendChild(textEl)
     textEl.value = data
     textEl.select()
-    document.execCommand('copy')
+    // noinspection JSDeprecatedSymbols
+    document.execCommand('copy') // NOSONAR
     console.debug('%c handleClipboardWrite: SUCCESS', 'color: Lime')
 }
