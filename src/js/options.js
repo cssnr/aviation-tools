@@ -42,6 +42,11 @@ document
     .getElementById('import-bookmarks')
     .addEventListener('click', importBookmarks)
 
+document.getElementById('chrome-shortcuts').addEventListener('click', () => {
+    // noinspection JSIgnoredPromiseFromCall
+    chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
+})
+
 const bookmarksInput = document.getElementById('bookmarks-input')
 bookmarksInput.addEventListener('change', inputBookmarks)
 
