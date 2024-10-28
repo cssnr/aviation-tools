@@ -105,7 +105,7 @@ function jumpClick(event) {
     const top = jq.offset().top - 30
     $('html, body').animate({ scrollTop: top }, 'fast', 'swing', () => {
         jq.css('outline', '#00c800 dashed 2px')
-        setTimeout(() => jq.css('outline', ''), 1400)
+        setTimeout(() => jq.css('outline', ''), 1800)
     })
 }
 
