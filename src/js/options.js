@@ -68,13 +68,13 @@ async function initOptions() {
     // noinspection ES6MissingAwait
     hideSections()
     // noinspection ES6MissingAwait
-    updateBrowser()
-    // noinspection ES6MissingAwait
-    checkInstall()
-    // noinspection ES6MissingAwait
     updateManifest()
     // noinspection ES6MissingAwait
+    updateBrowser()
+    // noinspection ES6MissingAwait
     setShortcuts()
+    // noinspection ES6MissingAwait
+    checkInstall()
 
     chrome.storage.sync.get(['options', 'bookmarks']).then((items) => {
         // console.debug('options:', items.options)
