@@ -17,16 +17,17 @@
 <div class="m-auto pb-4 w-100">
 <div id="options-wrapper" class="glass-outline blur rounded rounded-3 p-2 p-sm-3 m-auto w-100">
 
-    <div class="text-center mb-2">
-        <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
-            <span class="display-6">
-                <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
-                Aviation Tools</span></a>
-        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
-            v<span class="version">0.0.0</span></a>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Aviation Tools" title="Aviation Tools">
+        <div>
+            <a class="link-body-emphasis text-decoration-none fs-1" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+                Aviation Tools</a>
+            <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+                v<span class="version"></span></a>
+        </div>
     </div> <!-- header -->
 
-    <div class="d-flex flex-column flex-sm-row small">
+    <div class="d-flex flex-column flex-sm-row small mt-2">
         <div id="jump-list">
             <a href="#keyboard-section" class="text-decoration-none">Keyboard</a>
             &bull;
@@ -243,15 +244,17 @@
         <table id="bookmarks-table" class="table table-sm table-hover mb-0" style="table-layout: fixed;">
             <caption>
                 Bookmarks <i class="fa-solid fa-bookmark"></i>
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Click and Drag the Grip to Reorder Bookmarks.">
+                    <i class="fa-solid fa-lightbulb text-warning-emphasis ms-1"></i>
+                </span>
             </caption>
             <thead><tr>
                 <th scope="col" class="text-center" style="width: 36px;">
                     <i class="fa-solid fa-trash-can"></i>
                 </th>
                 <th scope="col">Bookmark URL</th>
-                <th scope="col" class="text-center" style="width: 22px;">
-                    <i class="fa-solid fa-copy"></i>
-                </th>
+                <th scope="col" class="text-center" style="width: 36px;"><i class="fa-solid fa-arrow-down-up-across-line"></i></th>
+                <th scope="col" class="text-center" style="width: 22px;"><i class="fa-solid fa-copy"></i></th>
             </tr></thead>
             <tbody></tbody>
         </table>
@@ -367,6 +370,7 @@
         <div class="toast-body"></div>
     </div>
     <i class="fa-regular fa-trash-can"></i>
+    <i class="fa-solid fa-grip"></i>
     <i class="fa-regular fa-copy"></i>
 </div> <!-- clones -->
 

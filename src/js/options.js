@@ -59,6 +59,8 @@ window.addEventListener('hashchange', (event) => {
     history.pushState(null, '', url)
 })
 
+const filtersTbody = document.querySelector('#bookmarks-table tbody')
+
 /**
  * Options Page Init
  * @function initOptions
@@ -68,13 +70,13 @@ async function initOptions() {
     // noinspection ES6MissingAwait
     hideSections()
     // noinspection ES6MissingAwait
-    updateBrowser()
-    // noinspection ES6MissingAwait
-    checkInstall()
-    // noinspection ES6MissingAwait
     updateManifest()
     // noinspection ES6MissingAwait
+    updateBrowser()
+    // noinspection ES6MissingAwait
     setShortcuts()
+    // noinspection ES6MissingAwait
+    checkInstall()
 
     chrome.storage.sync.get(['options', 'bookmarks']).then((items) => {
         // console.debug('options:', items.options)
@@ -258,14 +260,15 @@ function setBackground(options) {
  */
 function updateBookmarks(bookmarks) {
     console.debug('updateBookmarks:', bookmarks)
-    const tbody = document
-        .getElementById('bookmarks-table')
-        .querySelector('tbody')
-    tbody.innerHTML = ''
+    filtersTbody.innerHTML = ''
     const trashCan = document.querySelector('#clones > .fa-trash-can')
+    const faGrip = document.querySelector('#clones > .fa-grip')
     const faCopy = document.querySelector('#clones > .fa-copy')
-    bookmarks.forEach((value) => {
-        const row = tbody.insertRow()
+    bookmarks.forEach((value, i) => {
+        const row = filtersTbody.insertRow()
+        row.id = i.toString()
+
+        // DELETE
         const delBtn = document.createElement('a')
         const svg = trashCan.cloneNode(true)
         delBtn.appendChild(svg)
@@ -279,6 +282,7 @@ function updateBookmarks(bookmarks) {
         // cell1.dataset.idx = i.toString()
         cell1.appendChild(delBtn)
 
+        // BOOKMARK
         const link = document.createElement('a')
         // link.dataset.idx = idx
         link.textContent = value.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '')
@@ -300,16 +304,128 @@ function updateBookmarks(bookmarks) {
         // cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
 
+        // GRIP
+        const cell3 = row.insertCell()
+        cell3.classList.add('text-center', 'align-middle', 'link-body-emphasis')
+        cell3.setAttribute('role', 'button')
+        const grip = faGrip.cloneNode(true)
+        grip.title = 'Drag'
+        cell3.appendChild(grip)
+        cell3.setAttribute('draggable', 'true')
+        cell3.addEventListener('dragstart', dragStart)
+
+        // COPY
         const copyLink = document.createElement('a')
         copyLink.appendChild(faCopy.cloneNode(true))
         copyLink.title = 'Copy'
         copyLink.dataset.clipboardText = value
         copyLink.classList.add('link-info')
         copyLink.setAttribute('role', 'button')
-        const cell3 = row.insertCell()
-        cell3.classList.add('text-center')
-        cell3.appendChild(copyLink)
+        const cell4 = row.insertCell()
+        cell4.classList.add('text-center')
+        cell4.appendChild(copyLink)
     })
+    filtersTbody.addEventListener('dragover', dragOver)
+    filtersTbody.addEventListener('dragleave', dragEnd)
+    filtersTbody.addEventListener('dragend', dragEnd)
+    filtersTbody.addEventListener('drop', drop)
+}
+
+let row
+let last = -1
+
+/**
+ * Drag Start Event Callback
+ * Trigger filterClick to prevent dragging while editing
+ * @function dragStart
+ * @param {MouseEvent} event
+ */
+async function dragStart(event) {
+    console.debug('%cdragStart:', 'color: Aqua', event)
+    // editing = false
+    // await filterClick(event)
+    row = event.target.closest('tr')
+}
+
+/**
+ * Drag Over Event Callback
+ * @function dragOver
+ * @param {MouseEvent} event
+ */
+function dragOver(event) {
+    // console.debug('dragOver:', event)
+    // if (event.target.tagName === 'INPUT') {
+    //     return
+    // }
+    event.preventDefault()
+    if (!row) {
+        return // row not set on dragStart, so not a row being dragged
+    }
+    const tr = event.target.closest('tr')
+    // console.debug('tr:', tr)
+    if (tr?.id && tr.id !== last) {
+        const el = document.getElementById(last)
+        el?.classList.remove('table-group-divider')
+        tr.classList.add('table-group-divider')
+        last = tr.id
+    }
+}
+
+function dragEnd() {
+    // console.debug('dragEnd:', event)
+    const el = document.getElementById(last)
+    el?.classList.remove('table-group-divider')
+    last = -1
+}
+
+async function drop(event) {
+    console.debug('%cdrop:', 'color: Lime', event)
+    // if (event.target.tagName === 'INPUT') {
+    //     return
+    // }
+    event.preventDefault()
+    const tr = event.target.closest('tr')
+    if (!row || !tr) {
+        row = null
+        return console.debug('%crow or tr undefined', 'color: Yellow')
+    }
+    tr.classList?.remove('table-group-divider')
+    last = -1
+    // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
+    if (row.id === tr.id) {
+        row = null
+        return console.debug('%creturn on same row drop', 'color: Yellow')
+    }
+    filtersTbody.removeChild(row)
+    filtersTbody.insertBefore(row, tr)
+    const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
+    // console.debug('patterns:', patterns)
+    let source = parseInt(row.id)
+    let target = parseInt(tr.id)
+    if (source < target) {
+        target -= 1
+    }
+    // console.debug(`Source: ${source} - Target: ${target}`)
+    array_move(bookmarks, source, target)
+    // console.debug('patterns:', patterns)
+    await chrome.storage.sync.set({ bookmarks })
+    row = null
+}
+
+/**
+ * Note: Copied from Stack Overflow
+ * @param {Array} arr
+ * @param {Number} old_index
+ * @param {Number} new_index
+ */
+function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        let k = new_index - arr.length + 1
+        while (k--) {
+            arr.push(undefined)
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
 }
 
 /**
