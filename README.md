@@ -168,8 +168,8 @@ and [additional](https://cssnr.com/) open source projects.
 [![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/cssnr)
 
 Additionally, you can give a 5-star rating
-on [Google](https://chromewebstore.google.com/detail/auto-auth/gpoiggobidhogpmmlakahiaaegibnogm)
-or [Mozilla](https://addons.mozilla.org/addon/auto-auth) and star this project on GitHub.
+on [Google](https://chromewebstore.google.com/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
+and star this project on GitHub.
 
 Other Web Extensions I have created and published:
 
