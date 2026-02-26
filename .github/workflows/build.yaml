@@ -194,6 +194,7 @@ jobs:
           #github_token: ${{ steps.app.outputs.token }}
           app_id: 146360
           app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          fail_on_self_push: false
 
 #  check:
 #    name: "Check"
