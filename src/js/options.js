@@ -32,15 +32,9 @@ document
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
-document
-    .getElementById('bookmarks-form')
-    .addEventListener('submit', addBookmark)
-document
-    .getElementById('export-bookmarks')
-    .addEventListener('click', exportBookmarks)
-document
-    .getElementById('import-bookmarks')
-    .addEventListener('click', importBookmarks)
+document.getElementById('bookmarks-form').addEventListener('submit', addBookmark)
+document.getElementById('export-bookmarks').addEventListener('click', exportBookmarks)
+document.getElementById('import-bookmarks').addEventListener('click', importBookmarks)
 
 document.getElementById('chrome-shortcuts').addEventListener('click', () => {
     // noinspection JSIgnoredPromiseFromCall
@@ -96,8 +90,7 @@ async function hideSections() {
         const el = document.getElementById(section)
         // console.debug('el:', el)
         el.style.display = 'none'
-        document.querySelector(`[data-section="${section}"]`).textContent =
-            'show'
+        document.querySelector(`[data-section="${section}"]`).textContent = 'show'
     }
 }
 
@@ -127,16 +120,12 @@ function hideShowAll(event) {
         if (action === 'expand') {
             // console.debug('%c SHOW Section', 'color: Lime')
             $(section).show('fast')
-            document.querySelector(
-                `[data-section="${section.id}"]`
-            ).textContent = 'hide'
+            document.querySelector(`[data-section="${section.id}"]`).textContent = 'hide'
         } else {
             // console.debug('%c HIDE Section', 'color: OrangeRed')
             $(section).hide('fast')
             storage.push(section.id)
-            document.querySelector(
-                `[data-section="${section.id}"]`
-            ).textContent = 'show'
+            document.querySelector(`[data-section="${section.id}"]`).textContent = 'show'
         }
     }
     if (action === 'expand') {
@@ -153,8 +142,7 @@ function hideShowCallback(event) {
     const section = event.currentTarget.dataset.section
     console.debug('section:', section)
     const show =
-        document.querySelector(`[data-section="${section}"]`).textContent ===
-        'show'
+        document.querySelector(`[data-section="${section}"]`).textContent === 'show'
     console.debug('show:', show)
     hideShowSection(section, show)
     // const el = document.getElementById(section)
@@ -193,8 +181,7 @@ function hideShowSection(section, show = false) {
         if (!sections.includes(section)) {
             sections.push(section)
         }
-        document.querySelector(`[data-section="${section}"]`).textContent =
-            'show'
+        document.querySelector(`[data-section="${section}"]`).textContent = 'show'
     } else {
         console.debug('%c SHOW Section', 'color: Lime')
         jq.show('fast')
@@ -202,8 +189,7 @@ function hideShowSection(section, show = false) {
         if (idx !== -1) {
             sections.splice(idx, 1)
         }
-        document.querySelector(`[data-section="${section}"]`).textContent =
-            'hide'
+        document.querySelector(`[data-section="${section}"]`).textContent = 'hide'
     }
     console.debug('sections:', sections)
     localStorage.setItem('sections', JSON.stringify(sections))
@@ -292,7 +278,7 @@ function updateBookmarks(bookmarks) {
             'link-body-emphasis',
             'link-underline',
             'link-underline-opacity-0',
-            'text-break'
+            'text-break',
         )
         link.target = '_blank'
         link.href = value
@@ -554,7 +540,7 @@ function textFileDownload(filename, text) {
     const element = document.createElement('a')
     element.setAttribute(
         'href',
-        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text),
     )
     element.setAttribute('download', filename)
     element.classList.add('d-none')
@@ -621,11 +607,8 @@ async function setShortcuts(selector = '#keyboard-shortcuts', action = true) {
             const userSettings = await chrome.action.getUserSettings()
             const row = source.cloneNode(true)
             row.querySelector('i').className = 'fa-solid fa-puzzle-piece me-1'
-            row.querySelector('.description').textContent =
-                'Toolbar Icon Pinned'
-            row.querySelector('kbd').textContent = userSettings.isOnToolbar
-                ? 'Yes'
-                : 'No'
+            row.querySelector('.description').textContent = 'Toolbar Icon Pinned'
+            row.querySelector('kbd').textContent = userSettings.isOnToolbar ? 'Yes' : 'No'
             tbody.appendChild(row)
         } catch (e) {
             console.log('Error adding pinned setting:', e)

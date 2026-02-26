@@ -219,15 +219,17 @@ function hideShowElement(selector, show, speed = 'fast') {
  */
 export async function linkClick(event, close = false) {
     console.debug('linkClick:', close, event)
-    event.preventDefault()
-    const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
+    const target = event.currentTarget
+    const href = target.getAttribute('href').replace(/^\.+/, '')
     console.debug('href:', href)
     let url
     if (href.startsWith('#')) {
         console.debug('return on anchor link')
         return
-    } else if (href.endsWith('html/options.html')) {
-        chrome.runtime.openOptionsPage()
+    }
+    event.preventDefault()
+    if (href.endsWith('html/options.html')) {
+        await chrome.runtime.openOptionsPage()
         if (close) window.close()
         return
     } else if (href.startsWith('http')) {
@@ -236,7 +238,6 @@ export async function linkClick(event, close = false) {
         url = chrome.runtime.getURL(href)
     }
     console.debug('url:', url)
-    // await activateOrOpen(url)
     await chrome.tabs.create({ active: true, url })
     if (close) window.close()
 }
@@ -247,6 +248,7 @@ export async function linkClick(event, close = false) {
  */
 export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
+    console.debug('updateManifest:', manifest)
     document.querySelectorAll('.version').forEach((el) => {
         el.textContent = manifest.version
     })
@@ -265,12 +267,14 @@ export async function updateManifest() {
 export async function updateBrowser() {
     let selector = '.chrome'
     // noinspection JSUnresolvedReference
-    if (typeof browser !== 'undefined') {
+    if (
+        typeof browser !== 'undefined' &&
+        typeof browser?.runtime?.getBrowserInfo === 'function'
+    ) {
         selector = '.firefox'
     }
-    document
-        .querySelectorAll(selector)
-        .forEach((el) => el.classList.remove('d-none'))
+    console.debug('updateBrowser:', selector)
+    document.querySelectorAll(selector).forEach((el) => el.classList.remove('d-none'))
 }
 
 /**
@@ -287,7 +291,7 @@ export function showToast(message, type = 'success') {
         return console.warn('Missing clone or container:', clone, container)
     }
     const element = clone.cloneNode(true)
-    element.querySelector('.toast-body').innerHTML = message
+    element.querySelector('.toast-body').textContent = message
     element.classList.add(`text-bg-${type}`)
     container.appendChild(element)
     const toast = new bootstrap.Toast(element)
