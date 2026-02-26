@@ -99,9 +99,13 @@ jobs:
           name: "amo-metadata.json"
           json: '{"version": {"release_notes": {"en-US": "${{ env.NOTES }}"}}}'
 
+      - name: "Debug Artifact"
+        run: |
+          ls -lAh .
+
       - name: "Sign Mozilla Addon"
-        run: |-
-          unzip *firefox* -d src
+        run: |
+          unzip ./*firefox* -d src
           npx web-ext sign --api-key="${{ secrets.FIREFOX_API_KEY }}" \
             --api-secret="${{ secrets.FIREFOX_API_SECRET }}" \
             --source-dir="${{ env.SRC_DIR }}" \
@@ -110,10 +114,10 @@ jobs:
 
       - name: "Rename Signed Artifact"
         working-directory: web-ext-artifacts
-        run: |-
-          ls -l .
-          mv *.xpi "${{ env.PACKAGE_NAME }}-firefox.xpi"
-          ls -l .
+        run: |
+          ls -lAh .
+          mv ./*.xpi "${{ env.PACKAGE_NAME }}-firefox.xpi"
+          file "${{ env.PACKAGE_NAME }}-firefox.xpi"
 
       - name: "Upload to Actions"
         uses: actions/upload-artifact@v6

@@ -1,6 +1,5 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/cjjhackeogffajjndfhemgniokonimin?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/aviation-tools/cjjhackeogffajjndfhemgniokonimin)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/aviation-tools?logo=github&logoColor=white)](https://github.com/cssnr/aviation-tools/releases/latest)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_aviation-tools&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_aviation-tools)
 [![Workflow Build](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/build.yaml?logo=norton&logoColor=white&label=build)](https://github.com/cssnr/aviation-tools/actions/workflows/build.yaml)
 [![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/test.yaml?logo=norton&logoColor=white&label=test)](https://github.com/cssnr/aviation-tools/actions/workflows/test.yaml)
 [![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/aviation-tools/lint.yaml?logo=norton&logoColor=white&label=lint)](https://github.com/cssnr/aviation-tools/actions/workflows/lint.yaml)
