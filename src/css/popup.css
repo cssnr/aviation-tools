@@ -1,21 +1,21 @@
 /* CSS for popup.html */
 
 body {
-  width: 380px;
-  overflow-x: hidden;
+    width: 380px;
+    overflow-x: hidden;
 }
 
 input::placeholder {
-  text-align: center;
-  text-transform: capitalize;
+    text-align: center;
+    text-transform: capitalize;
 }
 
 .search-buttons a.dropdown-item {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .dropdown-menu {
-  max-width: 100vw;
-  white-space: normal;
-  overflow: hidden;
+    max-width: 100vw;
+    white-space: normal;
+    overflow: hidden;
 }

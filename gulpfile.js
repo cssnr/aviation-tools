@@ -26,7 +26,7 @@ gulp.task('fontawesome', () => {
             {
                 base: 'node_modules/@fortawesome/fontawesome-free',
                 encoding: false,
-            }
+            },
         )
         .pipe(gulp.dest('src/dist/fontawesome'))
 })
@@ -44,18 +44,12 @@ gulp.task('metar-taf-parser', () => {
                 'node_modules/metar-taf-parser/metar-taf-parser.js',
                 'node_modules/metar-taf-parser/locale/**',
             ],
-            { base: 'node_modules/metar-taf-parser' }
+            { base: 'node_modules/metar-taf-parser' },
         )
         .pipe(gulp.dest('src/dist/metar-taf-parser'))
 })
 
 gulp.task(
     'default',
-    gulp.parallel(
-        'bootstrap',
-        'clipboard',
-        'fontawesome',
-        'jquery',
-        'metar-taf-parser'
-    )
+    gulp.parallel('bootstrap', 'clipboard', 'fontawesome', 'jquery', 'metar-taf-parser'),
 )

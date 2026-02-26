@@ -22,15 +22,9 @@ document
 document
     .getElementsByName('searchType')
     .forEach((el) => el.addEventListener('change', updateSearchType))
-document
-    .getElementById('search-form')
-    .addEventListener('submit', searchFormSubmit)
-document
-    .getElementById('bookmark-current')
-    .addEventListener('click', bookmarkToggle)
-document
-    .getElementById('all-bookmarks')
-    .addEventListener('click', openAllBookmarks)
+document.getElementById('search-form').addEventListener('submit', searchFormSubmit)
+document.getElementById('bookmark-current').addEventListener('click', bookmarkToggle)
+document.getElementById('all-bookmarks').addEventListener('click', openAllBookmarks)
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -57,7 +51,7 @@ async function initPopup() {
         updateOptions(items.options)
         searchTerm.placeholder = items.options.searchType
         document.querySelector(
-            `input[name="searchType"][value="${items.options.searchType}"]`
+            `input[name="searchType"][value="${items.options.searchType}"]`,
         ).checked = true
     })
 
@@ -67,7 +61,7 @@ async function initPopup() {
         if (items.bookmarks.includes(tab.url)) {
             bookmarkCurrent.classList.replace(
                 bookmarkCurrent.dataset.disabled,
-                bookmarkCurrent.dataset.enabled
+                bookmarkCurrent.dataset.enabled,
             )
             bookmarkCurrent.textContent = 'Remove'
         }
@@ -219,9 +213,7 @@ async function searchFormSubmit(event) {
         const category = event.submitter.dataset.search
         await openOptionsFor(category, value)
     } else {
-        const category = document.querySelector(
-            'input[name="searchType"]:checked'
-        ).value
+        const category = document.querySelector('input[name="searchType"]:checked').value
         await openOptionsFor(category, value)
     }
     window.close()
@@ -243,14 +235,14 @@ async function bookmarkToggle(event) {
         bookmarks.push(tab.url)
         bookmarkCurrent.classList.replace(
             event.target.dataset.disabled,
-            event.target.dataset.enabled
+            event.target.dataset.enabled,
         )
         bookmarkCurrent.textContent = 'Remove'
     } else {
         bookmarks.splice(bookmarks.indexOf(tab.url), 1)
         bookmarkCurrent.classList.replace(
             event.target.dataset.enabled,
-            event.target.dataset.disabled
+            event.target.dataset.disabled,
         )
         bookmarkCurrent.textContent = 'Add'
     }

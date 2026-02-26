@@ -14,9 +14,7 @@ const metarTable = document.getElementById('metar-table')
 metarForm.addEventListener('submit', processMetar)
 metarInput.addEventListener('input', processMetar)
 
-document
-    .getElementById('clear')
-    .addEventListener('click', () => (metarInput.value = ''))
+document.getElementById('clear').addEventListener('click', () => (metarInput.value = ''))
 
 /**
  * DOMContentLoaded

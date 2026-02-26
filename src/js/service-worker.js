@@ -26,7 +26,10 @@ const omniboxDefault = 'Aviation Tools - airport, flight, registration'
 async function onStartup() {
     console.log('onStartup')
     // noinspection JSUnresolvedReference
-    if (typeof browser !== 'undefined') {
+    if (
+        typeof browser !== 'undefined' &&
+        typeof browser?.runtime?.getBrowserInfo === 'function'
+    ) {
         console.log('Firefox CTX Menu Workaround')
         const { bookmarks, options } = await chrome.storage.sync.get([
             'bookmarks',
@@ -166,9 +169,7 @@ async function onChanged(changes, namespace) {
                 // chrome.storage.sync.get(['bookmarks']).then((items) => {
                 //     createContextMenus(newValue, items.bookmarks)
                 // })
-                const { bookmarks } = await chrome.storage.sync.get([
-                    'bookmarks',
-                ])
+                const { bookmarks } = await chrome.storage.sync.get(['bookmarks'])
                 createContextMenus(newValue, bookmarks)
             } else {
                 console.log('%c Disabled contextMenu...', 'color: BlueViolet')
@@ -247,8 +248,7 @@ async function onInputChanged(text, suggest) {
             let { options } = await chrome.storage.sync.get(['options'])
             // search = text.replace(/\s/g, '')
             const type =
-                options.searchType.charAt(0).toUpperCase() +
-                options.searchType.slice(1)
+                options.searchType.charAt(0).toUpperCase() + options.searchType.slice(1)
             chrome.omnibox.setDefaultSuggestion({
                 description: `Aviation Tools - ${type} Search`,
             })
@@ -389,10 +389,7 @@ export function createContextMenus(options, bookmarks) {
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions', defaultOptions)
-    let { bookmarks, options } = await chrome.storage.sync.get([
-        'bookmarks',
-        'options',
-    ])
+    let { bookmarks, options } = await chrome.storage.sync.get(['bookmarks', 'options'])
     if (!bookmarks) {
         console.log('Initialize empty bookmarks sync storage array.')
         await chrome.storage.sync.set({ bookmarks: [] })
